@@ -1,14 +1,14 @@
 // @flow
 
-type Property = {
-  +xPosition: string
-};
+import type { PropertiesState } from "../types/properties";
 
-type PropertiesState = {
-  +[key: string]: Property
+const initialState: PropertiesState = {
+  test: {
+    xPosition: 100,
+    yPosition: 100,
+    fill: "#000000"
+  }
 };
-
-const initialState = {};
 
 export default (
   state: PropertiesState = initialState,

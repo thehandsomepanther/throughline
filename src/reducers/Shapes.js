@@ -1,12 +1,10 @@
 // @flow
 
-type Shape = "RECT" | "ELLIPSE" | "CIRCLE";
+import type { ShapesState } from "../types/shapes";
 
-type ShapesState = {
-  +[key: string]: Shape
+const initialState: ShapesState = {
+  test: "SHAPE_RECT"
 };
-
-const initialState: ShapesState = {};
 
 export default (
   state: ShapesState = initialState,
