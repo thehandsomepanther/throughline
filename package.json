@@ -1,0 +1,28 @@
+{
+  "name": "throughline",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "flow-bin": "^0.71.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "flow": "flow",
+    "format": "prettier-eslint \"src/**/*.js\""
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "prettier-eslint-cli": "^4.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && npm run flow"
+    }
+  }
+}
