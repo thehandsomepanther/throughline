@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eslint-plugin-flowtype": "^2.46.3",
     "flow-bin": "^0.71.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
     "react-scripts": "1.1.4"
   },
   "scripts": {
@@ -18,7 +20,8 @@
   },
   "devDependencies": {
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "^4.7.1"
+    "prettier-eslint-cli": "^4.7.1",
+    "redux": "^4.0.0"
   },
   "husky": {
     "hooks": {
