@@ -1,2 +1,2 @@
-import PropertiesEditor from "./PropertiesEditor";
+import PropertiesEditor from './PropertiesEditor';
 export default PropertiesEditor;

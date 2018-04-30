@@ -19,6 +19,7 @@
     "format": "prettier-eslint \"src/**/*.js\""
   },
   "devDependencies": {
+    "eslint-config-airbnb": "^16.1.0",
     "husky": "^0.14.3",
     "prettier-eslint-cli": "^4.7.1",
     "redux": "^4.0.0"

@@ -1,13 +1,13 @@
 // @flow
 
-import type { PropertiesState } from "../types/properties";
+import type { PropertiesState } from '../types/properties';
 
 const initialState: PropertiesState = {
   test: {
     xPosition: 100,
     yPosition: 100,
-    fill: "#000000"
-  }
+    fill: '#000000',
+  },
 };
 
 export default (

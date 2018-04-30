@@ -3,9 +3,9 @@
 export type Property = {
   +xPosition: number,
   +yPosition: number,
-  +fill: string
+  +fill: string,
 };
 
 export type PropertiesState = {
-  +[key: string]: Property
+  +[key: string]: Property,
 };

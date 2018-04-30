@@ -1,9 +1,9 @@
 // @flow
 
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Canvas from "../../containers/Canvas";
-import PropertiesEditor from "../../containers/PropertiesEditor";
+import Canvas from '../../containers/Canvas';
+import PropertiesEditor from '../../containers/PropertiesEditor';
 
 type Props = {};
 

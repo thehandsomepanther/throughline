@@ -1,9 +1,9 @@
 // @flow
 
-import type { ShapesState } from "../types/shapes";
+import type { ShapesState } from '../types/shapes';
 
 const initialState: ShapesState = {
-  test: "SHAPE_RECT"
+  test: 'SHAPE_RECT',
 };
 
 export default (

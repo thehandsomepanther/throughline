@@ -1,14 +1,13 @@
 // @flow
 
-import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import PropertiesEditor from "../../components/PropertiesEditor";
+import PropertiesEditor from '../../components/PropertiesEditor';
 
 const mapStateToProps = (state, ownProps) => ({
   shapes: state.shapes,
-  properties: state.properties
+  properties: state.properties,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) =>

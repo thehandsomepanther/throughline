@@ -1,14 +1,13 @@
 // @flow
 
-import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-import Canvas from "../../components/Canvas";
+import Canvas from '../../components/Canvas';
 
 const mapStateToProps = (state, ownProps) => ({
   shapes: state.shapes,
-  properties: state.properties
+  properties: state.properties,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) =>
