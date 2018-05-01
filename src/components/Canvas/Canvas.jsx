@@ -33,13 +33,13 @@ export default class Canvas extends React.Component<PropsType> {
     });
   }
 
-  render(): ?React$Element<any> {
+  render() {
     return (
       <div>
         <canvas
           width={600}
           height={600}
-          ref={(canvasEl: any) => {
+          ref={(canvasEl: ?HTMLCanvasElement) => {
             this.canvasEl = canvasEl;
           }}
         />

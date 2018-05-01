@@ -15,6 +15,7 @@ const mapStateToProps = (
   properties: state.properties,
 });
 
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({}, dispatch);
+const mapDispatchToProps = (dispatch: any): any =>
+  bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesEditor);

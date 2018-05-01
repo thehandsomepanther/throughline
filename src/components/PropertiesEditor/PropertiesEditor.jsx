@@ -1,4 +1,5 @@
 // @flow
+
 import React, { Component } from 'react';
 import type { ShapesStateType } from '../../types/shapes';
 import type { PropertiesStateType } from '../../types/properties';
