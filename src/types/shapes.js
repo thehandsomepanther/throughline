@@ -1,24 +1,30 @@
 // @flow
 
+import type { PropertyType } from './properties';
+
 export const SHAPE_RECT = 'SHAPE_RECT';
 export const SHAPE_ELLIPSE = 'SHAPE_ELLIPSE';
 
 export type ShapeRectType = {
   +type: 'SHAPE_RECT',
-  +xPosition: number,
-  +yPosition: number,
-  +fill: string,
-  +width: number,
-  +height: number,
+  +posX: PropertyType,
+  +posY: PropertyType,
+  +fillR: PropertyType,
+  +fillG: PropertyType,
+  +fillB: PropertyType,
+  +width: PropertyType,
+  +height: PropertyType,
 };
 
 export type ShapeEllipseType = {
   +type: 'SHAPE_ELLIPSE',
-  +xPosition: number,
-  +yPosition: number,
-  +fill: string,
-  +radiusX: number,
-  +radiusY: number,
+  +posX: PropertyType,
+  +posY: PropertyType,
+  +fillR: PropertyType,
+  +fillG: PropertyType,
+  +fillB: PropertyType,
+  +width: PropertyType,
+  +height: PropertyType,
 };
 
 export type ShapeType = ShapeRectType | ShapeEllipseType;

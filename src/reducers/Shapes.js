@@ -1,24 +1,99 @@
 // @flow
 
+import { USING_CONST } from '../types/properties';
 import { SHAPE_RECT } from '../types/shapes';
 import type { ShapesStateType } from '../types/shapes';
 
 const initialState: ShapesStateType = {
   test1: {
     type: SHAPE_RECT,
-    xPosition: 100,
-    yPosition: 100,
-    width: 100,
-    height: 100,
-    fill: '#f1f1f1',
+    posX: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    posY: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    width: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    height: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    fillR: {
+      using: USING_CONST,
+      const: 41,
+      custom: null,
+      fn: null,
+    },
+    fillG: {
+      using: USING_CONST,
+      const: 41,
+      custom: null,
+      fn: null,
+    },
+    fillB: {
+      using: USING_CONST,
+      const: 41,
+      custom: null,
+      fn: null,
+    },
   },
   test2: {
     type: SHAPE_RECT,
-    xPosition: 150,
-    yPosition: 150,
-    width: 100,
-    height: 100,
-    fill: '#000000',
+    posX: {
+      using: USING_CONST,
+      const: 150,
+      custom: null,
+      fn: null,
+    },
+    posY: {
+      using: USING_CONST,
+      const: 150,
+      custom: null,
+      fn: null,
+    },
+    width: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    height: {
+      using: USING_CONST,
+      const: 100,
+      custom: null,
+      fn: null,
+    },
+    fillR: {
+      using: USING_CONST,
+      const: 0,
+      custom: null,
+      fn: null,
+    },
+    fillG: {
+      using: USING_CONST,
+      const: 0,
+      custom: null,
+      fn: null,
+    },
+    fillB: {
+      using: USING_CONST,
+      const: 0,
+      custom: null,
+      fn: null,
+    },
   },
 };
 
