@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { SHAPE_RECT } from '../../types/shapes';
 import type { ShapesStateType } from '../../types/shapes';
 import type { PropertiesStateType, PropertyType } from '../../types/properties';
 import type { OrderStateType } from '../../types/order';
@@ -24,11 +25,14 @@ export default class Canvas extends React.Component<PropsType> {
     const { shapes, properties, order } = this.props;
     const ctx = this.canvasEl.getContext('2d');
 
+    ctx.save();
     order.forEach((key: string) => {
+      ctx.restore();
       let shapeProperties: PropertyType;
       switch (shapes[key]) {
-        case 'SHAPE_RECT':
+        case SHAPE_RECT:
           shapeProperties = properties[key];
+          ctx.fillStyle = shapeProperties.fill;
           ctx.fillRect(
             shapeProperties.xPosition,
             shapeProperties.yPosition,

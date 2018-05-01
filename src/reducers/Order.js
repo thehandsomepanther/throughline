@@ -2,7 +2,7 @@
 
 import type { OrderStateType } from '../types/order';
 
-const initialState: OrderStateType = ['test'];
+const initialState: OrderStateType = ['test1', 'test2'];
 
 export default (
   state: OrderStateType = initialState,
