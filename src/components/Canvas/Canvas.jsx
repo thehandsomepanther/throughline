@@ -9,9 +9,14 @@ type PropsType = {
   order: OrderStateType,
 };
 
+type StateType = {
+  activeCanvas: number,
+  interval: ?IntervalID,
+};
+
 const NUM_FRAMES = 60;
 
-export default class Canvas extends React.Component<PropsType> {
+export default class Canvas extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
     super(props);
     this.canvases = [];
@@ -28,13 +33,21 @@ export default class Canvas extends React.Component<PropsType> {
         />,
       );
     }
+
+    this.state = {
+      activeCanvas: 0,
+      interval: null,
+    };
   }
 
   componentDidMount() {
     this.updateCanvases();
+
+    const interval: IntervalID = setInterval(this.incrementActiveCanvas, 16);
+    this.setState({ interval });
   }
 
-  canvasEls: Array<HTMLCanvasElement>;
+  canvasEls: Array<?HTMLCanvasElement>;
   canvases: Array<React.Element<any>>;
 
   updateCanvases() {
@@ -44,6 +57,10 @@ export default class Canvas extends React.Component<PropsType> {
   }
 
   updateCanvas(i: number) {
+    if (!this.canvasEls[i]) {
+      return;
+    }
+
     const { shapes, order } = this.props;
     const ctx = this.canvasEls[i].getContext('2d');
 
@@ -55,7 +72,40 @@ export default class Canvas extends React.Component<PropsType> {
     });
   }
 
+  handleClick = () => {
+    const { interval } = this.state;
+    let newInterval: IntervalID;
+    if (interval !== null) {
+      clearInterval(interval);
+      this.setState({ interval: null });
+    } else {
+      newInterval = setInterval(this.incrementActiveCanvas, 16);
+      this.setState({ interval: newInterval });
+    }
+  };
+
+  incrementActiveCanvas = () => {
+    const { activeCanvas } = this.state;
+    this.setState({
+      activeCanvas: (activeCanvas + 1) % NUM_FRAMES,
+    });
+  };
+
   render(): ?React$Element<any> {
-    return <div>{this.canvases}</div>;
+    const { activeCanvas } = this.state;
+
+    return (
+      <div>
+        <input type="button" value="play/pause" onClick={this.handleClick} />
+        {this.canvases.map((canvas, i) => (
+          <div
+            style={{ display: i === activeCanvas ? 'block' : 'none' }}
+            key={i}
+          >
+            {this.canvases[i]}
+          </div>
+        ))}
+      </div>
+    );
   }
 }

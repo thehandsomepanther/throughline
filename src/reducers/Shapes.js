@@ -1,16 +1,26 @@
 // @flow
 
-import { USING_CONST } from '../types/properties';
+import { USING_CONST, USING_CUSTOM } from '../types/properties';
 import { SHAPE_RECT } from '../types/shapes';
 import type { ShapesStateType } from '../types/shapes';
+
+const temp: Array<number> = [];
+
+for (let i = 0; i < 60; i += 1) {
+  if (i < 30) {
+    temp.push(100 + i);
+  } else {
+    temp.push(160 - i);
+  }
+}
 
 const initialState: ShapesStateType = {
   test1: {
     type: SHAPE_RECT,
     posX: {
-      using: USING_CONST,
+      using: USING_CUSTOM,
       const: 100,
-      custom: null,
+      custom: temp,
       fn: null,
     },
     posY: {
