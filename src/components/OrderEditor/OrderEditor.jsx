@@ -14,7 +14,7 @@ export default ({
   <ol>
     {order.map((key: string): ?React$Element<any> => (
       <li key={key}>
-        {key}, a {shapes[key]}
+        {key}, a {shapes[key].type}
       </li>
     ))}
   </ol>
