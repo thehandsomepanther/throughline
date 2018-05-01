@@ -1,11 +1,13 @@
 // @flow
 
-export type Property = {
+export type PropertyType = {
   +xPosition: number,
   +yPosition: number,
   +fill: string,
+  +width: number,
+  +height: number,
 };
 
-export type PropertiesState = {
-  +[key: string]: Property,
+export type PropertiesStateType = {
+  +[key: string]: PropertyType,
 };

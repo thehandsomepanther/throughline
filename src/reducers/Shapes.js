@@ -1,15 +1,15 @@
 // @flow
 
-import type { ShapesState } from '../types/shapes';
+import type { ShapesStateType } from '../types/shapes';
 
-const initialState: ShapesState = {
+const initialState: ShapesStateType = {
   test: 'SHAPE_RECT',
 };
 
 export default (
-  state: ShapesState = initialState,
-  action: { type: string }
-) => {
+  state: ShapesStateType = initialState,
+  action: { type: string },
+): ShapesStateType => {
   switch (action.type) {
     default:
       return state;

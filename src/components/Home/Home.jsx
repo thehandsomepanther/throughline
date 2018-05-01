@@ -5,9 +5,9 @@ import React, { Component } from 'react';
 import Canvas from '../../containers/Canvas';
 import PropertiesEditor from '../../containers/PropertiesEditor';
 
-type Props = {};
+type PropsType = {};
 
-export default class Home extends Component<Props> {
+export default class Home extends Component<PropsType> {
   render() {
     return (
       <div>

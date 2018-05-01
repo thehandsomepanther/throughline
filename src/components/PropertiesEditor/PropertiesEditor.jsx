@@ -1,14 +1,14 @@
 // @flow
 import React, { Component } from 'react';
-import type { ShapesState } from '../../types/shapes';
-import type { PropertiesState } from '../../types/properties';
+import type { ShapesStateType } from '../../types/shapes';
+import type { PropertiesStateType } from '../../types/properties';
 
-type Props = {
-  shapes: ShapesState,
-  properties: PropertiesState,
+type PropsType = {
+  shapes: ShapesStateType,
+  properties: PropertiesStateType,
 };
 
-export default class PropertiesEditor extends Component<Props> {
+export default class PropertiesEditor extends Component<PropsType> {
   render() {
     return <div>editor</div>;
   }

@@ -1,11 +1,11 @@
 // @flow
 
-export type ShapeRect = 'SHAPE_RECT';
-export type ShapeEllipse = 'SHAPE_ELLIPSE';
-export type ShapeCircle = 'SHAPE_CIRCLE';
+export type ShapeRectType = 'SHAPE_RECT';
+export type ShapeEllipseType = 'SHAPE_ELLIPSE';
+export type ShapeCircleType = 'SHAPE_CIRCLE';
 
-export type Shape = ShapeRect | ShapeEllipse | ShapeCircle;
+export type ShapeType = ShapeRectType | ShapeEllipseType | ShapeCircleType;
 
-export type ShapesState = {
-  +[key: string]: Shape,
+export type ShapesStateType = {
+  +[key: string]: ShapeType,
 };

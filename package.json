@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "eslint-plugin-flowtype": "^2.46.3",
     "flow-bin": "^0.71.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -16,13 +16,15 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "format": "prettier-eslint \"src/**/*.js\""
+    "format": "prettier-eslint \"src/**/*.js\"",
+    "redux": "^4.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-flowtype": "^2.46.3",
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "^4.7.1",
-    "redux": "^4.0.0"
+    "prettier-eslint-cli": "^4.7.1"
   },
   "husky": {
     "hooks": {
