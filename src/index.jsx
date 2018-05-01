@@ -15,7 +15,7 @@ if (root) {
     <Provider store={configureStore()}>
       <Home />
     </Provider>,
-    root
+    root,
   );
 }
 
