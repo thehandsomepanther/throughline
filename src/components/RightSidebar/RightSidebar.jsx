@@ -3,7 +3,7 @@
 import React from 'react';
 import PropertiesEditor from '../../containers/PropertiesEditor';
 
-export default () => (
+export default (): ?React$Element<any> => (
   <div>
     <PropertiesEditor />
   </div>

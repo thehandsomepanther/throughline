@@ -1,26 +1,21 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 
-type PropsType = {
+export default ({
+  shapes,
+  order,
+}: {
   shapes: ShapesStateType,
   order: OrderStateType,
-};
-
-export default class OrderEditor extends Component<PropsType> {
-  render() {
-    const { shapes, order } = this.props;
-
-    return (
-      <ol>
-        {order.map((key, i) => (
-          <li key={i}>
-            {key}, a {shapes[key]}
-          </li>
-        ))}
-      </ol>
-    );
-  }
-}
+}): ?React$Element<any> => (
+  <ol>
+    {order.map((key: string): ?React$Element<any> => (
+      <li key={key}>
+        {key}, a {shapes[key]}
+      </li>
+    ))}
+  </ol>
+);

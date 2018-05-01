@@ -3,7 +3,7 @@
 import React from 'react';
 import OrderEditor from '../../containers/OrderEditor';
 
-export default () => (
+export default (): ?React$Element<any> => (
   <div>
     <OrderEditor />
   </div>

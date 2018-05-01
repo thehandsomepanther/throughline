@@ -2,10 +2,12 @@
 import * as React from 'react';
 import type { ShapesStateType } from '../../types/shapes';
 import type { PropertiesStateType, PropertyType } from '../../types/properties';
+import type { OrderStateType } from '../../types/order';
 
 type PropsType = {
   shapes: ShapesStateType,
   properties: PropertiesStateType,
+  order: OrderStateType,
 };
 
 export default class Canvas extends React.Component<PropsType> {
@@ -19,21 +21,27 @@ export default class Canvas extends React.Component<PropsType> {
     if (!this.canvasEl) {
       return;
     }
-    const { shapes, properties } = this.props;
-
+    const { shapes, properties, order } = this.props;
     const ctx = this.canvasEl.getContext('2d');
-    Object.keys(shapes).forEach((key: string) => {
-      const shapeProperties: PropertyType = properties[key];
-      ctx.fillRect(
-        shapeProperties.xPosition,
-        shapeProperties.yPosition,
-        shapeProperties.width,
-        shapeProperties.height,
-      );
+
+    order.forEach((key: string) => {
+      let shapeProperties: PropertyType;
+      switch (shapes[key]) {
+        case 'SHAPE_RECT':
+          shapeProperties = properties[key];
+          ctx.fillRect(
+            shapeProperties.xPosition,
+            shapeProperties.yPosition,
+            shapeProperties.width,
+            shapeProperties.height,
+          );
+          break;
+        default:
+      }
     });
   }
 
-  render() {
+  render(): ?React$Element<any> {
     return (
       <div>
         <canvas
