@@ -28,6 +28,7 @@ export default class Canvas extends React.Component<PropsType, StateType> {
     super(props);
     this.canvases = [];
     this.canvasEls = [];
+
     for (let i = 0; i < NUM_FRAMES; i += 1) {
       this.canvases.push(
         <canvas
@@ -51,9 +52,11 @@ export default class Canvas extends React.Component<PropsType, StateType> {
     this.redrawCanvases();
   }
 
-  componentWillReceiveProps(nextProps: PropsType) {
-    if (nextProps.editor.shouldUpdateCanvases) {
+  componentDidUpdate() {
+    const { editor, updateCanvases } = this.props;
+    if (editor.shouldUpdateCanvases) {
       this.redrawCanvases();
+      updateCanvases();
     }
   }
 
@@ -61,12 +64,9 @@ export default class Canvas extends React.Component<PropsType, StateType> {
   canvasEls: Array<?HTMLCanvasElement>;
 
   redrawCanvases() {
-    const { updateCanvases } = this.props;
-
     for (let i = 0; i < this.canvasEls.length; i += 1) {
       this.redrawCanvas(i);
     }
-    updateCanvases();
   }
 
   redrawCanvas(i: number) {
