@@ -7,7 +7,7 @@ import Canvas from '../../containers/Canvas';
 import RightSidebar from '../../components/RightSidebar';
 
 export default (): ?React$Element<any> => (
-  <div>
+  <div className="flex">
     <LeftSidebar />
     <Canvas />
     <RightSidebar />

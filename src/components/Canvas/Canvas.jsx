@@ -1,12 +1,17 @@
 // @flow
+
 import * as React from 'react';
 import { drawShape } from '../../util/shapes';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
+import type { EditorStateType } from '../../types/editor';
+import type { UpdateCanvasesActionType } from '../../actions/editor';
 
 type PropsType = {
   shapes: ShapesStateType,
   order: OrderStateType,
+  editor: EditorStateType,
+  updateCanvases: () => UpdateCanvasesActionType,
 };
 
 type StateType = {
@@ -15,6 +20,8 @@ type StateType = {
 };
 
 const NUM_FRAMES = 60;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 600;
 
 export default class Canvas extends React.Component<PropsType, StateType> {
   constructor(props: PropsType) {
@@ -24,8 +31,8 @@ export default class Canvas extends React.Component<PropsType, StateType> {
     for (let i = 0; i < NUM_FRAMES; i += 1) {
       this.canvases.push(
         <canvas
-          width={600}
-          height={600}
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
           key={i}
           ref={(canvasEl: ?HTMLCanvasElement) => {
             this.canvasEls.push(canvasEl);
@@ -41,32 +48,36 @@ export default class Canvas extends React.Component<PropsType, StateType> {
   }
 
   componentDidMount() {
-    this.updateCanvases();
-
-    const interval: IntervalID = setInterval(this.incrementActiveCanvas, 16);
-    this.setState({ interval });
+    this.redrawCanvases();
   }
 
-  canvasEls: Array<?HTMLCanvasElement>;
-  canvases: Array<React.Element<any>>;
-
-  updateCanvases() {
-    for (let i = 0; i < this.canvasEls.length; i += 1) {
-      this.updateCanvas(i);
+  componentWillReceiveProps(nextProps: PropsType) {
+    if (nextProps.editor.shouldUpdateCanvases) {
+      this.redrawCanvases();
     }
   }
 
-  updateCanvas(i: number) {
+  canvases: Array<React.Element<any>>;
+  canvasEls: Array<?HTMLCanvasElement>;
+
+  redrawCanvases() {
+    const { updateCanvases } = this.props;
+
+    for (let i = 0; i < this.canvasEls.length; i += 1) {
+      this.redrawCanvas(i);
+    }
+    updateCanvases();
+  }
+
+  redrawCanvas(i: number) {
     if (!this.canvasEls[i]) {
       return;
     }
 
     const { shapes, order } = this.props;
     const ctx = this.canvasEls[i].getContext('2d');
-
-    ctx.save();
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     order.forEach((key: string) => {
-      ctx.restore();
       const shape: ShapeType = shapes[key];
       drawShape(shape, ctx, i);
     });
@@ -96,15 +107,14 @@ export default class Canvas extends React.Component<PropsType, StateType> {
 
     return (
       <div>
+        {this.canvases.map(
+          (canvas: React.Element<any>, i: number): React.Element<any> => (
+            <div className={`ba ${i === activeCanvas ? '' : 'dn'}`} key={i}>
+              {this.canvases[i]}
+            </div>
+          ),
+        )}
         <input type="button" value="play/pause" onClick={this.handleClick} />
-        {this.canvases.map((canvas, i) => (
-          <div
-            style={{ display: i === activeCanvas ? 'block' : 'none' }}
-            key={i}
-          >
-            {this.canvases[i]}
-          </div>
-        ))}
       </div>
     );
   }

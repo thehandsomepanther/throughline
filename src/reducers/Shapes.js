@@ -1,8 +1,9 @@
 // @flow
 
-import { USING_CONST, USING_CUSTOM } from '../types/properties';
+import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
 import { SHAPE_RECT } from '../types/shapes';
 import type { ShapesStateType } from '../types/shapes';
+import type { ActionType } from '../actions';
 
 const temp: Array<number> = [];
 
@@ -18,16 +19,16 @@ const initialState: ShapesStateType = {
   test1: {
     type: SHAPE_RECT,
     posX: {
-      using: USING_CUSTOM,
+      using: USING_FN,
       const: 100,
       custom: temp,
-      fn: null,
+      fn: (t: number): number => Math.sin(t * 2 * Math.PI / 60) * 100 + 100,
     },
     posY: {
-      using: USING_CONST,
+      using: USING_FN,
       const: 100,
       custom: null,
-      fn: null,
+      fn: (t: number): number => Math.cos(t * 2 * Math.PI / 60) * 100 + 100,
     },
     width: {
       using: USING_CONST,
@@ -43,19 +44,19 @@ const initialState: ShapesStateType = {
     },
     fillR: {
       using: USING_CONST,
-      const: 41,
+      const: 241,
       custom: null,
       fn: null,
     },
     fillG: {
       using: USING_CONST,
-      const: 41,
+      const: 241,
       custom: null,
       fn: null,
     },
     fillB: {
       using: USING_CONST,
-      const: 41,
+      const: 241,
       custom: null,
       fn: null,
     },
@@ -109,10 +110,23 @@ const initialState: ShapesStateType = {
 
 export default (
   state: ShapesStateType = initialState,
-  action: { type: string },
+  action: ActionType,
 ): ShapesStateType => {
   switch (action.type) {
+    case 'SHAPE_UPDATE_USING':
+      return {
+        ...state,
+        [action.shape]: {
+          ...state[action.shape],
+          [action.property]: {
+            ...state[action.shape][action.property],
+            using: action.using,
+          },
+        },
+      };
+    case 'SHAPE_UPDATE_CONST':
+      return { ...state };
     default:
-      return state;
+      return { ...state };
   }
 };

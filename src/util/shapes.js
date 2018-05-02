@@ -6,7 +6,7 @@ import { rgbToHex } from './';
 import type { ShapeType } from '../types/shapes';
 import type { PropertyType } from '../types/properties';
 
-export const unpackProperty = (prop: PropertyType, t: number): number => {
+export const calcPropValue = (prop: PropertyType, t: number): number => {
   switch (prop.using) {
     case USING_CONST:
       if (prop.const === null || prop.const === undefined) {
@@ -38,15 +38,15 @@ export const drawShape = (
   switch (shape.type) {
     case SHAPE_RECT:
       ctx.fillStyle = rgbToHex(
-        unpackProperty(shape.fillR, t),
-        unpackProperty(shape.fillG, t),
-        unpackProperty(shape.fillB, t),
+        calcPropValue(shape.fillR, t),
+        calcPropValue(shape.fillG, t),
+        calcPropValue(shape.fillB, t),
       );
       ctx.fillRect(
-        unpackProperty(shape.posX, t),
-        unpackProperty(shape.posY, t),
-        unpackProperty(shape.width, t),
-        unpackProperty(shape.height, t),
+        calcPropValue(shape.posX, t),
+        calcPropValue(shape.posY, t),
+        calcPropValue(shape.width, t),
+        calcPropValue(shape.height, t),
       );
       break;
     default:
