@@ -1,15 +1,20 @@
 // @flow
 
 import React from 'react';
+import styled from 'react-emotion';
 
 import LeftSidebar from '../../components/LeftSidebar';
-import Canvas from '../../containers/Canvas';
+import CanvasView from '../../components/CanvasView';
 import RightSidebar from '../../components/RightSidebar';
 
+const Home = styled('div')`
+  display: flex;
+`;
+
 export default (): ?React$Element<any> => (
-  <div className="flex">
+  <Home className="flex">
     <LeftSidebar />
-    <Canvas />
+    <CanvasView />
     <RightSidebar />
-  </div>
+  </Home>
 );

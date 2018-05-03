@@ -1,11 +1,18 @@
 // @flow
 
 import * as React from 'react';
+import styled from 'react-emotion';
 import { drawShape } from '../../util/shapes';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { UpdateCanvasesActionType } from '../../actions/editor';
+
+const CanvasContainer = styled('div')`
+  display: ${(props): string => {
+    return props.index === props.activeCanvas ? 'block' : 'none';
+  }};
+`;
 
 type PropsType = {
   shapes: ShapesStateType,
@@ -109,9 +116,9 @@ export default class Canvas extends React.Component<PropsType, StateType> {
       <div>
         {this.canvases.map(
           (canvas: React.Element<any>, i: number): React.Element<any> => (
-            <div className={`ba ${i === activeCanvas ? '' : 'dn'}`} key={i}>
+            <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>
               {this.canvases[i]}
-            </div>
+            </CanvasContainer>
           ),
         )}
         <input type="button" value="play/pause" onClick={this.handleClick} />
