@@ -3,7 +3,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Canvas from '../../components/Canvas';
+import Canvas from '../../components/CanvasEditor';
 import { updateCanvases } from '../../actions/editor';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';

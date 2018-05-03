@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'react-emotion';
-import Canvas from '../../containers/Canvas';
+import CanvasEditor from '../../containers/CanvasEditor';
 
 const CanvasView = styled('div')`
   width: 50%;
@@ -10,6 +10,6 @@ const CanvasView = styled('div')`
 
 export default (): ?React$Element<any> => (
   <CanvasView>
-    <Canvas />
+    <CanvasEditor />
   </CanvasView>
 );

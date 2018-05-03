@@ -2,17 +2,17 @@
 
 import * as React from 'react';
 import styled from 'react-emotion';
+import {
+  CanvasEditorContainer,
+  CanvasContainer,
+  TickMarkersContainer,
+  TickMarker,
+} from './styles';
 import { drawShape } from '../../util/shapes';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { UpdateCanvasesActionType } from '../../actions/editor';
-
-const CanvasContainer = styled('div')`
-  display: ${(props): string => {
-    return props.index === props.activeCanvas ? 'block' : 'none';
-  }};
-`;
 
 type PropsType = {
   shapes: ShapesStateType,
@@ -30,7 +30,10 @@ const NUM_FRAMES = 60;
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
 
-export default class Canvas extends React.Component<PropsType, StateType> {
+export default class CanvasEditor extends React.Component<
+  PropsType,
+  StateType,
+> {
   constructor(props: PropsType) {
     super(props);
     this.canvases = [];
@@ -112,17 +115,25 @@ export default class Canvas extends React.Component<PropsType, StateType> {
   render(): ?React$Element<any> {
     const { activeCanvas } = this.state;
 
+    const tickMarkers = [];
+    for (let i = 0; i < NUM_FRAMES; i += 1) {
+      tickMarkers.push(<TickMarker index={i} activeCanvas={activeCanvas} />);
+    }
+
     return (
-      <div>
-        {this.canvases.map(
-          (canvas: React.Element<any>, i: number): React.Element<any> => (
-            <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>
-              {this.canvases[i]}
-            </CanvasContainer>
-          ),
-        )}
+      <CanvasEditorContainer>
+        <div>
+          {this.canvases.map(
+            (canvas: React.Element<any>, i: number): React.Element<any> => (
+              <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>
+                {this.canvases[i]}
+              </CanvasContainer>
+            ),
+          )}
+        </div>
+        <TickMarkersContainer>{tickMarkers}</TickMarkersContainer>
         <input type="button" value="play/pause" onClick={this.handleClick} />
-      </div>
+      </CanvasEditorContainer>
     );
   }
 }

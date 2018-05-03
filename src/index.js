@@ -6,7 +6,8 @@ import configureStore from './store';
 import Home from './components/Home';
 import registerServiceWorker from './registerServiceWorker';
 
-import './css/fonts/stylesheet.css';
+import './styles/css/reset.css';
+import './styles/css/fonts/stylesheet.css';
 
 const root = document.getElementById('root');
 
