@@ -12,7 +12,7 @@ export default ({
   order: OrderStateType,
 }): ?React$Element<any> => (
   <ol>
-    {order.map((key: string): ?React$Element<any> => (
+    {[...order].reverse().map((key: string): ?React$Element<any> => (
       <li key={key}>
         {key}, a {shapes[key].type}
       </li>
