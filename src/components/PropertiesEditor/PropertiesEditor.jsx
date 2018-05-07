@@ -43,7 +43,7 @@ const ShapePropertiesView = ({
       {name}, a {shape.type}
     </div>
     {SHAPE_RECT_PROPS.map((key: string): ?React$Element<any> => (
-      <div key={uniqid()}>
+      <div key={key}>
         <div>{key}</div>
         <select
           value={shape[key].using}
