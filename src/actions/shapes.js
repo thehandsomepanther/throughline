@@ -13,6 +13,11 @@ export type UpdateUsingActionType = {
   property: string,
   using: UsingType,
 };
+export type UpdateUsingType = (
+  shape: string,
+  property: string,
+  using: UsingType,
+) => UpdateUsingActionType;
 export const updateUsing = (
   shape: string,
   property: string,
@@ -27,13 +32,21 @@ export const updateUsing = (
 export type UpdateConstActionType = {
   type: ShapeUpdateConstType,
   shape: string,
-  val: number,
+  property: string,
+  value: number,
 };
+export type UpdateConstType = (
+  shape: string,
+  property: string,
+  value: number,
+) => UpdateConstActionType;
 export const updateConst = (
   shape: string,
-  val: number,
+  property: string,
+  value: number,
 ): UpdateConstActionType => ({
   type: SHAPE_UPDATE_CONST,
   shape,
-  val,
+  property,
+  value,
 });

@@ -125,7 +125,16 @@ export default (
         },
       };
     case 'SHAPE_UPDATE_CONST':
-      return { ...state };
+      return {
+        ...state,
+        [action.shape]: {
+          ...state[action.shape],
+          [action.property]: {
+            ...state[action.shape][action.property],
+            const: action.value,
+          },
+        },
+      };
     default:
       return { ...state };
   }
