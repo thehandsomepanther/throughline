@@ -2,7 +2,9 @@
 
 import styled from 'react-emotion';
 
-export const CanvasEditorContainer = styled('div')``;
+export const CanvasEditorContainer = styled('div')`
+  padding-top: 1rem;
+`;
 
 export const CanvasesContainer = styled('div')`
   display: flex;
@@ -21,6 +23,7 @@ export const CanvasContainer = styled('div')`
   background-color: white;
   width: 600px;
   height: 600px;
+  border-radius: 4px;
 `;
 
 export const TickMarkersContainer = styled('div')`

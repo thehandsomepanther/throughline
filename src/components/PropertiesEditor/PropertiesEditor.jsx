@@ -1,11 +1,16 @@
 // @flow
 
 import * as React from 'react';
+import {
+  PropertiesEditorContainer,
+  ShapeInfo,
+  PropertyInfoContainer,
+  PropertyName,
+} from './styles';
 import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
-import type { OrderStateType } from '../../types/order';
 import type { UpdateUsingType, UpdateConstType } from '../../actions/shapes';
 
 const getPropValue = (
@@ -36,12 +41,12 @@ const ShapePropertiesView = ({
   handleUpdateConst: UpdateConstType,
 }): ?React$Element<any> => (
   <div>
-    <div>
+    <ShapeInfo>
       {shape.name}, a {shape.type}
-    </div>
+    </ShapeInfo>
     {SHAPE_RECT_PROPS.map((prop: string): ?React$Element<any> => (
-      <div key={prop}>
-        <div>{prop}</div>
+      <PropertyInfoContainer key={prop}>
+        <PropertyName>{prop}</PropertyName>
         <select
           value={shape[prop].using}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,7 +63,7 @@ const ShapePropertiesView = ({
             handleUpdateConst(shape.name, prop, e.target.value);
           }}
         />
-      </div>
+      </PropertyInfoContainer>
     ))}
   </div>
 );
@@ -66,25 +71,19 @@ const ShapePropertiesView = ({
 export default ({
   shapes,
   editor,
-  order,
   updateConst,
   updateUsing,
 }: {
   shapes: ShapesStateType,
   editor: EditorStateType,
-  order: OrderStateType,
   updateConst: UpdateConstType,
   updateUsing: UpdateUsingType,
 }): ?React$Element<any> => (
-  <div>
-    {order.map((key: string, i: number): ?React$Element<any> => (
-      <div key={`${key}-${i}`}>
-        <ShapePropertiesView
-          shape={shapes[key]}
-          handleUsingChange={updateUsing}
-          handleUpdateConst={updateConst}
-        />
-      </div>
-    ))}
-  </div>
+  <PropertiesEditorContainer>
+    <ShapePropertiesView
+      shape={shapes[editor.activeShape]}
+      handleUsingChange={updateUsing}
+      handleUpdateConst={updateConst}
+    />
+  </PropertiesEditorContainer>
 );
