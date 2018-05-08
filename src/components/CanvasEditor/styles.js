@@ -41,10 +41,14 @@ export const TickMarker = styled('div')`
   width: 2px;
   height: ${(props: TickMarkerPropsType): string =>
     props.index === props.activeCanvas ? '40px' : '20px'};
-  width: 2px;
   margin-left: 2px;
   margin-right: 2px;
   background-color: #fefefe;
+  cursor: pointer;
+
+  &:hover {
+    height: 40px;
+  }
 `;
 
 export const ControlsContainer = styled('div')`

@@ -108,15 +108,17 @@ export default class CanvasEditor extends React.Component<
 
   incrementActiveCanvas = () => {
     const { activeCanvas } = this.state;
-    this.setState({
-      activeCanvas: (activeCanvas + 1) % NUM_FRAMES,
-    });
+    this.setActiveCanvas(activeCanvas + 1);
   };
 
   decrementActiveCanvas = () => {
     const { activeCanvas } = this.state;
+    this.setActiveCanvas(activeCanvas - 1);
+  };
+
+  setActiveCanvas = (n: number) => {
     this.setState({
-      activeCanvas: (activeCanvas - 1) % NUM_FRAMES,
+      activeCanvas: n % NUM_FRAMES,
     });
   };
 
@@ -125,7 +127,15 @@ export default class CanvasEditor extends React.Component<
 
     const tickMarkers = [];
     for (let i = 0; i < NUM_FRAMES; i += 1) {
-      tickMarkers.push(<TickMarker index={i} activeCanvas={activeCanvas} />);
+      tickMarkers.push(
+        <TickMarker
+          index={i}
+          activeCanvas={activeCanvas}
+          onClick={() => {
+            this.setActiveCanvas(i);
+          }}
+        />,
+      );
     }
 
     return (
