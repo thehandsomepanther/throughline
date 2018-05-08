@@ -18,6 +18,7 @@ for (let i = 0; i < 60; i += 1) {
 const initialState: ShapesStateType = {
   test1: {
     type: SHAPE_RECT,
+    name: 'test1',
     posX: {
       using: USING_FN,
       const: 100,
@@ -63,6 +64,7 @@ const initialState: ShapesStateType = {
   },
   test2: {
     type: SHAPE_RECT,
+    name: 'test2',
     posX: {
       using: USING_CONST,
       const: 150,

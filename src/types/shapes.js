@@ -27,6 +27,7 @@ export const SHAPE_RECT_PROPS = [
 
 export type ShapeRectType = {
   +type: 'SHAPE_RECT',
+  +name: string,
   +posX: PropertyType,
   +posY: PropertyType,
   +fillR: PropertyType,
@@ -38,6 +39,7 @@ export type ShapeRectType = {
 
 export type ShapeEllipseType = {
   +type: 'SHAPE_ELLIPSE',
+  +name: string,
   +posX: PropertyType,
   +posY: PropertyType,
   +fillR: PropertyType,

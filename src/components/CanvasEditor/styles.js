@@ -4,6 +4,12 @@ import styled from 'react-emotion';
 
 export const CanvasEditorContainer = styled('div')``;
 
+export const CanvasesContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 type CanvasContainerPropsType = {
   index: number,
   activeCanvas: number,
@@ -13,11 +19,15 @@ export const CanvasContainer = styled('div')`
   display: ${(props: CanvasContainerPropsType): string =>
     props.index === props.activeCanvas ? 'block' : 'none'};
   background-color: white;
+  width: 600px;
+  height: 600px;
 `;
 
 export const TickMarkersContainer = styled('div')`
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 `;
 
 type TickMarkerPropsType = {
@@ -32,4 +42,11 @@ export const TickMarker = styled('div')`
   margin-left: 2px;
   margin-right: 2px;
   background-color: #fefefe;
+`;
+
+export const ControlsContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 `;

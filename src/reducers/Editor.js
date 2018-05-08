@@ -19,6 +19,11 @@ export default (
         ...state,
         shouldUpdateCanvases: true,
       };
+    case 'EDITOR_CHANGE_ACTIVE_SHAPE':
+      return {
+        ...state,
+        activeShape: action.shape,
+      };
     case 'EDITOR_UPDATE_CANVASES':
       return {
         ...state,

@@ -3,9 +3,11 @@
 import * as React from 'react';
 import {
   CanvasEditorContainer,
+  CanvasesContainer,
   CanvasContainer,
   TickMarkersContainer,
   TickMarker,
+  ControlsContainer,
 } from './styles';
 import { drawShape } from '../../util/shapes';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
@@ -92,7 +94,7 @@ export default class CanvasEditor extends React.Component<
     });
   }
 
-  handleClick = () => {
+  handleTogglePlayClick = () => {
     const { interval } = this.state;
     let newInterval: IntervalID;
     if (interval !== null) {
@@ -111,6 +113,13 @@ export default class CanvasEditor extends React.Component<
     });
   };
 
+  decrementActiveCanvas = () => {
+    const { activeCanvas } = this.state;
+    this.setState({
+      activeCanvas: (activeCanvas - 1) % NUM_FRAMES,
+    });
+  };
+
   render(): ?React$Element<any> {
     const { activeCanvas } = this.state;
 
@@ -121,7 +130,7 @@ export default class CanvasEditor extends React.Component<
 
     return (
       <CanvasEditorContainer>
-        <div>
+        <CanvasesContainer>
           {this.canvases.map(
             (canvas: React.Element<any>, i: number): React.Element<any> => (
               <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>
@@ -129,9 +138,25 @@ export default class CanvasEditor extends React.Component<
               </CanvasContainer>
             ),
           )}
-        </div>
+        </CanvasesContainer>
         <TickMarkersContainer>{tickMarkers}</TickMarkersContainer>
-        <input type="button" value="play/pause" onClick={this.handleClick} />
+        <ControlsContainer>
+          <input
+            type="button"
+            value="previous frame"
+            onClick={this.decrementActiveCanvas}
+          />
+          <input
+            type="button"
+            value="play/pause"
+            onClick={this.handleTogglePlayClick}
+          />
+          <input
+            type="button"
+            value="next frame"
+            onClick={this.incrementActiveCanvas}
+          />
+        </ControlsContainer>
       </CanvasEditorContainer>
     );
   }

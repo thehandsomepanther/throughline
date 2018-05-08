@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import uniqid from 'uniqid';
 import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
@@ -11,44 +10,42 @@ import type { UpdateUsingType, UpdateConstType } from '../../actions/shapes';
 
 const getPropValue = (
   shape: ShapeType,
-  key: string,
+  prop: string,
 ): string | number | Array<number> => {
-  switch (shape[key].using) {
+  switch (shape[prop].using) {
     case USING_CONST:
-      return shape[key].const;
+      return shape[prop].const;
     case USING_CUSTOM:
-      return shape[key].custom;
+      return shape[prop].custom;
     case USING_FN:
-      return shape[key].fn.toString();
+      return shape[prop].fn.toString();
     default:
       throw new Error(
-        `Attempted to using an unrecognized value, ${shape[key].using}`,
+        `Attempted to using an unrecognized value, ${shape[prop].using}`,
       );
   }
 };
 
 const ShapePropertiesView = ({
   shape,
-  name,
   handleUsingChange,
   handleUpdateConst,
 }: {
   shape: ShapeType,
-  name: string,
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
 }): ?React$Element<any> => (
   <div>
     <div>
-      {name}, a {shape.type}
+      {shape.name}, a {shape.type}
     </div>
-    {SHAPE_RECT_PROPS.map((key: string): ?React$Element<any> => (
-      <div key={key}>
-        <div>{key}</div>
+    {SHAPE_RECT_PROPS.map((prop: string): ?React$Element<any> => (
+      <div key={prop}>
+        <div>{prop}</div>
         <select
-          value={shape[key].using}
+          value={shape[prop].using}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            handleUsingChange(name, key, e.target.value);
+            handleUsingChange(shape.name, prop, e.target.value);
           }}
         >
           <option value={USING_CONST}>{USING_CONST}</option>
@@ -56,9 +53,9 @@ const ShapePropertiesView = ({
           <option value={USING_FN}>{USING_FN}</option>
         </select>
         <input
-          value={getPropValue(shape, key)}
+          value={getPropValue(shape, prop)}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleUpdateConst(name, key, e.target.value);
+            handleUpdateConst(shape.name, prop, e.target.value);
           }}
         />
       </div>
@@ -81,10 +78,9 @@ export default ({
 }): ?React$Element<any> => (
   <div>
     {order.map((key: string, i: number): ?React$Element<any> => (
-      <div key={i}>
+      <div key={`${key}-${i}`}>
         <ShapePropertiesView
           shape={shapes[key]}
-          name={key}
           handleUsingChange={updateUsing}
           handleUpdateConst={updateConst}
         />
