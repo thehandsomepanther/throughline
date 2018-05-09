@@ -23,13 +23,13 @@ const initialState: ShapesStateType = {
       using: USING_FN,
       const: 100,
       custom: temp,
-      fn: (t: number): number => Math.sin(t * 2 * Math.PI / 60) * 100 + 100,
+      fn: 'return Math.sin(t * 2 * Math.PI / 60) * 100 + 100',
     },
     posY: {
       using: USING_FN,
       const: 100,
       custom: temp,
-      fn: (t: number): number => Math.cos(t * 2 * Math.PI / 60) * 100 + 100,
+      fn: 'return Math.cos(t * 2 * Math.PI / 60) * 100 + 100',
     },
     width: {
       using: USING_CONST,
@@ -133,7 +133,18 @@ export default (
           ...state[action.shape],
           [action.property]: {
             ...state[action.shape][action.property],
-            const: action.value,
+            const: action.value || 0,
+          },
+        },
+      };
+    case 'SHAPE_UPDATE_FN':
+      return {
+        ...state,
+        [action.shape]: {
+          ...state[action.shape],
+          [action.property]: {
+            ...state[action.shape][action.property],
+            fn: action.value,
           },
         },
       };

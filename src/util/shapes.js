@@ -6,6 +6,14 @@ import { rgbToHex } from './';
 import type { ShapeType } from '../types/shapes';
 import type { PropertyType } from '../types/properties';
 
+export const tryEvalFunctionProp = (fn: string, t: number): ?number => {
+  try {
+    return eval(`(function(t){${fn}})(${t})`);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const calcPropValue = (prop: PropertyType, t: number): number => {
   switch (prop.using) {
     case USING_CONST:
@@ -24,7 +32,7 @@ export const calcPropValue = (prop: PropertyType, t: number): number => {
           'Tried to use function value of prop when none exists.',
         );
       }
-      return prop.fn(t);
+      return tryEvalFunctionProp(prop.fn, t);
     default:
       throw new Error(`Tried to use unexpected prop: ${prop.using}`);
   }

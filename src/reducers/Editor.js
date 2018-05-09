@@ -2,6 +2,7 @@
 
 import type { EditorStateType } from '../types/editor';
 import type { ActionType } from '../actions';
+import { tryEvalFunctionProp } from '../util/shapes';
 
 const initialState: EditorStateType = {
   activeShape: 'test1',
@@ -18,6 +19,11 @@ export default (
       return {
         ...state,
         shouldUpdateCanvases: true,
+      };
+    case 'SHAPE_UPDATE_FN':
+      return {
+        ...state,
+        shouldUpdateCanvases: tryEvalFunctionProp(action.value, 0) !== null,
       };
     case 'EDITOR_CHANGE_ACTIVE_SHAPE':
       return {

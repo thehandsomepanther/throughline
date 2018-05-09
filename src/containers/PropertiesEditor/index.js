@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import PropertiesEditor from '../../components/PropertiesEditor';
-import { updateUsing, updateConst } from '../../actions/shapes';
+import { updateUsing, updateConst, updateFunction } from '../../actions/shapes';
 import type { ShapesStateType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
 import type { StoreType } from '../../types/store';
@@ -20,6 +20,6 @@ const mapStateToProps = (
 });
 
 const mapDispatchToProps = (dispatch: any): any =>
-  bindActionCreators({ updateUsing, updateConst }, dispatch);
+  bindActionCreators({ updateUsing, updateConst, updateFunction }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesEditor);

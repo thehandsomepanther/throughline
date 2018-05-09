@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import { Controlled as CodeMirror } from 'react-codemirror2';
 
 import {
   PropertiesEditorContainer,
@@ -16,11 +15,10 @@ import type { EditorStateType } from '../../types/editor';
 import type {
   UpdateUsingType,
   UpdateConstType,
+  UpdateFunctionType,
   UpdateConstActionType,
+  UpdateFunctionActionType,
 } from '../../actions/shapes';
-
-require('codemirror/mode/xml/xml');
-require('codemirror/mode/javascript/javascript');
 
 const getPropValue = (
   shape: ShapeType,
@@ -32,7 +30,7 @@ const getPropValue = (
     case USING_CUSTOM:
       return shape[prop].custom;
     case USING_FN:
-      return shape[prop].fn.toString();
+      return shape[prop].fn;
     default:
       throw new Error(
         `Attempted to using an unrecognized value, ${shape[prop].using}`,
@@ -48,7 +46,8 @@ const ConstInput = ({
   handleUpdateConst: (number) => UpdateConstActionType,
 }): ?React$Element<any> => (
   <input
-    value={value}
+    value={value || ''}
+    placeholder={0}
     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
       handleUpdateConst(parseInt(e.target.value, 10));
     }}
@@ -57,14 +56,17 @@ const ConstInput = ({
 
 const FunctionInput = ({
   code,
+  handleUpdateFunction,
 }: {
   code: string | number | Array<number>,
+  handleUpdateFunction: (string) => UpdateFunctionActionType,
 }): ?React$Element<any> => (
   <div>
-    <CodeMirror
+    <input
       value={code}
-      options={{ mode: 'javascript', lineNumbers: true, theme: 'material' }}
-      viewportMargin={Infinity}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        handleUpdateFunction(e.target.value);
+      }}
     />
   </div>
 );
@@ -73,10 +75,12 @@ const ShapePropertiesView = ({
   shape,
   handleUsingChange,
   handleUpdateConst,
+  handleUpdateFunction,
 }: {
   shape: ShapeType,
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
+  handleUpdateFunction: UpdateFunctionType,
 }): ?React$Element<any> => (
   <div>
     <ShapeInfo>
@@ -105,7 +109,12 @@ const ShapePropertiesView = ({
         )}
         {shape[prop].using === USING_CUSTOM}
         {shape[prop].using === USING_FN && (
-          <FunctionInput code={getPropValue(shape, prop)} />
+          <FunctionInput
+            code={getPropValue(shape, prop)}
+            handleUpdateFunction={(code: string) => {
+              handleUpdateFunction(shape.name, prop, code);
+            }}
+          />
         )}
       </PropertyInfoContainer>
     ))}
@@ -117,17 +126,20 @@ export default ({
   editor,
   updateConst,
   updateUsing,
+  updateFunction,
 }: {
   shapes: ShapesStateType,
   editor: EditorStateType,
   updateConst: UpdateConstType,
   updateUsing: UpdateUsingType,
+  updateFunction: UpdateFnType,
 }): ?React$Element<any> => (
   <PropertiesEditorContainer>
     <ShapePropertiesView
       shape={shapes[editor.activeShape]}
       handleUsingChange={updateUsing}
       handleUpdateConst={updateConst}
+      handleUpdateFunction={updateFunction}
     />
   </PropertiesEditorContainer>
 );

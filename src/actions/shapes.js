@@ -1,10 +1,15 @@
 // @flow
 
-import { SHAPE_UPDATE_USING, SHAPE_UPDATE_CONST } from '../types/shapes';
+import {
+  SHAPE_UPDATE_USING,
+  SHAPE_UPDATE_CONST,
+  SHAPE_UPDATE_FN,
+} from '../types/shapes';
 import type { UsingType } from '../types/properties';
 import type {
   ShapeUpdateUsingType,
   ShapeUpdateConstType,
+  ShapeUpdateFunctionType,
 } from '../types/shapes';
 
 export type UpdateUsingActionType = {
@@ -46,6 +51,28 @@ export const updateConst = (
   value: number,
 ): UpdateConstActionType => ({
   type: SHAPE_UPDATE_CONST,
+  shape,
+  property,
+  value,
+});
+
+export type UpdateFunctionActionType = {
+  type: ShapeUpdateFunctionType,
+  shape: string,
+  property: string,
+  value: string,
+};
+export type UpdateFunctionType = (
+  shape: string,
+  property: string,
+  value: string,
+) => UpdateFunctionActionType;
+export const updateFunction = (
+  shape: string,
+  property: string,
+  value: string,
+): UpdateFunctionActionType => ({
+  type: SHAPE_UPDATE_FN,
   shape,
   property,
   value,
