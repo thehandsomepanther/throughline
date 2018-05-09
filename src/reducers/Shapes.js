@@ -28,7 +28,7 @@ const initialState: ShapesStateType = {
     posY: {
       using: USING_FN,
       const: 100,
-      custom: null,
+      custom: temp,
       fn: (t: number): number => Math.cos(t * 2 * Math.PI / 60) * 100 + 100,
     },
     width: {

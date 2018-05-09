@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
+
 import configureStore from './store';
 import Home from './components/Home';
 import registerServiceWorker from './registerServiceWorker';

@@ -23,4 +23,6 @@ export const PropertyInfoContainer = styled('div')`
 export const PropertyName = styled('div')`
   color: ${COLOR_NEAR_BLACK};
   margin-top: 1rem;
+  display: inline-block;
+  margin-right: 1rem;
 `;

@@ -1,6 +1,8 @@
 // @flow
 
 import * as React from 'react';
+import { Controlled as CodeMirror } from 'react-codemirror2';
+
 import {
   PropertiesEditorContainer,
   ShapeInfo,
@@ -11,7 +13,14 @@ import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
-import type { UpdateUsingType, UpdateConstType } from '../../actions/shapes';
+import type {
+  UpdateUsingType,
+  UpdateConstType,
+  UpdateConstActionType,
+} from '../../actions/shapes';
+
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/javascript/javascript');
 
 const getPropValue = (
   shape: ShapeType,
@@ -30,6 +39,35 @@ const getPropValue = (
       );
   }
 };
+
+const ConstInput = ({
+  value,
+  handleUpdateConst,
+}: {
+  value: string | number | Array<number>,
+  handleUpdateConst: (number) => UpdateConstActionType,
+}): ?React$Element<any> => (
+  <input
+    value={value}
+    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+      handleUpdateConst(parseInt(e.target.value, 10));
+    }}
+  />
+);
+
+const FunctionInput = ({
+  code,
+}: {
+  code: string | number | Array<number>,
+}): ?React$Element<any> => (
+  <div>
+    <CodeMirror
+      value={code}
+      options={{ mode: 'javascript', lineNumbers: true, theme: 'material' }}
+      viewportMargin={Infinity}
+    />
+  </div>
+);
 
 const ShapePropertiesView = ({
   shape,
@@ -53,16 +91,22 @@ const ShapePropertiesView = ({
             handleUsingChange(shape.name, prop, e.target.value);
           }}
         >
-          <option value={USING_CONST}>{USING_CONST}</option>
-          <option value={USING_CUSTOM}>{USING_CUSTOM}</option>
-          <option value={USING_FN}>{USING_FN}</option>
+          <option value={USING_CONST}>Constant</option>
+          <option value={USING_CUSTOM}>Custom</option>
+          <option value={USING_FN}>Function</option>
         </select>
-        <input
-          value={getPropValue(shape, prop)}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleUpdateConst(shape.name, prop, e.target.value);
-          }}
-        />
+        {shape[prop].using === USING_CONST && (
+          <ConstInput
+            value={getPropValue(shape, prop)}
+            handleUpdateConst={(val: number) => {
+              handleUpdateConst(shape.name, prop, val);
+            }}
+          />
+        )}
+        {shape[prop].using === USING_CUSTOM}
+        {shape[prop].using === USING_FN && (
+          <FunctionInput code={getPropValue(shape, prop)} />
+        )}
       </PropertyInfoContainer>
     ))}
   </div>
