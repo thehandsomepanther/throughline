@@ -73,11 +73,13 @@ const FunctionInput = ({
 
 const ShapePropertiesView = ({
   shape,
+  shapeKey,
   handleUsingChange,
   handleUpdateConst,
   handleUpdateFunction,
 }: {
   shape: ShapeType,
+  shapeKey: string,
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
   handleUpdateFunction: UpdateFunctionType,
@@ -92,7 +94,7 @@ const ShapePropertiesView = ({
         <select
           value={shape[prop].using}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            handleUsingChange(shape.name, prop, e.target.value);
+            handleUsingChange(shapeKey, prop, e.target.value);
           }}
         >
           <option value={USING_CONST}>Constant</option>
@@ -102,18 +104,18 @@ const ShapePropertiesView = ({
         {shape[prop].using === USING_CONST && (
           <ConstInput
             value={getPropValue(shape, prop)}
-            handleUpdateConst={(val: number) => {
-              handleUpdateConst(shape.name, prop, val);
-            }}
+            handleUpdateConst={(val: number): UpdateConstActionType =>
+              handleUpdateConst(shapeKey, prop, val)
+            }
           />
         )}
         {shape[prop].using === USING_CUSTOM}
         {shape[prop].using === USING_FN && (
           <FunctionInput
             code={getPropValue(shape, prop)}
-            handleUpdateFunction={(code: string) => {
-              handleUpdateFunction(shape.name, prop, code);
-            }}
+            handleUpdateFunction={(code: string): UpdateFunctionActionType =>
+              handleUpdateFunction(shapeKey, prop, code)
+            }
           />
         )}
       </PropertyInfoContainer>
@@ -132,14 +134,16 @@ export default ({
   editor: EditorStateType,
   updateConst: UpdateConstType,
   updateUsing: UpdateUsingType,
-  updateFunction: UpdateFnType,
-}): ?React$Element<any> => (
-  <PropertiesEditorContainer>
-    <ShapePropertiesView
-      shape={shapes[editor.activeShape]}
-      handleUsingChange={updateUsing}
-      handleUpdateConst={updateConst}
-      handleUpdateFunction={updateFunction}
-    />
-  </PropertiesEditorContainer>
-);
+  updateFunction: UpdateFunctionType,
+}): ?React$Element<any> =>
+  editor.activeShape ? (
+    <PropertiesEditorContainer>
+      <ShapePropertiesView
+        shapeKey={editor.activeShape}
+        shape={shapes[editor.activeShape]}
+        handleUsingChange={updateUsing}
+        handleUpdateConst={updateConst}
+        handleUpdateFunction={updateFunction}
+      />
+    </PropertiesEditorContainer>
+  ) : null;

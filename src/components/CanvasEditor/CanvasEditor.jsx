@@ -13,13 +13,19 @@ import { drawShape } from '../../util/shapes';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
-import type { UpdateCanvasesActionType } from '../../actions/editor';
+import type {
+  UpdateCanvasesActionType,
+  AddErroneousPropActionType,
+  ResetErroneousPropsActionType,
+} from '../../actions/editor';
 
 type PropsType = {
   shapes: ShapesStateType,
   order: OrderStateType,
   editor: EditorStateType,
   updateCanvases: () => UpdateCanvasesActionType,
+  addErroneousProp: (shape: string, prop: string) => AddErroneousPropActionType,
+  resetErroneousProps: () => ResetErroneousPropsActionType,
 };
 
 type StateType = {
@@ -71,28 +77,21 @@ export default class CanvasEditor extends React.Component<
     }
   }
 
-  canvases: Array<React.Element<any>>;
-  canvasEls: Array<?HTMLCanvasElement>;
-
-  redrawCanvases() {
-    for (let i = 0; i < this.canvasEls.length; i += 1) {
-      this.redrawCanvas(i);
-    }
-  }
-
-  redrawCanvas(i: number) {
-    if (!this.canvasEls[i]) {
-      return;
-    }
-
-    const { shapes, order } = this.props;
-    const ctx = this.canvasEls[i].getContext('2d');
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    order.forEach((key: string) => {
-      const shape: ShapeType = shapes[key];
-      drawShape(shape, ctx, i);
+  setActiveCanvas = (n: number) => {
+    this.setState({
+      activeCanvas: n % NUM_FRAMES,
     });
-  }
+  };
+
+  decrementActiveCanvas = () => {
+    const { activeCanvas } = this.state;
+    this.setActiveCanvas(activeCanvas - 1);
+  };
+
+  incrementActiveCanvas = () => {
+    const { activeCanvas } = this.state;
+    this.setActiveCanvas(activeCanvas + 1);
+  };
 
   handleTogglePlayClick = () => {
     const { interval } = this.state;
@@ -106,29 +105,47 @@ export default class CanvasEditor extends React.Component<
     }
   };
 
-  incrementActiveCanvas = () => {
-    const { activeCanvas } = this.state;
-    this.setActiveCanvas(activeCanvas + 1);
+  handleDrawCanvasError = (shape: string, prop: string) => {
+    const { addErroneousProp } = this.props;
+    console.log(shape, prop);
+    addErroneousProp(shape, prop);
   };
 
-  decrementActiveCanvas = () => {
-    const { activeCanvas } = this.state;
-    this.setActiveCanvas(activeCanvas - 1);
+  redrawCanvases = () => {
+    // const { resetErroneousProps } = this.props;
+    // resetErroneousProps();
+    for (let i = 0; i < this.canvasEls.length; i += 1) {
+      this.redrawCanvas(i);
+    }
   };
 
-  setActiveCanvas = (n: number) => {
-    this.setState({
-      activeCanvas: n % NUM_FRAMES,
+  redrawCanvas = (i: number) => {
+    if (!this.canvasEls[i]) {
+      return;
+    }
+
+    const { shapes, order } = this.props;
+    const ctx = this.canvasEls[i].getContext('2d');
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    order.forEach((key: string) => {
+      drawShape(shapes[key], ctx, i, (prop: string) => {
+        this.handleDrawCanvasError(key, prop);
+      });
     });
   };
 
+  canvases: Array<React.Element<any>>;
+  canvasEls: Array<?HTMLCanvasElement>;
+
   render(): ?React$Element<any> {
+    const { editor } = this.props;
     const { activeCanvas } = this.state;
 
     const tickMarkers = [];
     for (let i = 0; i < NUM_FRAMES; i += 1) {
       tickMarkers.push(
         <TickMarker
+          key={`tickMarker-${i}`}
           index={i}
           activeCanvas={activeCanvas}
           onClick={() => {

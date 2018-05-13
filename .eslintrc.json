@@ -9,7 +9,11 @@
       2,
       "always"
     ],
-    "no-confusing-arrow":[
+    "no-confusing-arrow": [
+      0,
+      "never"
+    ],
+    "no-case-declarations": [
       0,
       "never"
     ],
