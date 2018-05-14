@@ -18,10 +18,6 @@ export default (
   switch (action.type) {
     case 'SHAPE_UPDATE_USING':
     case 'SHAPE_UPDATE_CONST':
-      return {
-        ...state,
-        shouldUpdateCanvases: true,
-      };
     case 'SHAPE_UPDATE_FN':
       return {
         ...state,
@@ -40,17 +36,17 @@ export default (
     case 'EDITOR_ADD_ERRONEOUS_PROP':
       tempState = { ...state };
       if (!tempState.erroneousProps[action.shape]) {
-        tempState.erroneousProps[action.shape] = [];
+        tempState.erroneousProps[action.shape] = {};
       }
 
       return {
         ...tempState,
         erroneousProps: {
           ...state.erroneousProps,
-          [action.shape]: [
+          [action.shape]: {
             ...tempState.erroneousProps[action.shape],
-            action.prop,
-          ],
+            [action.prop]: true,
+          },
         },
       };
     case 'EDITOR_RESET_ERRONEOUS_PROP':

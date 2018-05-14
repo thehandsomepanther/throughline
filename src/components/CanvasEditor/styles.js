@@ -1,6 +1,7 @@
 // @flow
 
 import styled from 'react-emotion';
+import { COLOR_NEAR_WHITE, COLOR_NEAR_BLACK } from '../../styles';
 
 export const CanvasEditorContainer = styled('div')`
   padding-top: 1rem;
@@ -10,6 +11,7 @@ export const CanvasesContainer = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 type CanvasContainerPropsType = {
@@ -20,7 +22,7 @@ type CanvasContainerPropsType = {
 export const CanvasContainer = styled('div')`
   display: ${(props: CanvasContainerPropsType): string =>
     props.index === props.activeCanvas ? 'block' : 'none'};
-  background-color: white;
+  background-color: ${COLOR_NEAR_WHITE};
   width: 600px;
   height: 600px;
   border-radius: 4px;
@@ -43,7 +45,7 @@ export const TickMarker = styled('div')`
     props.index === props.activeCanvas ? '40px' : '20px'};
   margin-left: 2px;
   margin-right: 2px;
-  background-color: #fefefe;
+  background-color: ${COLOR_NEAR_WHITE};
   cursor: pointer;
 
   &:hover {
@@ -56,4 +58,13 @@ export const ControlsContainer = styled('div')`
   align-items: center;
   justify-content: center;
   margin-top: 1rem;
+`;
+
+export const NotificationContainer = styled('div')`
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  color: ${COLOR_NEAR_BLACK};
+  text-align: center;
 `;

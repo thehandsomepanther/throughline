@@ -16,6 +16,8 @@ export type EditorStateType = {
   +activeShape: ?string,
   +shouldUpdateCanvases: boolean,
   +erroneousProps: {
-    +[key: string]: Array<string>,
+    +[key: string]: {
+      +[key: string]: true,
+    },
   },
 };

@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react';
+import _ from 'lodash';
 import {
   CanvasEditorContainer,
   CanvasesContainer,
@@ -8,9 +9,10 @@ import {
   TickMarkersContainer,
   TickMarker,
   ControlsContainer,
+  NotificationContainer,
 } from './styles';
 import { drawShape } from '../../util/shapes';
-import type { ShapesStateType, ShapeType } from '../../types/shapes';
+import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type {
@@ -59,6 +61,11 @@ export default class CanvasEditor extends React.Component<
       );
     }
 
+    this.debouncedRedrawCanvases = _.debounce(this.redrawCanvases, 200, {
+      leading: false,
+      trailing: true,
+    });
+
     this.state = {
       activeCanvas: 0,
       interval: null,
@@ -72,7 +79,7 @@ export default class CanvasEditor extends React.Component<
   componentDidUpdate() {
     const { editor, updateCanvases } = this.props;
     if (editor.shouldUpdateCanvases) {
-      this.redrawCanvases();
+      this.debouncedRedrawCanvases();
       updateCanvases();
     }
   }
@@ -107,13 +114,12 @@ export default class CanvasEditor extends React.Component<
 
   handleDrawCanvasError = (shape: string, prop: string) => {
     const { addErroneousProp } = this.props;
-    console.log(shape, prop);
     addErroneousProp(shape, prop);
   };
 
   redrawCanvases = () => {
-    // const { resetErroneousProps } = this.props;
-    // resetErroneousProps();
+    const { resetErroneousProps } = this.props;
+    resetErroneousProps();
     for (let i = 0; i < this.canvasEls.length; i += 1) {
       this.redrawCanvas(i);
     }
@@ -136,6 +142,7 @@ export default class CanvasEditor extends React.Component<
 
   canvases: Array<React.Element<any>>;
   canvasEls: Array<?HTMLCanvasElement>;
+  debouncedRedrawCanvases: () => void;
 
   render(): ?React$Element<any> {
     const { editor } = this.props;
@@ -158,6 +165,11 @@ export default class CanvasEditor extends React.Component<
     return (
       <CanvasEditorContainer>
         <CanvasesContainer>
+          {Object.keys(editor.erroneousProps).length > 0 && (
+            <NotificationContainer>
+              Some of your shapes have invalid props
+            </NotificationContainer>
+          )}
           {this.canvases.map(
             (canvas: React.Element<any>, i: number): React.Element<any> => (
               <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>

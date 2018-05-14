@@ -63,7 +63,8 @@ const FunctionInput = ({
 }): ?React$Element<any> => (
   <div>
     <input
-      value={code}
+      value={code || ''}
+      placeholder="return 0"
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         handleUpdateFunction(e.target.value);
       }}

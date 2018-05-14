@@ -144,7 +144,7 @@ export default (
           ...state[action.shape],
           [action.property]: {
             ...state[action.shape][action.property],
-            fn: action.value,
+            fn: action.value || '',
           },
         },
       };
