@@ -11,8 +11,8 @@ import {
   ControlsContainer,
   NotificationContainer,
 } from './styles';
-import { drawShape } from '../../util/shapes';
-import type { ShapesStateType } from '../../types/shapes';
+import { getShapePropValues } from '../../util/shapes';
+import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type {
@@ -20,6 +20,7 @@ import type {
   AddErroneousPropActionType,
   ResetErroneousPropsActionType,
 } from '../../actions/editor';
+import { rgbToHex } from '../../util';
 
 type PropsType = {
   shapes: ShapesStateType,
@@ -61,7 +62,8 @@ export default class CanvasEditor extends React.Component<
       );
     }
 
-    this.debouncedRedrawCanvases = _.debounce(this.redrawCanvases, 200, {
+    this.canvasesRedrawInProgress = false;
+    this.debouncedRedrawCanvases = _.debounce(this.redrawCanvases, 500, {
       leading: false,
       trailing: true,
     });
@@ -118,31 +120,81 @@ export default class CanvasEditor extends React.Component<
   };
 
   redrawCanvases = () => {
-    const { resetErroneousProps } = this.props;
-    resetErroneousProps();
-    for (let i = 0; i < this.canvasEls.length; i += 1) {
-      this.redrawCanvas(i);
-    }
-  };
+    const { resetErroneousProps, updateCanvases, order, shapes } = this.props;
 
-  redrawCanvas = (i: number) => {
-    if (!this.canvasEls[i]) {
+    if (this.canvasesRedrawInProgress) {
+      updateCanvases();
       return;
     }
+    this.canvasesRedrawInProgress = true;
 
-    const { shapes, order } = this.props;
-    const ctx = this.canvasEls[i].getContext('2d');
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    order.forEach((key: string) => {
-      drawShape(shapes[key], ctx, i, (prop: string) => {
+    resetErroneousProps();
+    const promises = order.map((key: string): Promise<{
+      [key: string]: Array<number>,
+    }> => this.recalcShapePropValues(key));
+
+    Promise.all(promises).then(
+      (shapePropValues: Array<{ [key: string]: Array<number> }>) => {
+        this.canvasEls.forEach(
+          (canvasEl: ?HTMLCanvasElement, frame: number) => {
+            if (!canvasEl) {
+              return;
+            }
+
+            const ctx = canvasEl.getContext('2d');
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            order.forEach((key: string, i: number) => {
+              const {
+                fillRValues,
+                fillGValues,
+                fillBValues,
+                posXValues,
+                posYValues,
+                widthValues,
+                heightValues,
+              } = shapePropValues[i];
+
+              switch (shapes[key].type) {
+                case 'SHAPE_RECT':
+                  ctx.fillStyle = rgbToHex(
+                    fillRValues[frame],
+                    fillGValues[frame],
+                    fillBValues[frame],
+                  );
+                  ctx.fillRect(
+                    posXValues[frame],
+                    posYValues[frame],
+                    widthValues[frame],
+                    heightValues[frame],
+                  );
+                  break;
+                default:
+              }
+            });
+          },
+        );
+
+        this.canvasesRedrawInProgress = false;
+      },
+    );
+  };
+
+  recalcShapePropValues = (
+    key: string,
+  ): Promise<{ [key: string]: Array<number> }> =>
+    new Promise((resolve, reject) => {
+      const { shapes } = this.props;
+      getShapePropValues(shapes[key], NUM_FRAMES, (prop: string) => {
         this.handleDrawCanvasError(key, prop);
+      }).then((shapePropValues: { [key: string]: Array<number> }) => {
+        resolve(shapePropValues);
       });
     });
-  };
 
   canvases: Array<React.Element<any>>;
   canvasEls: Array<?HTMLCanvasElement>;
   debouncedRedrawCanvases: () => void;
+  canvasesRedrawInProgress: boolean;
 
   render(): ?React$Element<any> {
     const { editor } = this.props;

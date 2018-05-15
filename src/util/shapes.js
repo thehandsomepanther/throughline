@@ -3,15 +3,24 @@
 
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
 import { SHAPE_RECT } from '../types/shapes';
-import { rgbToHex } from './';
 import type { ShapeType } from '../types/shapes';
 import type { PropertyType } from '../types/properties';
 
-export const evalFunctionProp = (fn: string, t: number): Promise<number> => {
+export const evalFunctionProp = (
+  fn: string,
+  frames: number,
+): Promise<Array<number>> => {
   let worker: ?Worker = new Worker('worker.js');
+  const frameIndices = [];
+  for (let i = 0; i < frames; i += 1) {
+    frameIndices.push(i);
+  }
 
   return new Promise(
-    (resolve: (val: number) => void, reject: (reason: Error) => void) => {
+    (
+      resolve: (val: Array<number>) => void,
+      reject: (reason: Error) => void,
+    ) => {
       if (worker) {
         const timeout = setTimeout(() => {
           if (worker) {
@@ -19,13 +28,17 @@ export const evalFunctionProp = (fn: string, t: number): Promise<number> => {
             worker = null;
           }
           reject(new Error('Timeout'));
-        }, 1500);
+        }, 2000);
 
-        worker.postMessage([`(function(t){${fn}})(${t})`]);
+        worker.postMessage([
+          `(function(){return ${JSON.stringify(
+            frameIndices,
+          )}.map(function(t){${fn}})})()`,
+        ]);
 
         worker.onmessage = (e: MessageEvent) => {
           clearTimeout(timeout);
-          resolve(parseInt(e.data, 10));
+          resolve(JSON.parse(e.data));
         };
 
         worker.onerror = (e: ErrorEvent) => {
@@ -37,64 +50,78 @@ export const evalFunctionProp = (fn: string, t: number): Promise<number> => {
   );
 };
 
-export const calcPropValue = (
+export const calcPropValues = (
   prop: PropertyType,
-  t: number,
-): Promise<number> => {
+  frames: number,
+): Promise<Array<number>> => {
   switch (prop.using) {
     case USING_CONST:
       if (prop.const === null || prop.const === undefined) {
         throw new Error('Tried to use const value of prop when none exists.');
       }
-      return Promise.resolve(prop.const);
+      const values = [];
+      for (let i = 0; i < frames; i += 1) {
+        values.push(prop.const);
+      }
+
+      return Promise.resolve(values);
     case USING_CUSTOM:
       if (!prop.custom) {
         throw new Error('Tried to use custom value of prop when none exists.');
       }
-      return Promise.resolve(prop.custom[t]);
+
+      return Promise.resolve(prop.custom);
     case USING_FN:
-      return evalFunctionProp(prop.fn || '', t);
+      return evalFunctionProp(prop.fn || '', frames);
     default:
       throw new Error(`Tried to use unexpected prop: ${prop.using}`);
   }
 };
 
-export const drawShape = (
+export const getShapePropValues = (
   shape: ShapeType,
-  ctx: CanvasRenderingContext2D,
-  t: number,
+  frames: number,
   handleCalcPropError: (prop: string) => void,
-) => {
-  switch (shape.type) {
-    case SHAPE_RECT:
-      Promise.all([
-        calcPropValue(shape.fillR, t).catch(() => {
-          handleCalcPropError('fillR');
-        }),
-        calcPropValue(shape.fillG, t).catch(() => {
-          handleCalcPropError('fillG');
-        }),
-        calcPropValue(shape.fillB, t).catch(() => {
-          handleCalcPropError('fillB');
-        }),
-        calcPropValue(shape.posX, t).catch(() => {
-          handleCalcPropError('posX');
-        }),
-        calcPropValue(shape.posY, t).catch(() => {
-          handleCalcPropError('posY');
-        }),
-        calcPropValue(shape.width, t).catch(() => {
-          handleCalcPropError('width');
-        }),
-        calcPropValue(shape.height, t).catch(() => {
-          handleCalcPropError('height');
-        }),
-      ]).then((values: Array<number>) => {
-        const [fillR, fillG, fillB, posX, posY, width, height] = values;
-        ctx.fillStyle = rgbToHex(fillR, fillG, fillB);
-        ctx.fillRect(posX, posY, width, height);
-      });
-      break;
-    default:
-  }
-};
+): Promise<{ [key: string]: Array<number> }> =>
+  new Promise((resolve, reject) => {
+    switch (shape.type) {
+      case SHAPE_RECT:
+        Promise.all([
+          calcPropValues(shape.fillR, frames).catch(() => {
+            handleCalcPropError('fillR');
+          }),
+          calcPropValues(shape.fillG, frames).catch(() => {
+            handleCalcPropError('fillG');
+          }),
+          calcPropValues(shape.fillB, frames).catch(() => {
+            handleCalcPropError('fillB');
+          }),
+          calcPropValues(shape.posX, frames).catch(() => {
+            handleCalcPropError('posX');
+          }),
+          calcPropValues(shape.posY, frames).catch(() => {
+            handleCalcPropError('posY');
+          }),
+          calcPropValues(shape.width, frames).catch(() => {
+            handleCalcPropError('width');
+          }),
+          calcPropValues(shape.height, frames).catch(() => {
+            handleCalcPropError('height');
+          }),
+        ]).then((values: Array<Array<number>>) => {
+          const [fillR, fillG, fillB, posX, posY, width, height] = values;
+
+          resolve({
+            fillRValues: fillR,
+            fillGValues: fillG,
+            fillBValues: fillB,
+            posXValues: posX,
+            posYValues: posY,
+            widthValues: width,
+            heightValues: height,
+          });
+        });
+        break;
+      default:
+    }
+  });
