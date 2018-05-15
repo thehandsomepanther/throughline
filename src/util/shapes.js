@@ -61,7 +61,7 @@ export const calcPropValues = (
       }
       const values = [];
       for (let i = 0; i < frames; i += 1) {
-        values.push(prop.const);
+        values.push(prop.const || 0);
       }
 
       return Promise.resolve(values);

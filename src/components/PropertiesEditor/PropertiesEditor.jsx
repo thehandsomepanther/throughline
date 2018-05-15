@@ -8,6 +8,7 @@ import {
   PropertyInfoContainer,
   PropertyName,
   FunctionPropertyInput,
+  ConstantPropertyInput,
 } from './styles';
 import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
@@ -46,7 +47,7 @@ const ConstInput = ({
   value: string | number | Array<number>,
   handleUpdateConst: (number) => UpdateConstActionType,
 }): ?React$Element<any> => (
-  <input
+  <ConstantPropertyInput
     value={value || ''}
     placeholder={0}
     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

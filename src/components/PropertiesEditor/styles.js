@@ -32,10 +32,25 @@ export const PropertyName = styled('div')`
   margin-right: 1rem;
 `;
 
+export const ConstantPropertyInput = styled('input')`
+  color: ${COLOR_GREY};
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  outline: none;
+  border: 1px solid ${COLOR_GREY};
+  box-shadow: none;
+  font-family: ${FONT_STACK_MONOSPACE};
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+`;
+
 export const FunctionPropertyInput = styled('input')`
   width: 100%;
-  background-color: black;
-  color: white;
+  background-color: ${COLOR_NEAR_BLACK};
+  color: ${COLOR_NEAR_WHITE};
   -webkit-appearance: none;
   -moz-appearance: none;
   -ms-appearance: none;
