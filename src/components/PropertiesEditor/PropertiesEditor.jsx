@@ -7,6 +7,7 @@ import {
   ShapeInfo,
   PropertyInfoContainer,
   PropertyName,
+  FunctionPropertyInput,
 } from './styles';
 import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
@@ -62,7 +63,7 @@ const FunctionInput = ({
   handleUpdateFunction: (string) => UpdateFunctionActionType,
 }): ?React$Element<any> => (
   <div>
-    <input
+    <FunctionPropertyInput
       value={code || ''}
       placeholder="return 0"
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
