@@ -25,6 +25,10 @@
       2,
       "boolean"
     ],
+    "object-curly-newline": [
+      0,
+      "never"
+    ],
     "flowtype/define-flow-type": 1,
     "flowtype/generic-spacing": [
       2,

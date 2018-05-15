@@ -82,8 +82,8 @@ export const getShapePropValues = (
   shape: ShapeType,
   frames: number,
   handleCalcPropError: (prop: string) => void,
-): Promise<{ [key: string]: Array<number> }> =>
-  new Promise((resolve, reject) => {
+): Promise<{ [key: string]: ?Array<number> }> =>
+  new Promise((resolve: (val: { [key: string]: ?Array<number> }) => void) => {
     switch (shape.type) {
       case SHAPE_RECT:
         Promise.all([
@@ -108,7 +108,7 @@ export const getShapePropValues = (
           calcPropValues(shape.height, frames).catch(() => {
             handleCalcPropError('height');
           }),
-        ]).then((values: Array<Array<number>>) => {
+        ]).then((values: Array<?Array<number>>) => {
           const [fillR, fillG, fillB, posX, posY, width, height] = values;
 
           resolve({

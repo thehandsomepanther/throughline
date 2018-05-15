@@ -12,7 +12,7 @@ import {
   NotificationContainer,
 } from './styles';
 import { getShapePropValues } from '../../util/shapes';
-import type { ShapesStateType, ShapeType } from '../../types/shapes';
+import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type {
@@ -126,15 +126,16 @@ export default class CanvasEditor extends React.Component<
       updateCanvases();
       return;
     }
+
     this.canvasesRedrawInProgress = true;
-
     resetErroneousProps();
-    const promises = order.map((key: string): Promise<{
-      [key: string]: Array<number>,
-    }> => this.recalcShapePropValues(key));
 
-    Promise.all(promises).then(
-      (shapePropValues: Array<{ [key: string]: Array<number> }>) => {
+    Promise.all(
+      order.map((key: string): Promise<{
+        [key: string]: Array<number>,
+      }> => this.recalcShapePropValues(key)),
+    )
+      .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
         this.canvasEls.forEach(
           (canvasEl: ?HTMLCanvasElement, frame: number) => {
             if (!canvasEl) {
@@ -175,21 +176,46 @@ export default class CanvasEditor extends React.Component<
         );
 
         this.canvasesRedrawInProgress = false;
-      },
-    );
+      })
+      .catch(() => {
+        this.canvasesRedrawInProgress = false;
+      });
   };
 
   recalcShapePropValues = (
     key: string,
   ): Promise<{ [key: string]: Array<number> }> =>
-    new Promise((resolve, reject) => {
-      const { shapes } = this.props;
-      getShapePropValues(shapes[key], NUM_FRAMES, (prop: string) => {
-        this.handleDrawCanvasError(key, prop);
-      }).then((shapePropValues: { [key: string]: Array<number> }) => {
-        resolve(shapePropValues);
-      });
-    });
+    new Promise(
+      (
+        resolve: (val: { [key: string]: Array<number> }) => void,
+        reject: (reason: Error) => void,
+      ) => {
+        const { shapes } = this.props;
+        getShapePropValues(shapes[key], NUM_FRAMES, (prop: string) => {
+          this.handleDrawCanvasError(key, prop);
+        }).then((shapePropValues: { [key: string]: ?Array<number> }) => {
+          let shouldResolve = true;
+
+          for (let i = 0; i < Object.values(shapePropValues).length; i += 1) {
+            const values = Object.values(shapePropValues)[i];
+            if (values === undefined) {
+              shouldResolve = false;
+              break;
+            }
+          }
+
+          if (shouldResolve) {
+            // we know that all the values in the resolved object will be of type
+            // Array<number> because of the for loop above, but Flow isn't smart
+            // enough to know that
+            // $FlowFixMe
+            resolve(shapePropValues);
+          } else {
+            reject(new Error('Some shapes have invalid props'));
+          }
+        });
+      },
+    );
 
   canvases: Array<React.Element<any>>;
   canvasEls: Array<?HTMLCanvasElement>;
