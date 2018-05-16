@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import OrderEditor from '../../components/OrderEditor';
 import { changeActiveShape } from '../../actions/editor';
+import { updateOrder } from '../../actions/order';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { StoreType } from '../../types/store';
@@ -23,6 +24,6 @@ const mapStateToProps = (
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ changeActiveShape }, dispatch);
+  bindActionCreators({ changeActiveShape, updateOrder }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderEditor);
