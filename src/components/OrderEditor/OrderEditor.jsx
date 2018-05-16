@@ -29,7 +29,7 @@ export default ({
           changeActiveShape(key);
         }}
       >
-        {shapes[key].name}, a {shapes[key].type} at {i}
+        {shapes[key].name}, a {shapes[key].type}
         {i > 0 && (
           <input
             type="button"

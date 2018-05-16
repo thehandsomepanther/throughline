@@ -3,7 +3,13 @@
 import type { OrderStateType } from '../types/order';
 import type { ActionType } from '../actions';
 
-const initialState: OrderStateType = ['test1', 'test2'];
+const initialState: OrderStateType = [
+  'test1',
+  'test2',
+  'test3',
+  'test4',
+  'test5',
+];
 
 export default (
   state: OrderStateType = initialState,
@@ -14,13 +20,7 @@ export default (
     case 'ORDER_UPDATE_ORDER':
       newState = [...state];
       newState.splice(action.oldIndex, 1);
-      newState.splice(
-        action.newIndex > action.oldIndex
-          ? action.newIndex + 1
-          : action.newIndex,
-        0,
-        state[action.oldIndex],
-      );
+      newState.splice(action.newIndex, 0, state[action.oldIndex]);
       return newState;
     default:
       return state;

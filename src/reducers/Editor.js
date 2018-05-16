@@ -19,6 +19,7 @@ export default (
     case 'SHAPE_UPDATE_USING':
     case 'SHAPE_UPDATE_CONST':
     case 'SHAPE_UPDATE_FN':
+    case 'ORDER_UPDATE_ORDER':
       return {
         ...state,
         shouldUpdateCanvases: true,
