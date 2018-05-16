@@ -14,7 +14,7 @@ export type EditorResetErroneousPropType = 'EDITOR_RESET_ERRONEOUS_PROP';
 
 export type EditorStateType = {
   +activeShape: ?string,
-  +shouldUpdateCanvases: boolean,
+  +shouldRecalcPropValues: boolean,
   +erroneousProps: {
     +[key: string]: {
       +[key: string]: true,

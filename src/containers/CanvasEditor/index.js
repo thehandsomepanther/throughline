@@ -9,10 +9,12 @@ import {
   addErroneousProp,
   resetErroneousProps,
 } from '../../actions/editor';
+import { updateShapeValues } from '../../actions/shapeValues';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { StoreType } from '../../types/store';
 import type { EditorStateType } from '../../types/editor';
+import type { ShapeValuesStateType } from '../../types/shapeValues';
 
 const mapStateToProps = (
   state: StoreType,
@@ -20,15 +22,22 @@ const mapStateToProps = (
   shapes: ShapesStateType,
   order: OrderStateType,
   editor: EditorStateType,
+  shapeValues: ShapeValuesStateType,
 } => ({
   shapes: state.shapes,
   order: state.order,
   editor: state.editor,
+  shapeValues: state.shapeValues,
 });
 
 const mapDispatchToProps = (dispatch: any): any =>
   bindActionCreators(
-    { updateCanvases, addErroneousProp, resetErroneousProps },
+    {
+      updateCanvases,
+      addErroneousProp,
+      resetErroneousProps,
+      updateShapeValues,
+    },
     dispatch,
   );
 

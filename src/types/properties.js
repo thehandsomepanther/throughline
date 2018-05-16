@@ -16,3 +16,5 @@ export type PropertyType = {
   +fn: ?string,
   +custom: ?Array<number>,
 };
+
+export type PropertyValuesType = Array<number>;

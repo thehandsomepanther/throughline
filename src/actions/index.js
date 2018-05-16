@@ -12,6 +12,7 @@ import type {
   ResetErroneousPropsActionType,
 } from './editor';
 import type { UpdateOrderActionType } from './order';
+import type { UpdateShapeValuesActionType } from './shapeValues';
 
 export type ActionType =
   | UpdateConstActionType
@@ -21,4 +22,5 @@ export type ActionType =
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType
   | ResetErroneousPropsActionType
-  | UpdateOrderActionType;
+  | UpdateOrderActionType
+  | UpdateShapeValuesActionType;

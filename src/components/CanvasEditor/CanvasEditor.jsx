@@ -15,25 +15,30 @@ import { getShapePropValues } from '../../util/shapes';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
+import type { ShapeValuesStateType } from '../../types/shapeValues';
 import type {
   UpdateCanvasesActionType,
   AddErroneousPropActionType,
   ResetErroneousPropsActionType,
 } from '../../actions/editor';
+import type { UpdateShapeValuesType } from '../../actions/shapeValues';
 import { rgbToHex } from '../../util';
 
 type PropsType = {
   shapes: ShapesStateType,
   order: OrderStateType,
   editor: EditorStateType,
+  shapeValues: ShapeValuesStateType,
   updateCanvases: () => UpdateCanvasesActionType,
   addErroneousProp: (shape: string, prop: string) => AddErroneousPropActionType,
   resetErroneousProps: () => ResetErroneousPropsActionType,
+  updateShapeValues: UpdateShapeValuesType,
 };
 
 type StateType = {
   activeCanvas: number,
   interval: ?IntervalID,
+  shouldRedrawCanvases: boolean,
 };
 
 const NUM_FRAMES = 60;
@@ -62,8 +67,8 @@ export default class CanvasEditor extends React.Component<
       );
     }
 
-    this.canvasesRedrawInProgress = false;
-    this.debouncedRedrawCanvases = _.debounce(this.redrawCanvases, 500, {
+    this.shapePropertiesRecalcInProgress = false;
+    this.debouncedRecalcPropValues = _.debounce(this.recalcPropValues, 500, {
       leading: false,
       trailing: true,
     });
@@ -71,17 +76,61 @@ export default class CanvasEditor extends React.Component<
     this.state = {
       activeCanvas: 0,
       interval: null,
+      shouldRedrawCanvases: false,
     };
   }
 
   componentDidMount() {
-    this.redrawCanvases();
+    this.recalcPropValues();
+  }
+
+  componentWillUpdate(nextProps: PropsType, nextState: StateType) {
+    if (nextState.shouldRedrawCanvases) {
+      this.canvasEls.forEach((canvasEl: ?HTMLCanvasElement, frame: number) => {
+        if (!canvasEl) {
+          return;
+        }
+
+        const ctx = canvasEl.getContext('2d');
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        nextProps.order.forEach((key: string) => {
+          const {
+            fillRValues,
+            fillGValues,
+            fillBValues,
+            posXValues,
+            posYValues,
+            widthValues,
+            heightValues,
+          } = nextProps.shapeValues[key];
+
+          switch (nextProps.shapes[key].type) {
+            case 'SHAPE_RECT':
+              ctx.fillStyle = rgbToHex(
+                fillRValues[frame],
+                fillGValues[frame],
+                fillBValues[frame],
+              );
+              ctx.fillRect(
+                posXValues[frame],
+                posYValues[frame],
+                widthValues[frame],
+                heightValues[frame],
+              );
+              break;
+            default:
+          }
+        });
+      });
+
+      this.setState({ shouldRedrawCanvases: false });
+    }
   }
 
   componentDidUpdate() {
     const { editor, updateCanvases } = this.props;
-    if (editor.shouldUpdateCanvases) {
-      this.debouncedRedrawCanvases();
+    if (editor.shouldRecalcPropValues) {
+      this.debouncedRecalcPropValues();
       updateCanvases();
     }
   }
@@ -119,15 +168,20 @@ export default class CanvasEditor extends React.Component<
     addErroneousProp(shape, prop);
   };
 
-  redrawCanvases = () => {
-    const { resetErroneousProps, updateCanvases, order, shapes } = this.props;
+  recalcPropValues = () => {
+    const {
+      order,
+      resetErroneousProps,
+      updateCanvases,
+      updateShapeValues,
+    } = this.props;
 
-    if (this.canvasesRedrawInProgress) {
+    if (this.shapePropertiesRecalcInProgress) {
       updateCanvases();
       return;
     }
 
-    this.canvasesRedrawInProgress = true;
+    this.shapePropertiesRecalcInProgress = true;
     resetErroneousProps();
 
     Promise.all(
@@ -136,49 +190,27 @@ export default class CanvasEditor extends React.Component<
       }> => this.recalcShapePropValues(key)),
     )
       .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
-        this.canvasEls.forEach(
-          (canvasEl: ?HTMLCanvasElement, frame: number) => {
-            if (!canvasEl) {
-              return;
-            }
-
-            const ctx = canvasEl.getContext('2d');
-            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-            order.forEach((key: string, i: number) => {
-              const {
-                fillRValues,
-                fillGValues,
-                fillBValues,
-                posXValues,
-                posYValues,
-                widthValues,
-                heightValues,
-              } = shapePropValues[i];
-
-              switch (shapes[key].type) {
-                case 'SHAPE_RECT':
-                  ctx.fillStyle = rgbToHex(
-                    fillRValues[frame],
-                    fillGValues[frame],
-                    fillBValues[frame],
-                  );
-                  ctx.fillRect(
-                    posXValues[frame],
-                    posYValues[frame],
-                    widthValues[frame],
-                    heightValues[frame],
-                  );
-                  break;
-                default:
-              }
-            });
-          },
+        updateShapeValues(
+          shapePropValues.reduce(
+            (
+              prev: { [key: string]: Array<number> },
+              curr: { [key: string]: Array<number> },
+              i: number,
+            ): { [key: string]: Array<number> } => ({
+              ...prev,
+              [order[i]]: curr,
+            }),
+            {},
+          ),
         );
 
-        this.canvasesRedrawInProgress = false;
+        this.shapePropertiesRecalcInProgress = false;
+        this.setState({
+          shouldRedrawCanvases: true,
+        });
       })
       .catch(() => {
-        this.canvasesRedrawInProgress = false;
+        this.shapePropertiesRecalcInProgress = false;
       });
   };
 
@@ -219,8 +251,8 @@ export default class CanvasEditor extends React.Component<
 
   canvases: Array<React.Element<any>>;
   canvasEls: Array<?HTMLCanvasElement>;
-  debouncedRedrawCanvases: () => void;
-  canvasesRedrawInProgress: boolean;
+  debouncedRecalcPropValues: () => void;
+  shapePropertiesRecalcInProgress: boolean;
 
   render(): ?React$Element<any> {
     const { editor } = this.props;

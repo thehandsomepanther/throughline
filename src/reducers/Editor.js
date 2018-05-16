@@ -5,7 +5,7 @@ import type { ActionType } from '../actions';
 
 const initialState: EditorStateType = {
   activeShape: 'test1',
-  shouldUpdateCanvases: false,
+  shouldRecalcPropValues: false,
   erroneousProps: {},
 };
 
@@ -13,8 +13,6 @@ export default (
   state: EditorStateType = initialState,
   action: ActionType,
 ): EditorStateType => {
-  let tempState;
-
   switch (action.type) {
     case 'SHAPE_UPDATE_USING':
     case 'SHAPE_UPDATE_CONST':
@@ -22,7 +20,7 @@ export default (
     case 'ORDER_UPDATE_ORDER':
       return {
         ...state,
-        shouldUpdateCanvases: true,
+        shouldRecalcPropValues: true,
       };
     case 'EDITOR_CHANGE_ACTIVE_SHAPE':
       return {
@@ -32,20 +30,15 @@ export default (
     case 'EDITOR_UPDATE_CANVASES':
       return {
         ...state,
-        shouldUpdateCanvases: false,
+        shouldRecalcPropValues: false,
       };
     case 'EDITOR_ADD_ERRONEOUS_PROP':
-      tempState = { ...state };
-      if (!tempState.erroneousProps[action.shape]) {
-        tempState.erroneousProps[action.shape] = {};
-      }
-
       return {
-        ...tempState,
+        ...state,
         erroneousProps: {
           ...state.erroneousProps,
           [action.shape]: {
-            ...tempState.erroneousProps[action.shape],
+            ...(state.erroneousProps[action.shape] || {}),
             [action.prop]: true,
           },
         },
