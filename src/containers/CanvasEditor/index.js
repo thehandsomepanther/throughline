@@ -9,7 +9,7 @@ import {
   addErroneousProp,
   resetErroneousProps,
 } from '../../actions/editor';
-import { updateShapeValues } from '../../actions/shapeValues';
+import { setShapeValues } from '../../actions/shapeValues';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { StoreType } from '../../types/store';
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch: any): any =>
       updateCanvases,
       addErroneousProp,
       resetErroneousProps,
-      updateShapeValues,
+      setShapeValues,
     },
     dispatch,
   );

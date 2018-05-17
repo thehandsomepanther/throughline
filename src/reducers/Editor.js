@@ -7,6 +7,8 @@ const initialState: EditorStateType = {
   activeShape: 'test1',
   shouldRecalcPropValues: false,
   erroneousProps: {},
+  numFrames: 60,
+  activeFrame: 0,
 };
 
 export default (

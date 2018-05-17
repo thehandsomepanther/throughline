@@ -20,4 +20,6 @@ export type EditorStateType = {
       +[key: string]: true,
     },
   },
+  +numFrames: number,
+  +activeFrame: number,
 };

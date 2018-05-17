@@ -10,8 +10,7 @@ export default (
   action: ActionType,
 ): ShapeValuesStateType => {
   switch (action.type) {
-    case 'SHAPE_VALUES_UPDATE_VALUES':
-      console.log(action);
+    case 'SHAPE_VALUES_SET_VALUES':
       return {
         ...action.shapeValues,
       };

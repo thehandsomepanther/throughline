@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import PropertiesEditor from '../../components/PropertiesEditor';
 import { updateUsing, updateConst, updateFunction } from '../../actions/shapes';
-import { updateShapeValues } from '../../actions/shapeValues';
+import { setShapeValues } from '../../actions/shapeValues';
 import type { ShapesStateType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
 import type { StoreType } from '../../types/store';
@@ -22,7 +22,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (dispatch: any): any =>
   bindActionCreators(
-    { updateUsing, updateConst, updateFunction, updateShapeValues },
+    { updateUsing, updateConst, updateFunction, setShapeValues },
     dispatch,
   );
 

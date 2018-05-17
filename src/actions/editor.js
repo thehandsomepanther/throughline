@@ -16,6 +16,7 @@ import type {
 export type UpdateCanvasesActionType = {
   type: EditorUpdateCanvasesType,
 };
+export type UpdateCanvasesType = () => UpdateCanvasesActionType;
 export const updateCanvases = (): UpdateCanvasesActionType => ({
   type: EDITOR_UPDATE_CANVASES,
 });
@@ -24,6 +25,9 @@ export type ChangeActiveShapeActionType = {
   type: EditorChangeActiveShapeType,
   shape: string,
 };
+export type ChangeActiveShapeType = (
+  shape: string,
+) => ChangeActiveShapeActionType;
 export const changeActiveShape = (
   shape: string,
 ): ChangeActiveShapeActionType => ({
@@ -36,6 +40,10 @@ export type AddErroneousPropActionType = {
   shape: string,
   prop: string,
 };
+export type AddErroneousPropType = (
+  shape: string,
+  prop: string,
+) => AddErroneousPropActionType;
 export const addErroneousProp = (
   shape: string,
   prop: string,
@@ -48,6 +56,7 @@ export const addErroneousProp = (
 export type ResetErroneousPropsActionType = {
   type: EditorResetErroneousPropType,
 };
+export type ResetErroneousPropsType = () => ResetErroneousPropsActionType;
 export const resetErroneousProps = (): ResetErroneousPropsActionType => ({
   type: EDITOR_RESET_ERRONEOUS_PROP,
 });

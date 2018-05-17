@@ -17,11 +17,11 @@ import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { ShapeValuesStateType } from '../../types/shapeValues';
 import type {
-  UpdateCanvasesActionType,
-  AddErroneousPropActionType,
-  ResetErroneousPropsActionType,
+  UpdateCanvasesType,
+  AddErroneousPropType,
+  ResetErroneousPropsType,
 } from '../../actions/editor';
-import type { UpdateShapeValuesType } from '../../actions/shapeValues';
+import type { SetShapeValuesType } from '../../actions/shapeValues';
 import { rgbToHex } from '../../util';
 
 type PropsType = {
@@ -29,10 +29,10 @@ type PropsType = {
   order: OrderStateType,
   editor: EditorStateType,
   shapeValues: ShapeValuesStateType,
-  updateCanvases: () => UpdateCanvasesActionType,
-  addErroneousProp: (shape: string, prop: string) => AddErroneousPropActionType,
-  resetErroneousProps: () => ResetErroneousPropsActionType,
-  updateShapeValues: UpdateShapeValuesType,
+  updateCanvases: UpdateCanvasesType,
+  addErroneousProp: AddErroneousPropType,
+  resetErroneousProps: ResetErroneousPropsType,
+  setShapeValues: SetShapeValuesType,
 };
 
 type StateType = {
@@ -41,7 +41,6 @@ type StateType = {
   shouldRedrawCanvases: boolean,
 };
 
-const NUM_FRAMES = 60;
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
 
@@ -54,7 +53,7 @@ export default class CanvasEditor extends React.Component<
     this.canvases = [];
     this.canvasEls = [];
 
-    for (let i = 0; i < NUM_FRAMES; i += 1) {
+    for (let i = 0; i < props.editor.numFrames; i += 1) {
       this.canvases.push(
         <canvas
           width={CANVAS_WIDTH}
@@ -136,8 +135,9 @@ export default class CanvasEditor extends React.Component<
   }
 
   setActiveCanvas = (n: number) => {
+    const { editor } = this.props;
     this.setState({
-      activeCanvas: n % NUM_FRAMES,
+      activeCanvas: n % editor.numFrames,
     });
   };
 
@@ -173,7 +173,7 @@ export default class CanvasEditor extends React.Component<
       order,
       resetErroneousProps,
       updateCanvases,
-      updateShapeValues,
+      setShapeValues,
     } = this.props;
 
     if (this.shapePropertiesRecalcInProgress) {
@@ -190,7 +190,7 @@ export default class CanvasEditor extends React.Component<
       }> => this.recalcShapePropValues(key)),
     )
       .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
-        updateShapeValues(
+        setShapeValues(
           shapePropValues.reduce(
             (
               prev: { [key: string]: Array<number> },
@@ -223,9 +223,13 @@ export default class CanvasEditor extends React.Component<
         reject: (reason: Error) => void,
       ) => {
         const { shapes } = this.props;
-        getShapePropValues(shapes[key], NUM_FRAMES, (prop: string) => {
-          this.handleDrawCanvasError(key, prop);
-        }).then((shapePropValues: { [key: string]: ?Array<number> }) => {
+        getShapePropValues(
+          shapes[key],
+          this.props.editor.numFrames,
+          (prop: string) => {
+            this.handleDrawCanvasError(key, prop);
+          },
+        ).then((shapePropValues: { [key: string]: ?Array<number> }) => {
           let shouldResolve = true;
 
           for (let i = 0; i < Object.values(shapePropValues).length; i += 1) {
@@ -259,7 +263,7 @@ export default class CanvasEditor extends React.Component<
     const { activeCanvas } = this.state;
 
     const tickMarkers = [];
-    for (let i = 0; i < NUM_FRAMES; i += 1) {
+    for (let i = 0; i < editor.numFrames; i += 1) {
       tickMarkers.push(
         <TickMarker
           key={`tickMarker-${i}`}
