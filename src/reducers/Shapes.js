@@ -258,8 +258,8 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.property]: {
-            ...state[action.shape][action.property],
+          [action.prop]: {
+            ...state[action.shape][action.prop],
             using: action.using,
           },
         },
@@ -269,8 +269,8 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.property]: {
-            ...state[action.shape][action.property],
+          [action.prop]: {
+            ...state[action.shape][action.prop],
             const: action.value || 0,
           },
         },
@@ -280,8 +280,8 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.property]: {
-            ...state[action.shape][action.property],
+          [action.prop]: {
+            ...state[action.shape][action.prop],
             fn: action.value || '',
           },
         },

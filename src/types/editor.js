@@ -9,6 +9,9 @@ export type EditorChangeActiveShapeType = 'EDITOR_CHANGE_ACTIVE_SHAPE';
 export const EDITOR_ADD_ERRONEOUS_PROP = 'EDITOR_ADD_ERRONEOUS_PROP';
 export type EditorAddErroneousPropType = 'EDITOR_ADD_ERRONEOUS_PROP';
 
+export const EDITOR_REMOVE_ERRONEOUS_PROP = 'EDITOR_REMOVE_ERRONEOUS_PROP';
+export type EditorRemoveErroneousPropType = 'EDITOR_REMOVE_ERRONEOUS_PROP';
+
 export const EDITOR_RESET_ERRONEOUS_PROP = 'EDITOR_RESET_ERRONEOUS_PROP';
 export type EditorResetErroneousPropType = 'EDITOR_RESET_ERRONEOUS_PROP';
 

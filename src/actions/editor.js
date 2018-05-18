@@ -6,6 +6,7 @@ import {
   EDITOR_ADD_ERRONEOUS_PROP,
   EDITOR_RESET_ERRONEOUS_PROP,
   EDITOR_CHANGE_ACTIVE_FRAME,
+  EDITOR_REMOVE_ERRONEOUS_PROP,
 } from '../types/editor';
 import type {
   EditorUpdateCanvasesType,
@@ -13,6 +14,7 @@ import type {
   EditorAddErroneousPropType,
   EditorResetErroneousPropType,
   EditorChangeActiveFrameType,
+  EditorRemoveErroneousPropType,
 } from '../types/editor';
 
 export type UpdateCanvasesActionType = {
@@ -51,6 +53,24 @@ export const addErroneousProp = (
   prop: string,
 ): AddErroneousPropActionType => ({
   type: EDITOR_ADD_ERRONEOUS_PROP,
+  shape,
+  prop,
+});
+
+export type RemoveErroneousPropActionType = {
+  type: EditorRemoveErroneousPropType,
+  shape: string,
+  prop: string,
+};
+export type RemoveErroneousPropType = (
+  shape: string,
+  prop: string,
+) => RemoveErroneousPropActionType;
+export const removeErroneousProp = (
+  shape: string,
+  prop: string,
+): RemoveErroneousPropActionType => ({
+  type: EDITOR_REMOVE_ERRONEOUS_PROP,
   shape,
   prop,
 });

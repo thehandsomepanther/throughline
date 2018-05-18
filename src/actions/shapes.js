@@ -6,6 +6,7 @@ import {
   SHAPE_UPDATE_FN,
 } from '../types/shapes';
 import { updateShapeValues } from './shapeValues';
+import { addErroneousProp, removeErroneousProp } from './editor';
 import type { UsingType } from '../types/properties';
 import type {
   ShapeUpdateUsingType,
@@ -14,26 +15,26 @@ import type {
 } from '../types/shapes';
 import type { GetStateType } from '../types/store';
 import type { DispatchType } from './';
-import { calcShapeValues } from '../util/shapes';
+import { calcPropValues } from '../util/shapes';
 
 export type UpdateUsingActionType = {
   type: ShapeUpdateUsingType,
   shape: string,
-  property: string,
+  prop: string,
   using: UsingType,
 };
 export type UpdateUsingType = (
   shape: string,
-  property: string,
+  prop: string,
   using: UsingType,
 ) => UpdateUsingActionType;
 export const updateUsing = (
   shape: string,
-  property: string,
+  prop: string,
   using: UsingType,
 ): UpdateUsingActionType => ({
   type: SHAPE_UPDATE_USING,
-  property,
+  prop,
   shape,
   using,
 });
@@ -41,55 +42,59 @@ export const updateUsing = (
 export type UpdateConstActionType = {
   type: ShapeUpdateConstType,
   shape: string,
-  property: string,
+  prop: string,
   value: number,
 };
 export type UpdateConstType = (
   shape: string,
-  property: string,
+  prop: string,
   value: number,
 ) => UpdateConstActionType;
 export const updateConst = (
   shape: string,
-  property: string,
+  prop: string,
   value: number,
 ): UpdateConstActionType => ({
   type: SHAPE_UPDATE_CONST,
   shape,
-  property,
+  prop,
   value,
 });
 
 export type UpdateFunctionActionType = {
   type: ShapeUpdateFunctionType,
   shape: string,
-  property: string,
+  prop: string,
   value: string,
 };
 export type UpdateFunctionType = (
   shape: string,
-  property: string,
+  prop: string,
   value: string,
 ) => UpdateFunctionActionType;
 export const updateFunction = (
   shape: string,
-  property: string,
+  prop: string,
   value: string,
 ): ((dispatch: DispatchType, getState: GetStateType) => void) => (
   dispatch: DispatchType,
   getState: GetStateType,
 ) => {
-  const { shapes, editor } = getState();
-  calcShapeValues(shapes[shape], editor.numFrames, () => {}).then(
-    (shapeValues: { [key: string]: ?Array<number> }) => {
-      dispatch(updateShapeValues(shape, property));
-    },
-  );
-
   dispatch({
     type: SHAPE_UPDATE_FN,
     shape,
-    property,
+    prop,
     value,
   });
+
+  const { shapes, editor } = getState();
+  calcPropValues(shapes[shape][prop], editor.numFrames)
+    .then((values: Array<number>) => {
+      console.log(values);
+      dispatch(removeErroneousProp(shape, prop));
+      dispatch(updateShapeValues(shape, prop, values));
+    })
+    .catch(() => {
+      dispatch(addErroneousProp(shape, prop));
+    });
 };

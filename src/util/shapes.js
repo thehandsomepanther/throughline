@@ -129,13 +129,13 @@ export const calcShapeValues = (
               // enough to know that
               // $FlowFixMe
               resolve({
-                fillRValues: fillR,
-                fillGValues: fillG,
-                fillBValues: fillB,
-                posXValues: posX,
-                posYValues: posY,
-                widthValues: width,
-                heightValues: height,
+                fillR,
+                fillG,
+                fillB,
+                posX,
+                posY,
+                width,
+                height,
               });
             } else {
               reject(new Error('Some shapes have invalid props'));

@@ -15,12 +15,15 @@ export default (
   state: EditorStateType = initialState,
   action: ActionType,
 ): EditorStateType => {
+  let newState;
+
   switch (action.type) {
     case 'SHAPE_UPDATE_USING':
     case 'SHAPE_UPDATE_CONST':
     case 'SHAPE_UPDATE_FN':
     case 'ORDER_UPDATE_ORDER':
     case 'SHAPE_VALUES_SET_VALUES':
+    case 'SHAPE_VALUES_UPDATE_VALUES':
       return {
         ...state,
         shouldRedrawCanvases: true,
@@ -46,6 +49,23 @@ export default (
           },
         },
       };
+    case 'EDITOR_REMOVE_ERRONEOUS_PROP':
+      newState = { ...state };
+      if (
+        newState.erroneousProps[action.shape] &&
+        newState.erroneousProps[action.shape][action.prop]
+      ) {
+        delete newState.erroneousProps[action.shape][action.prop];
+
+        if (
+          Object.getOwnPropertyNames(newState.erroneousProps[action.shape])
+            .length === 0
+        ) {
+          delete newState.erroneousProps[action.shape];
+        }
+      }
+
+      return newState;
     case 'EDITOR_RESET_ERRONEOUS_PROP':
       return {
         ...state,

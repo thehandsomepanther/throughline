@@ -18,7 +18,7 @@ export default (
       return {
         ...state,
         [action.shape]: {
-          ...state.shape,
+          ...state[action.shape],
           [action.prop]: action.values,
         },
       };

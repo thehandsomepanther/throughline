@@ -22,7 +22,12 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (dispatch: any): any =>
   bindActionCreators(
-    { updateUsing, updateConst, updateFunction, setShapeValues },
+    {
+      updateUsing,
+      updateConst,
+      updateFunction,
+      setShapeValues,
+    },
     dispatch,
   );
 

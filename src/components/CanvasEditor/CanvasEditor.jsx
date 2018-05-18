@@ -66,7 +66,10 @@ export default class CanvasEditor extends React.Component<
   componentWillUpdate(nextProps: PropsType) {
     const { updateCanvases } = this.props;
 
-    if (nextProps.editor.shouldRedrawCanvases) {
+    if (
+      nextProps.editor.shouldRedrawCanvases &&
+      Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0
+    ) {
       this.canvasEls.forEach((canvasEl: ?HTMLCanvasElement, frame: number) => {
         if (!canvasEl) {
           return;
@@ -76,27 +79,27 @@ export default class CanvasEditor extends React.Component<
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         nextProps.order.forEach((key: string) => {
           const {
-            fillRValues,
-            fillGValues,
-            fillBValues,
-            posXValues,
-            posYValues,
-            widthValues,
-            heightValues,
+            fillR,
+            fillG,
+            fillB,
+            posX,
+            posY,
+            width,
+            height,
           } = nextProps.shapeValues[key];
 
           switch (nextProps.shapes[key].type) {
             case 'SHAPE_RECT':
               ctx.fillStyle = rgbToHex(
-                fillRValues[frame],
-                fillGValues[frame],
-                fillBValues[frame],
+                fillR[frame],
+                fillG[frame],
+                fillB[frame],
               );
               ctx.fillRect(
-                posXValues[frame],
-                posYValues[frame],
-                widthValues[frame],
-                heightValues[frame],
+                posX[frame],
+                posY[frame],
+                width[frame],
+                height[frame],
               );
               break;
             default:

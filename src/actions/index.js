@@ -9,6 +9,7 @@ import type {
   UpdateCanvasesActionType,
   ChangeActiveShapeActionType,
   AddErroneousPropActionType,
+  RemoveErroneousPropActionType,
   ResetErroneousPropsActionType,
   ChangeActiveFrameActionType,
 } from './editor';
@@ -25,6 +26,7 @@ export type ActionType =
   | UpdateCanvasesActionType
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType
+  | RemoveErroneousPropActionType
   | ResetErroneousPropsActionType
   | ChangeActiveFrameActionType
   | UpdateOrderActionType

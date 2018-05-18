@@ -45,7 +45,7 @@ const ConstInput = ({
   handleUpdateConst,
 }: {
   value: string | number | Array<number>,
-  handleUpdateConst: (number) => UpdateConstActionType,
+  handleUpdateConst: (val: number) => UpdateConstActionType,
 }): ?React$Element<any> => (
   <ConstantPropertyInput
     value={value || ''}
@@ -61,7 +61,7 @@ const FunctionInput = ({
   handleUpdateFunction,
 }: {
   code: string | number | Array<number>,
-  handleUpdateFunction: (string) => UpdateFunctionActionType,
+  handleUpdateFunction: (code: string) => UpdateFunctionActionType,
 }): ?React$Element<any> => (
   <div>
     <FunctionPropertyInput
