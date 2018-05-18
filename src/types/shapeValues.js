@@ -3,8 +3,10 @@
 import type { PropertyValuesType } from './properties';
 
 export const SHAPE_VALUES_SET_VALUES = 'SHAPE_VALUES_SET_VALUES';
-
 export type ShapeValuesSetValuesType = 'SHAPE_VALUES_SET_VALUES';
+
+export const SHAPE_VALUES_UPDATE_VALUES = 'SHAPE_VALUES_UPDATE_VALUES';
+export type ShapeValuesUpdateValuesType = 'SHAPE_VALUES_UPDATE_VALUES';
 
 export type ShapeRectValuesType = {
   +type: 'SHAPE_RECT',

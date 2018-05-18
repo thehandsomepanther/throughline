@@ -8,7 +8,7 @@ import {
   FONT_STACK_LUNCH,
 } from '../../styles';
 
-export const Home = styled('div')`
+export const HomeDiv = styled('div')`
   display: flex;
   background-color: ${COLOR_YELLOW};
   color: ${COLOR_NEAR_WHITE};

@@ -5,7 +5,7 @@ import type { ActionType } from '../actions';
 
 const initialState: EditorStateType = {
   activeShape: 'test1',
-  shouldRecalcPropValues: false,
+  shouldRedrawCanvases: false,
   erroneousProps: {},
   numFrames: 60,
   activeFrame: 0,
@@ -20,9 +20,10 @@ export default (
     case 'SHAPE_UPDATE_CONST':
     case 'SHAPE_UPDATE_FN':
     case 'ORDER_UPDATE_ORDER':
+    case 'SHAPE_VALUES_SET_VALUES':
       return {
         ...state,
-        shouldRecalcPropValues: true,
+        shouldRedrawCanvases: true,
       };
     case 'EDITOR_CHANGE_ACTIVE_SHAPE':
       return {
@@ -32,7 +33,7 @@ export default (
     case 'EDITOR_UPDATE_CANVASES':
       return {
         ...state,
-        shouldRecalcPropValues: false,
+        shouldRedrawCanvases: false,
       };
     case 'EDITOR_ADD_ERRONEOUS_PROP':
       return {
@@ -49,6 +50,11 @@ export default (
       return {
         ...state,
         erroneousProps: {},
+      };
+    case 'EDITOR_CHANGE_ACTIVE_FRAME':
+      return {
+        ...state,
+        activeFrame: action.frame,
       };
     default:
       return state;

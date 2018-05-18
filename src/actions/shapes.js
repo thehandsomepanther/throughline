@@ -5,12 +5,16 @@ import {
   SHAPE_UPDATE_CONST,
   SHAPE_UPDATE_FN,
 } from '../types/shapes';
+import { updateShapeValues } from './shapeValues';
 import type { UsingType } from '../types/properties';
 import type {
   ShapeUpdateUsingType,
   ShapeUpdateConstType,
   ShapeUpdateFunctionType,
 } from '../types/shapes';
+import type { GetStateType } from '../types/store';
+import type { DispatchType } from './';
+import { calcShapeValues } from '../util/shapes';
 
 export type UpdateUsingActionType = {
   type: ShapeUpdateUsingType,
@@ -71,9 +75,21 @@ export const updateFunction = (
   shape: string,
   property: string,
   value: string,
-): UpdateFunctionActionType => ({
-  type: SHAPE_UPDATE_FN,
-  shape,
-  property,
-  value,
-});
+): ((dispatch: DispatchType, getState: GetStateType) => void) => (
+  dispatch: DispatchType,
+  getState: GetStateType,
+) => {
+  const { shapes, editor } = getState();
+  calcShapeValues(shapes[shape], editor.numFrames, () => {}).then(
+    (shapeValues: { [key: string]: ?Array<number> }) => {
+      dispatch(updateShapeValues(shape, property));
+    },
+  );
+
+  dispatch({
+    type: SHAPE_UPDATE_FN,
+    shape,
+    property,
+    value,
+  });
+};

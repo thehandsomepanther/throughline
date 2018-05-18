@@ -5,12 +5,14 @@ import {
   EDITOR_CHANGE_ACTIVE_SHAPE,
   EDITOR_ADD_ERRONEOUS_PROP,
   EDITOR_RESET_ERRONEOUS_PROP,
+  EDITOR_CHANGE_ACTIVE_FRAME,
 } from '../types/editor';
 import type {
   EditorUpdateCanvasesType,
   EditorChangeActiveShapeType,
   EditorAddErroneousPropType,
   EditorResetErroneousPropType,
+  EditorChangeActiveFrameType,
 } from '../types/editor';
 
 export type UpdateCanvasesActionType = {
@@ -59,4 +61,18 @@ export type ResetErroneousPropsActionType = {
 export type ResetErroneousPropsType = () => ResetErroneousPropsActionType;
 export const resetErroneousProps = (): ResetErroneousPropsActionType => ({
   type: EDITOR_RESET_ERRONEOUS_PROP,
+});
+
+export type ChangeActiveFrameActionType = {
+  type: EditorChangeActiveFrameType,
+  frame: number,
+};
+export type ChangeActiveFrameType = (
+  frame: number,
+) => ChangeActiveFrameActionType;
+export const changeActiveFrame = (
+  frame: number,
+): ChangeActiveFrameActionType => ({
+  type: EDITOR_CHANGE_ACTIVE_FRAME,
+  frame,
 });

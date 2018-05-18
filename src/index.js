@@ -8,7 +8,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
 import configureStore from './store';
-import Home from './components/Home';
+import Home from './containers/Home';
 import registerServiceWorker from './registerServiceWorker';
 
 import './styles/css/reset.css';

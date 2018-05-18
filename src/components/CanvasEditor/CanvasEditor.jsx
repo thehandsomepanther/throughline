@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import _ from 'lodash';
 import {
   CanvasEditorContainer,
   CanvasesContainer,
@@ -11,17 +10,14 @@ import {
   ControlsContainer,
   NotificationContainer,
 } from './styles';
-import { getShapePropValues } from '../../util/shapes';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { ShapeValuesStateType } from '../../types/shapeValues';
 import type {
   UpdateCanvasesType,
-  AddErroneousPropType,
-  ResetErroneousPropsType,
+  ChangeActiveFrameType,
 } from '../../actions/editor';
-import type { SetShapeValuesType } from '../../actions/shapeValues';
 import { rgbToHex } from '../../util';
 
 type PropsType = {
@@ -30,15 +26,11 @@ type PropsType = {
   editor: EditorStateType,
   shapeValues: ShapeValuesStateType,
   updateCanvases: UpdateCanvasesType,
-  addErroneousProp: AddErroneousPropType,
-  resetErroneousProps: ResetErroneousPropsType,
-  setShapeValues: SetShapeValuesType,
+  changeActiveFrame: ChangeActiveFrameType,
 };
 
 type StateType = {
-  activeCanvas: number,
   interval: ?IntervalID,
-  shouldRedrawCanvases: boolean,
 };
 
 const CANVAS_WIDTH = 600;
@@ -66,25 +58,15 @@ export default class CanvasEditor extends React.Component<
       );
     }
 
-    this.shapePropertiesRecalcInProgress = false;
-    this.debouncedRecalcPropValues = _.debounce(this.recalcPropValues, 500, {
-      leading: false,
-      trailing: true,
-    });
-
     this.state = {
-      activeCanvas: 0,
       interval: null,
-      shouldRedrawCanvases: false,
     };
   }
 
-  componentDidMount() {
-    this.recalcPropValues();
-  }
+  componentWillUpdate(nextProps: PropsType) {
+    const { updateCanvases } = this.props;
 
-  componentWillUpdate(nextProps: PropsType, nextState: StateType) {
-    if (nextState.shouldRedrawCanvases) {
+    if (nextProps.editor.shouldRedrawCanvases) {
       this.canvasEls.forEach((canvasEl: ?HTMLCanvasElement, frame: number) => {
         if (!canvasEl) {
           return;
@@ -122,33 +104,23 @@ export default class CanvasEditor extends React.Component<
         });
       });
 
-      this.setState({ shouldRedrawCanvases: false });
-    }
-  }
-
-  componentDidUpdate() {
-    const { editor, updateCanvases } = this.props;
-    if (editor.shouldRecalcPropValues) {
-      this.debouncedRecalcPropValues();
       updateCanvases();
     }
   }
 
   setActiveCanvas = (n: number) => {
-    const { editor } = this.props;
-    this.setState({
-      activeCanvas: n % editor.numFrames,
-    });
+    const { changeActiveFrame, editor } = this.props;
+    changeActiveFrame(n % editor.numFrames);
   };
 
   decrementActiveCanvas = () => {
-    const { activeCanvas } = this.state;
-    this.setActiveCanvas(activeCanvas - 1);
+    const { editor } = this.props;
+    this.setActiveCanvas(editor.activeFrame - 1);
   };
 
   incrementActiveCanvas = () => {
-    const { activeCanvas } = this.state;
-    this.setActiveCanvas(activeCanvas + 1);
+    const { editor } = this.props;
+    this.setActiveCanvas(editor.activeFrame + 1);
   };
 
   handleTogglePlayClick = () => {
@@ -163,104 +135,11 @@ export default class CanvasEditor extends React.Component<
     }
   };
 
-  handleDrawCanvasError = (shape: string, prop: string) => {
-    const { addErroneousProp } = this.props;
-    addErroneousProp(shape, prop);
-  };
-
-  recalcPropValues = () => {
-    const {
-      order,
-      resetErroneousProps,
-      updateCanvases,
-      setShapeValues,
-    } = this.props;
-
-    if (this.shapePropertiesRecalcInProgress) {
-      updateCanvases();
-      return;
-    }
-
-    this.shapePropertiesRecalcInProgress = true;
-    resetErroneousProps();
-
-    Promise.all(
-      order.map((key: string): Promise<{
-        [key: string]: Array<number>,
-      }> => this.recalcShapePropValues(key)),
-    )
-      .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
-        setShapeValues(
-          shapePropValues.reduce(
-            (
-              prev: { [key: string]: Array<number> },
-              curr: { [key: string]: Array<number> },
-              i: number,
-            ): { [key: string]: Array<number> } => ({
-              ...prev,
-              [order[i]]: curr,
-            }),
-            {},
-          ),
-        );
-
-        this.shapePropertiesRecalcInProgress = false;
-        this.setState({
-          shouldRedrawCanvases: true,
-        });
-      })
-      .catch(() => {
-        this.shapePropertiesRecalcInProgress = false;
-      });
-  };
-
-  recalcShapePropValues = (
-    key: string,
-  ): Promise<{ [key: string]: Array<number> }> =>
-    new Promise(
-      (
-        resolve: (val: { [key: string]: Array<number> }) => void,
-        reject: (reason: Error) => void,
-      ) => {
-        const { shapes } = this.props;
-        getShapePropValues(
-          shapes[key],
-          this.props.editor.numFrames,
-          (prop: string) => {
-            this.handleDrawCanvasError(key, prop);
-          },
-        ).then((shapePropValues: { [key: string]: ?Array<number> }) => {
-          let shouldResolve = true;
-
-          for (let i = 0; i < Object.values(shapePropValues).length; i += 1) {
-            const values = Object.values(shapePropValues)[i];
-            if (values === undefined) {
-              shouldResolve = false;
-              break;
-            }
-          }
-
-          if (shouldResolve) {
-            // we know that all the values in the resolved object will be of type
-            // Array<number> because of the for loop above, but Flow isn't smart
-            // enough to know that
-            // $FlowFixMe
-            resolve(shapePropValues);
-          } else {
-            reject(new Error('Some shapes have invalid props'));
-          }
-        });
-      },
-    );
-
   canvases: Array<React.Element<any>>;
   canvasEls: Array<?HTMLCanvasElement>;
-  debouncedRecalcPropValues: () => void;
-  shapePropertiesRecalcInProgress: boolean;
 
   render(): ?React$Element<any> {
     const { editor } = this.props;
-    const { activeCanvas } = this.state;
 
     const tickMarkers = [];
     for (let i = 0; i < editor.numFrames; i += 1) {
@@ -268,7 +147,7 @@ export default class CanvasEditor extends React.Component<
         <TickMarker
           key={`tickMarker-${i}`}
           index={i}
-          activeCanvas={activeCanvas}
+          activeCanvas={editor.activeFrame}
           onClick={() => {
             this.setActiveCanvas(i);
           }}
@@ -286,7 +165,11 @@ export default class CanvasEditor extends React.Component<
           )}
           {this.canvases.map(
             (canvas: React.Element<any>, i: number): React.Element<any> => (
-              <CanvasContainer index={i} activeCanvas={activeCanvas} key={i}>
+              <CanvasContainer
+                index={i}
+                activeCanvas={editor.activeFrame}
+                key={i}
+              >
                 {this.canvases[i]}
               </CanvasContainer>
             ),

@@ -12,9 +12,12 @@ export type EditorAddErroneousPropType = 'EDITOR_ADD_ERRONEOUS_PROP';
 export const EDITOR_RESET_ERRONEOUS_PROP = 'EDITOR_RESET_ERRONEOUS_PROP';
 export type EditorResetErroneousPropType = 'EDITOR_RESET_ERRONEOUS_PROP';
 
+export const EDITOR_CHANGE_ACTIVE_FRAME = 'EDITOR_CHANGE_ACTIVE_FRAME';
+export type EditorChangeActiveFrameType = 'EDITOR_CHANGE_ACTIVE_FRAME';
+
 export type EditorStateType = {
   +activeShape: ?string,
-  +shouldRecalcPropValues: boolean,
+  +shouldRedrawCanvases: boolean,
   +erroneousProps: {
     +[key: string]: {
       +[key: string]: true,

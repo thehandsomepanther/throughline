@@ -11,3 +11,5 @@ export type StoreType = {
   +editor: EditorStateType,
   +shapeValues: ShapeValuesStateType,
 };
+
+export type GetStateType = () => StoreType;

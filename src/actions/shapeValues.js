@@ -1,7 +1,13 @@
 // @flow
 
-import { SHAPE_VALUES_SET_VALUES } from '../types/shapeValues';
-import type { ShapeValuesSetValuesType } from '../types/shapeValues';
+import {
+  SHAPE_VALUES_SET_VALUES,
+  SHAPE_VALUES_UPDATE_VALUES,
+} from '../types/shapeValues';
+import type {
+  ShapeValuesSetValuesType,
+  ShapeValuesUpdateValuesType,
+} from '../types/shapeValues';
 
 export type SetShapeValuesActionType = {
   type: ShapeValuesSetValuesType,
@@ -15,4 +21,26 @@ export const setShapeValues = (shapeValues: {
 }): SetShapeValuesActionType => ({
   type: SHAPE_VALUES_SET_VALUES,
   shapeValues,
+});
+
+export type UpdateShapeValuesActionType = {
+  type: ShapeValuesUpdateValuesType,
+  shape: string,
+  prop: string,
+  values: Array<number>,
+};
+export type UpdateShapeValuesType = (
+  shape: string,
+  prop: string,
+  values: Array<number>,
+) => UpdateShapeValuesActionType;
+export const updateShapeValues = (
+  shape: string,
+  prop: string,
+  values: Array<number>,
+): UpdateShapeValuesActionType => ({
+  type: SHAPE_VALUES_UPDATE_VALUES,
+  shape,
+  prop,
+  values,
 });

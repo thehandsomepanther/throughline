@@ -10,9 +10,13 @@ import type {
   ChangeActiveShapeActionType,
   AddErroneousPropActionType,
   ResetErroneousPropsActionType,
+  ChangeActiveFrameActionType,
 } from './editor';
 import type { UpdateOrderActionType } from './order';
-import type { SetShapeValuesActionType } from './shapeValues';
+import type {
+  SetShapeValuesActionType,
+  UpdateShapeValuesActionType,
+} from './shapeValues';
 
 export type ActionType =
   | UpdateConstActionType
@@ -22,5 +26,9 @@ export type ActionType =
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType
   | ResetErroneousPropsActionType
+  | ChangeActiveFrameActionType
   | UpdateOrderActionType
-  | SetShapeValuesActionType;
+  | SetShapeValuesActionType
+  | UpdateShapeValuesActionType;
+
+export type DispatchType = (action: ActionType) => void;

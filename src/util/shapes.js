@@ -78,50 +78,71 @@ export const calcPropValues = (
   }
 };
 
-export const getShapePropValues = (
+export const calcShapeValues = (
   shape: ShapeType,
   frames: number,
   handleCalcPropError: (prop: string) => void,
-): Promise<{ [key: string]: ?Array<number> }> =>
-  new Promise((resolve: (val: { [key: string]: ?Array<number> }) => void) => {
-    switch (shape.type) {
-      case SHAPE_RECT:
-        Promise.all([
-          calcPropValues(shape.fillR, frames).catch(() => {
-            handleCalcPropError('fillR');
-          }),
-          calcPropValues(shape.fillG, frames).catch(() => {
-            handleCalcPropError('fillG');
-          }),
-          calcPropValues(shape.fillB, frames).catch(() => {
-            handleCalcPropError('fillB');
-          }),
-          calcPropValues(shape.posX, frames).catch(() => {
-            handleCalcPropError('posX');
-          }),
-          calcPropValues(shape.posY, frames).catch(() => {
-            handleCalcPropError('posY');
-          }),
-          calcPropValues(shape.width, frames).catch(() => {
-            handleCalcPropError('width');
-          }),
-          calcPropValues(shape.height, frames).catch(() => {
-            handleCalcPropError('height');
-          }),
-        ]).then((values: Array<?Array<number>>) => {
-          const [fillR, fillG, fillB, posX, posY, width, height] = values;
+): Promise<{ [key: string]: Array<number> }> =>
+  new Promise(
+    (
+      resolve: (val: { [key: string]: Array<number> }) => void,
+      reject: (reason: Error) => void,
+    ) => {
+      switch (shape.type) {
+        case SHAPE_RECT:
+          Promise.all([
+            calcPropValues(shape.fillR, frames).catch(() => {
+              handleCalcPropError('fillR');
+            }),
+            calcPropValues(shape.fillG, frames).catch(() => {
+              handleCalcPropError('fillG');
+            }),
+            calcPropValues(shape.fillB, frames).catch(() => {
+              handleCalcPropError('fillB');
+            }),
+            calcPropValues(shape.posX, frames).catch(() => {
+              handleCalcPropError('posX');
+            }),
+            calcPropValues(shape.posY, frames).catch(() => {
+              handleCalcPropError('posY');
+            }),
+            calcPropValues(shape.width, frames).catch(() => {
+              handleCalcPropError('width');
+            }),
+            calcPropValues(shape.height, frames).catch(() => {
+              handleCalcPropError('height');
+            }),
+          ]).then((values: Array<?Array<number>>) => {
+            let shouldResolve = true;
+            for (let i = 0; i < values.length; i += 1) {
+              if (values[i] === undefined) {
+                shouldResolve = false;
+                break;
+              }
+            }
 
-          resolve({
-            fillRValues: fillR,
-            fillGValues: fillG,
-            fillBValues: fillB,
-            posXValues: posX,
-            posYValues: posY,
-            widthValues: width,
-            heightValues: height,
+            if (shouldResolve) {
+              const [fillR, fillG, fillB, posX, posY, width, height] = values;
+
+              // we know that all the values in the resolved object will be of type
+              // Array<number> because of the for loop above, but Flow isn't smart
+              // enough to know that
+              // $FlowFixMe
+              resolve({
+                fillRValues: fillR,
+                fillGValues: fillG,
+                fillBValues: fillB,
+                posXValues: posX,
+                posYValues: posY,
+                widthValues: width,
+                heightValues: height,
+              });
+            } else {
+              reject(new Error('Some shapes have invalid props'));
+            }
           });
-        });
-        break;
-      default:
-    }
-  });
+          break;
+        default:
+      }
+    },
+  );

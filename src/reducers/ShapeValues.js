@@ -14,6 +14,14 @@ export default (
       return {
         ...action.shapeValues,
       };
+    case 'SHAPE_VALUES_UPDATE_VALUES':
+      return {
+        ...state,
+        [action.shape]: {
+          ...state.shape,
+          [action.prop]: action.values,
+        },
+      };
     default:
       return { ...state };
   }
