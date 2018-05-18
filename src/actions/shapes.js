@@ -7,11 +7,13 @@ import {
 } from '../types/shapes';
 import { updateShapeValues } from './shapeValues';
 import { addErroneousProp, removeErroneousProp } from './editor';
+import type { EditorStateType } from '../types/editor';
 import type { UsingType } from '../types/properties';
 import type {
   ShapeUpdateUsingType,
   ShapeUpdateConstType,
   ShapeUpdateFunctionType,
+  ShapesStateType,
 } from '../types/shapes';
 import type { GetStateType } from '../types/store';
 import type { DispatchType } from './';
@@ -39,6 +41,23 @@ export const updateUsing = (
   using,
 });
 
+const updatePropValues = (
+  dispatch: DispatchType,
+  shapes: ShapesStateType,
+  shape: string,
+  prop: string,
+  editor: EditorStateType,
+) => {
+  calcPropValues(shapes[shape][prop], editor.numFrames)
+    .then((values: Array<number>) => {
+      dispatch(removeErroneousProp(shape, prop));
+      dispatch(updateShapeValues(shape, prop, values));
+    })
+    .catch(() => {
+      dispatch(addErroneousProp(shape, prop));
+    });
+};
+
 export type UpdateConstActionType = {
   type: ShapeUpdateConstType,
   shape: string,
@@ -54,12 +73,20 @@ export const updateConst = (
   shape: string,
   prop: string,
   value: number,
-): UpdateConstActionType => ({
-  type: SHAPE_UPDATE_CONST,
-  shape,
-  prop,
-  value,
-});
+): ((dispatch: DispatchType, getState: GetStateType) => void) => (
+  dispatch: DispatchType,
+  getState: GetStateType,
+) => {
+  dispatch({
+    type: SHAPE_UPDATE_CONST,
+    shape,
+    prop,
+    value,
+  });
+
+  const { shapes, editor } = getState();
+  updatePropValues(dispatch, shapes, shape, prop, editor);
+};
 
 export type UpdateFunctionActionType = {
   type: ShapeUpdateFunctionType,
@@ -88,13 +115,5 @@ export const updateFunction = (
   });
 
   const { shapes, editor } = getState();
-  calcPropValues(shapes[shape][prop], editor.numFrames)
-    .then((values: Array<number>) => {
-      console.log(values);
-      dispatch(removeErroneousProp(shape, prop));
-      dispatch(updateShapeValues(shape, prop, values));
-    })
-    .catch(() => {
-      dispatch(addErroneousProp(shape, prop));
-    });
+  updatePropValues(dispatch, shapes, shape, prop, editor);
 };
