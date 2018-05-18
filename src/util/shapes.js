@@ -38,6 +38,12 @@ export const evalFunctionProp = (
 
         worker.onmessage = (e: MessageEvent) => {
           clearTimeout(timeout);
+          const values = JSON.parse(e.data);
+          values.forEach((value: ?number) => {
+            if (typeof value !== 'number') {
+              reject(new Error(e.message));
+            }
+          });
           resolve(JSON.parse(e.data));
         };
 
