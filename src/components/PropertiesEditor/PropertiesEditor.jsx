@@ -9,6 +9,7 @@ import {
   PropertyName,
   FunctionPropertyInput,
   ConstantPropertyInput,
+  InvalidPropNotification,
 } from './styles';
 import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
@@ -77,12 +78,14 @@ const FunctionInput = ({
 const ShapePropertiesView = ({
   shape,
   shapeKey,
+  erroneousProps,
   handleUsingChange,
   handleUpdateConst,
   handleUpdateFunction,
 }: {
   shape: ShapeType,
   shapeKey: string,
+  erroneousProps: ?{ [key: string]: true },
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
   handleUpdateFunction: UpdateFunctionType,
@@ -93,6 +96,15 @@ const ShapePropertiesView = ({
     </ShapeInfo>
     {SHAPE_RECT_PROPS.map((prop: string): ?React$Element<any> => (
       <PropertyInfoContainer key={prop}>
+        {erroneousProps &&
+          erroneousProps[prop] && (
+            <InvalidPropNotification>
+              <span role="img" aria-label="warning">
+                ⛔️
+              </span>{' '}
+              This prop is invalid
+            </InvalidPropNotification>
+          )}
         <PropertyName>{prop}</PropertyName>
         <select
           value={shape[prop].using}
@@ -144,6 +156,7 @@ export default ({
       <ShapePropertiesView
         shapeKey={editor.activeShape}
         shape={shapes[editor.activeShape]}
+        erroneousProps={{ ...editor.erroneousProps[editor.activeShape] }}
         handleUsingChange={updateUsing}
         handleUpdateConst={updateConst}
         handleUpdateFunction={updateFunction}

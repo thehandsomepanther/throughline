@@ -19,28 +19,6 @@ import type { GetStateType } from '../types/store';
 import type { DispatchType } from './';
 import { calcPropValues } from '../util/shapes';
 
-export type UpdateUsingActionType = {
-  type: ShapeUpdateUsingType,
-  shape: string,
-  prop: string,
-  using: UsingType,
-};
-export type UpdateUsingType = (
-  shape: string,
-  prop: string,
-  using: UsingType,
-) => UpdateUsingActionType;
-export const updateUsing = (
-  shape: string,
-  prop: string,
-  using: UsingType,
-): UpdateUsingActionType => ({
-  type: SHAPE_UPDATE_USING,
-  prop,
-  shape,
-  using,
-});
-
 const updatePropValues = (
   dispatch: DispatchType,
   shapes: ShapesStateType,
@@ -56,6 +34,36 @@ const updatePropValues = (
     .catch(() => {
       dispatch(addErroneousProp(shape, prop));
     });
+};
+
+export type UpdateUsingActionType = {
+  type: ShapeUpdateUsingType,
+  shape: string,
+  prop: string,
+  using: UsingType,
+};
+export type UpdateUsingType = (
+  shape: string,
+  prop: string,
+  using: UsingType,
+) => UpdateUsingActionType;
+export const updateUsing = (
+  shape: string,
+  prop: string,
+  using: UsingType,
+): ((dispatch: DispatchType, getState: GetStateType) => void) => (
+  dispatch: DispatchType,
+  getState: GetStateType,
+) => {
+  dispatch({
+    type: SHAPE_UPDATE_USING,
+    prop,
+    shape,
+    using,
+  });
+
+  const { shapes, editor } = getState();
+  updatePropValues(dispatch, shapes, shape, prop, editor);
 };
 
 export type UpdateConstActionType = {

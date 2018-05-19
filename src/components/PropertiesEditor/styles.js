@@ -6,6 +6,7 @@ import {
   COLOR_NEAR_WHITE,
   COLOR_NEAR_BLACK,
   COLOR_GREY,
+  COLOR_YELLOW,
 } from '../../styles';
 
 export const PropertiesEditorContainer = styled('div')`
@@ -21,13 +22,20 @@ export const ShapeInfo = styled('div')`
 `;
 
 export const PropertyInfoContainer = styled('div')`
-  margin-top: 1rem;
   border-top: 1px solid ${COLOR_GREY};
+  padding-top: 1rem;
+`;
+
+export const InvalidPropNotification = styled('div')`
+  margin-bottom: 1rem;
+  background-color: ${COLOR_YELLOW};
+  padding: 1rem;
+  color: ${COLOR_NEAR_BLACK};
+  border-radius: 4px;
 `;
 
 export const PropertyName = styled('div')`
   color: ${COLOR_NEAR_BLACK};
-  margin-top: 1rem;
   display: inline-block;
   margin-right: 1rem;
 `;

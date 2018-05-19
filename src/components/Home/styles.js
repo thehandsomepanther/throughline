@@ -11,7 +11,6 @@ import {
 export const HomeDiv = styled('div')`
   display: flex;
   background-color: ${COLOR_YELLOW};
-  color: ${COLOR_NEAR_WHITE};
   height: 100vh;
   overflow-y: hidden;
   font-family: ${FONT_STACK_LUNCH};
