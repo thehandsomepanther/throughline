@@ -31,6 +31,7 @@ type PropsType = {
 
 type StateType = {
   interval: ?IntervalID,
+  lastActiveCanvas: number,
 };
 
 const CANVAS_WIDTH = 600;
@@ -60,6 +61,7 @@ export default class CanvasEditor extends React.Component<
 
     this.state = {
       interval: null,
+      lastActiveCanvas: 0,
     };
   }
 
@@ -143,6 +145,7 @@ export default class CanvasEditor extends React.Component<
 
   render(): ?React$Element<any> {
     const { editor } = this.props;
+    const { lastActiveCanvas } = this.state;
 
     const tickMarkers = [];
     for (let i = 0; i < editor.numFrames; i += 1) {
@@ -153,7 +156,14 @@ export default class CanvasEditor extends React.Component<
           activeCanvas={editor.activeFrame}
           onClick={() => {
             this.setActiveCanvas(i);
+            this.setState({
+              lastActiveCanvas: i,
+            });
           }}
+          onMouseOver={() => {
+            this.setActiveCanvas(i);
+          }}
+          onFocus={() => {}}
         />,
       );
     }
@@ -178,7 +188,19 @@ export default class CanvasEditor extends React.Component<
             ),
           )}
         </CanvasesContainer>
-        <TickMarkersContainer>{tickMarkers}</TickMarkersContainer>
+        <TickMarkersContainer
+          onMouseEnter={() => {
+            this.setState({
+              lastActiveCanvas: editor.activeFrame,
+            });
+          }}
+          onMouseLeave={() => {
+            this.setActiveCanvas(lastActiveCanvas);
+          }}
+          onFocus={() => {}}
+        >
+          {tickMarkers}
+        </TickMarkersContainer>
         <ControlsContainer>
           <input
             type="button"
