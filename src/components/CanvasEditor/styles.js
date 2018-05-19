@@ -40,6 +40,7 @@ type TickMarkerPropsType = {
   activeCanvas: number,
 };
 export const TickMarker = styled('div')`
+  position: relative;
   width: 2px;
   height: ${(props: TickMarkerPropsType): string =>
     props.index === props.activeCanvas ? '40px' : '20px'};
@@ -51,6 +52,15 @@ export const TickMarker = styled('div')`
   &:hover {
     height: 40px;
   }
+`;
+
+export const TickMarkerNumber = styled('span')`
+  position: absolute;
+  text-align: center;
+  bottom: -20px;
+  transform: translateX(-50%);
+  left: 1px;
+  color: ${COLOR_NEAR_WHITE};
 `;
 
 export const ControlsContainer = styled('div')`

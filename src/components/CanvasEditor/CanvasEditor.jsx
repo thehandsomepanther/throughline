@@ -7,6 +7,7 @@ import {
   CanvasContainer,
   TickMarkersContainer,
   TickMarker,
+  TickMarkerNumber,
   ControlsContainer,
   NotificationContainer,
 } from './styles';
@@ -164,7 +165,13 @@ export default class CanvasEditor extends React.Component<
             this.setActiveCanvas(i);
           }}
           onFocus={() => {}}
-        />,
+        >
+          {(i === 0 ||
+            i === editor.activeFrame ||
+            i === editor.numFrames - 1) && (
+            <TickMarkerNumber>{i}</TickMarkerNumber>
+          )}
+        </TickMarker>,
       );
     }
 
