@@ -19,16 +19,18 @@ type StateType = {
   lastActiveCanvas: number,
 };
 
-const INITIAL_STATE = {
-  lastActiveCanvas: 0,
-};
-
 export default class PropertiesGraph extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      lastActiveCanvas: 0,
+    };
+  }
+
   componentDidMount() {
     if (!this.ptsCanvas) {
       return;
     }
-    this.state = INITIAL_STATE;
     this.createChart();
   }
 
@@ -88,12 +90,6 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
         }
       },
       action: (type: string) => {
-        // without this check, for some reason this.state will be set to null
-        // on every PropertiesGraph except the first one interacted with
-        if (!this.state) {
-          this.state = INITIAL_STATE;
-        }
-
         const { changeActiveFrame, activeFrame, values } = this.props;
         const { lastActiveCanvas } = this.state;
         const interval = this.space.size.x / (values.length + 1);
@@ -136,6 +132,8 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
   renderChart: () => void;
 
   render(): ?React$Element<any> {
+    console.log(this.state);
+
     return (
       <div>
         <canvas
