@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import PropertiesEditor from '../../components/PropertiesEditor';
 import { updateUsing, updateConst, updateFunction } from '../../actions/shapes';
+import { changeActiveFrame } from '../../actions/editor';
 import { setShapeValues } from '../../actions/shapeValues';
 import type { ShapesStateType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
@@ -30,6 +31,7 @@ const mapDispatchToProps = (dispatch: any): any =>
       updateConst,
       updateFunction,
       setShapeValues,
+      changeActiveFrame,
     },
     dispatch,
   );

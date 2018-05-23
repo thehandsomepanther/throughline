@@ -27,6 +27,7 @@ import type {
   UpdateConstActionType,
   UpdateFunctionActionType,
 } from '../../actions/shapes';
+import type { ChangeActiveFrameType } from '../../actions/editor';
 
 const getPropValue = (
   shape: ShapeType,
@@ -84,18 +85,22 @@ const ShapePropertiesView = ({
   shape,
   shapeKey,
   shapeValues,
+  activeFrame,
   erroneousProps,
   handleUsingChange,
   handleUpdateConst,
   handleUpdateFunction,
+  changeActiveFrame,
 }: {
   shape: ShapeType,
   shapeKey: string,
   shapeValues: ShapeValuesType,
+  activeFrame: number,
   erroneousProps: ?{ [key: string]: true },
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
   handleUpdateFunction: UpdateFunctionType,
+  changeActiveFrame: ChangeActiveFrameType,
 }): ?React$Element<any> => (
   <div>
     <ShapeInfo>
@@ -140,7 +145,11 @@ const ShapePropertiesView = ({
             }
           />
         )}
-        <PropertiesGraph values={shapeValues[prop]} />
+        <PropertiesGraph
+          values={shapeValues[prop]}
+          activeFrame={activeFrame}
+          changeActiveFrame={changeActiveFrame}
+        />
       </PropertyInfoContainer>
     ))}
   </div>
@@ -153,6 +162,7 @@ export default ({
   updateConst,
   updateUsing,
   updateFunction,
+  changeActiveFrame,
 }: {
   shapes: ShapesStateType,
   editor: EditorStateType,
@@ -160,6 +170,7 @@ export default ({
   updateConst: UpdateConstType,
   updateUsing: UpdateUsingType,
   updateFunction: UpdateFunctionType,
+  changeActiveFrame: ChangeActiveFrameType,
 }): ?React$Element<any> =>
   editor.activeShape && shapeValues[editor.activeShape] ? (
     <PropertiesEditorContainer>
@@ -167,10 +178,12 @@ export default ({
         shapeKey={editor.activeShape}
         shape={shapes[editor.activeShape]}
         shapeValues={shapeValues[editor.activeShape]}
+        activeFrame={editor.activeFrame}
         erroneousProps={{ ...editor.erroneousProps[editor.activeShape] }}
         handleUsingChange={updateUsing}
         handleUpdateConst={updateConst}
         handleUpdateFunction={updateFunction}
+        changeActiveFrame={changeActiveFrame}
       />
     </PropertiesEditorContainer>
   ) : null;

@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { CanvasSpace, Pt } from 'pts';
+import type { ChangeActiveFrameType } from '../../actions/editor';
 
 const MARGIN_VERTICAL = 20;
 
@@ -10,17 +11,28 @@ const percentile = (min: number, max: number, val: number): number =>
 
 type PropsType = {
   values: Array<number>,
+  activeFrame: number,
+  changeActiveFrame: ChangeActiveFrameType,
 };
 
-export default class PtsChart extends Component<PropsType> {
+type StateType = {
+  lastActiveCanvas: number,
+};
+
+const INITIAL_STATE = {
+  lastActiveCanvas: 0,
+};
+
+export default class PropertiesGraph extends Component<PropsType, StateType> {
   componentDidMount() {
+    if (!this.ptsCanvas) {
+      return;
+    }
+    this.state = INITIAL_STATE;
     this.createChart();
   }
 
   componentDidUpdate() {
-    if (!this.ptsCanvas) {
-      return;
-    }
     this.space.playOnce(0);
   }
 
@@ -36,22 +48,21 @@ export default class PtsChart extends Component<PropsType> {
     this.form = this.space.getForm();
 
     this.renderChart = () => {
-      const { values } = this.props;
+      const { values, activeFrame } = this.props;
 
       const interval = this.space.size.x / (values.length + 1);
-      const maxValue = Math.max(...values, 100);
-      const minValue = Math.min(...values, 0);
+      const maxValue = Math.max(...values);
+      const minValue = Math.min(...values);
 
       const getY = (val: number): number =>
-        maxValue === minValue
-          ? MARGIN_VERTICAL + (this.space.size.y - 2 * MARGIN_VERTICAL) / 2
-          : MARGIN_VERTICAL +
-            (this.space.size.y - 2 * MARGIN_VERTICAL) *
-              (1 - percentile(minValue, maxValue, val));
+        MARGIN_VERTICAL +
+        (this.space.size.y - 2 * MARGIN_VERTICAL) *
+          (maxValue === minValue
+            ? 1 / 2
+            : 1 * (1 - percentile(minValue, maxValue, val)));
 
       const points = values.map(
-        (n: number, i: number): Array<any> =>
-          new Pt((i + 1) * interval, getY(n)),
+        (n: number, i: number): any => new Pt((i + 1) * interval, getY(n)),
       );
 
       points.unshift(new Pt(0, getY(values[values.length - 1])));
@@ -63,6 +74,11 @@ export default class PtsChart extends Component<PropsType> {
       this.form.strokeOnly('#aaa', 2, 'round');
       this.form.line(points.slice(0, 2));
       this.form.line(points.slice(points.length - 2));
+
+      this.form.line([
+        new Pt((activeFrame + 1) * interval, 0),
+        new Pt((activeFrame + 1) * interval, this.space.size.y),
+      ]);
     };
 
     this.space.add({
@@ -71,7 +87,34 @@ export default class PtsChart extends Component<PropsType> {
           this.renderChart();
         }
       },
-      action: () => {
+      action: (type: string) => {
+        // without this check, for some reason this.state will be set to null
+        // on every PropertiesGraph except the first one interacted with
+        if (!this.state) {
+          this.state = INITIAL_STATE;
+        }
+
+        const { changeActiveFrame, activeFrame, values } = this.props;
+        const { lastActiveCanvas } = this.state;
+        const interval = this.space.size.x / (values.length + 1);
+        let frame;
+
+        switch (type) {
+          case 'over':
+            this.setState({ lastActiveCanvas: activeFrame });
+            break;
+          case 'out':
+            changeActiveFrame(lastActiveCanvas);
+            break;
+          case 'move':
+            frame = Math.floor(this.space.pointer.x / interval);
+            if (frame >= 0 && frame < values.length) {
+              changeActiveFrame(Math.floor(this.space.pointer.x / interval));
+            }
+            break;
+          default:
+        }
+
         this.space.clear();
         this.renderChart();
       },
