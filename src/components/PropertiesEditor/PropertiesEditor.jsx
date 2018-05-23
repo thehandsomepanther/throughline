@@ -28,6 +28,7 @@ import type {
   UpdateFunctionActionType,
 } from '../../actions/shapes';
 import type { ChangeActiveFrameType } from '../../actions/editor';
+import type { UpdateShapeValuesType } from '../../actions/shapeValues';
 
 const getPropValue = (
   shape: ShapeType,
@@ -91,6 +92,7 @@ const ShapePropertiesView = ({
   handleUpdateConst,
   handleUpdateFunction,
   changeActiveFrame,
+  updateShapeValues,
 }: {
   shape: ShapeType,
   shapeKey: string,
@@ -101,6 +103,7 @@ const ShapePropertiesView = ({
   handleUpdateConst: UpdateConstType,
   handleUpdateFunction: UpdateFunctionType,
   changeActiveFrame: ChangeActiveFrameType,
+  updateShapeValues: UpdateShapeValuesActionType,
 }): ?React$Element<any> => (
   <div>
     <ShapeInfo>
@@ -149,6 +152,13 @@ const ShapePropertiesView = ({
           values={shapeValues[prop]}
           activeFrame={activeFrame}
           changeActiveFrame={changeActiveFrame}
+          updateShapeValues={
+            shape[prop].using === USING_CUSTOM
+              ? (values: Array<number>) => {
+                  updateShapeValues(shapeKey, prop, values);
+                }
+              : null
+          }
         />
       </PropertyInfoContainer>
     ))}
@@ -163,6 +173,7 @@ export default ({
   updateUsing,
   updateFunction,
   changeActiveFrame,
+  updateShapeValues,
 }: {
   shapes: ShapesStateType,
   editor: EditorStateType,
@@ -171,6 +182,7 @@ export default ({
   updateUsing: UpdateUsingType,
   updateFunction: UpdateFunctionType,
   changeActiveFrame: ChangeActiveFrameType,
+  updateShapeValues: UpdateShapeValuesActionType,
 }): ?React$Element<any> =>
   editor.activeShape && shapeValues[editor.activeShape] ? (
     <PropertiesEditorContainer>
@@ -184,6 +196,7 @@ export default ({
         handleUpdateConst={updateConst}
         handleUpdateFunction={updateFunction}
         changeActiveFrame={changeActiveFrame}
+        updateShapeValues={updateShapeValues}
       />
     </PropertiesEditorContainer>
   ) : null;

@@ -13,6 +13,7 @@ type PropsType = {
   values: Array<number>,
   activeFrame: number,
   changeActiveFrame: ChangeActiveFrameType,
+  updateShapeValues: ?(values: Array<number>) => void,
 };
 
 type StateType = {
@@ -38,6 +39,31 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
     this.space.playOnce(0);
   }
 
+  get interval(): number {
+    return this.space.size.x / (this.props.values.length + 1);
+  }
+
+  getSpacePointFromGraphPoint = (x: number, y: number): Array<number> => {
+    const { values } = this.props;
+    const maxValue = Math.max(...values) + MARGIN_VERTICAL;
+    const minValue = Math.min(...values) - MARGIN_VERTICAL;
+
+    return [
+      (x + 1) * this.interval,
+      this.space.size.y * (1 - percentile(minValue, maxValue, y)),
+    ];
+  };
+
+  getGraphPointFromSpacePoint = (x: number, y: number): Array<number> => {
+    const { values } = this.props;
+
+    const p = 1 - y / this.space.size.y;
+    const maxValue = Math.max(...values) + MARGIN_VERTICAL;
+    const minValue = Math.min(...values) - MARGIN_VERTICAL;
+
+    return [(x + 1) * this.interval, (maxValue - minValue) * p + minValue];
+  };
+
   createChart = () => {
     if (!this.ptsCanvas) {
       return;
@@ -52,23 +78,19 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
     this.renderChart = () => {
       const { values, activeFrame } = this.props;
 
-      const interval = this.space.size.x / (values.length + 1);
-      const maxValue = Math.max(...values);
-      const minValue = Math.min(...values);
-
-      const getY = (val: number): number =>
-        MARGIN_VERTICAL +
-        (this.space.size.y - 2 * MARGIN_VERTICAL) *
-          (maxValue === minValue
-            ? 1 / 2
-            : 1 * (1 - percentile(minValue, maxValue, val)));
-
       const points = values.map(
-        (n: number, i: number): any => new Pt((i + 1) * interval, getY(n)),
+        (n: number, i: number): any =>
+          new Pt(...this.getSpacePointFromGraphPoint(i, n)),
       );
 
-      points.unshift(new Pt(0, getY(values[values.length - 1])));
-      points.push(new Pt((values.length + 1) * interval, getY(values[0])));
+      points.unshift(
+        new Pt(
+          ...this.getSpacePointFromGraphPoint(-1, values[values.length - 1]),
+        ),
+      );
+      points.push(
+        new Pt(...this.getSpacePointFromGraphPoint(values.length, values[0])),
+      );
 
       this.form.strokeOnly('#000', 2);
       this.form.line(points);
@@ -78,8 +100,8 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
       this.form.line(points.slice(points.length - 2));
 
       this.form.line([
-        new Pt((activeFrame + 1) * interval, 0),
-        new Pt((activeFrame + 1) * interval, this.space.size.y),
+        new Pt((activeFrame + 1) * this.interval, 0),
+        new Pt((activeFrame + 1) * this.interval, this.space.size.y),
       ]);
     };
 
@@ -90,10 +112,15 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
         }
       },
       action: (type: string) => {
-        const { changeActiveFrame, activeFrame, values } = this.props;
+        const {
+          changeActiveFrame,
+          activeFrame,
+          values,
+          updateShapeValues,
+        } = this.props;
         const { lastActiveCanvas } = this.state;
-        const interval = this.space.size.x / (values.length + 1);
-        let frame;
+        const frame = Math.floor(this.space.pointer.x / this.interval);
+        let graphY;
 
         switch (type) {
           case 'over':
@@ -103,9 +130,21 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
             changeActiveFrame(lastActiveCanvas);
             break;
           case 'move':
-            frame = Math.floor(this.space.pointer.x / interval);
             if (frame >= 0 && frame < values.length) {
-              changeActiveFrame(Math.floor(this.space.pointer.x / interval));
+              changeActiveFrame(
+                Math.floor(this.space.pointer.x / this.interval),
+              );
+            }
+            break;
+          case 'down':
+          case 'drag':
+            if (frame >= 0 && frame < values.length && updateShapeValues) {
+              [, graphY] = this.getGraphPointFromSpacePoint(
+                this.space.pointer.x,
+                this.space.pointer.y,
+              );
+              values[frame] = graphY;
+              updateShapeValues(values);
             }
             break;
           default:
@@ -132,8 +171,6 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
   renderChart: () => void;
 
   render(): ?React$Element<any> {
-    console.log(this.state);
-
     return (
       <div>
         <canvas
