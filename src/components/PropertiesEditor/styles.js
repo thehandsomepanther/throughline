@@ -15,6 +15,8 @@ export const PropertiesEditorContainer = styled('div')`
   padding: 0.8rem;
   background-color: ${COLOR_NEAR_WHITE};
   border-radius: 4px;
+  height: 100vh;
+  overflow-y: scroll;
 `;
 
 export const ShapeInfo = styled('div')`

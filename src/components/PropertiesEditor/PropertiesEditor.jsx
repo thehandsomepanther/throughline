@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 
+import PropertiesGraph from './PropertiesGraph';
 import {
   PropertiesEditorContainer,
   ShapeInfo,
@@ -15,6 +16,10 @@ import { SHAPE_RECT_PROPS } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
+import type {
+  ShapeValuesStateType,
+  ShapeValuesType,
+} from '../../types/shapeValues';
 import type {
   UpdateUsingType,
   UpdateConstType,
@@ -78,6 +83,7 @@ const FunctionInput = ({
 const ShapePropertiesView = ({
   shape,
   shapeKey,
+  shapeValues,
   erroneousProps,
   handleUsingChange,
   handleUpdateConst,
@@ -85,6 +91,7 @@ const ShapePropertiesView = ({
 }: {
   shape: ShapeType,
   shapeKey: string,
+  shapeValues: ShapeValuesType,
   erroneousProps: ?{ [key: string]: true },
   handleUsingChange: UpdateUsingType,
   handleUpdateConst: UpdateConstType,
@@ -133,6 +140,7 @@ const ShapePropertiesView = ({
             }
           />
         )}
+        <PropertiesGraph values={shapeValues[prop]} />
       </PropertyInfoContainer>
     ))}
   </div>
@@ -141,21 +149,24 @@ const ShapePropertiesView = ({
 export default ({
   shapes,
   editor,
+  shapeValues,
   updateConst,
   updateUsing,
   updateFunction,
 }: {
   shapes: ShapesStateType,
   editor: EditorStateType,
+  shapeValues: ShapeValuesStateType,
   updateConst: UpdateConstType,
   updateUsing: UpdateUsingType,
   updateFunction: UpdateFunctionType,
 }): ?React$Element<any> =>
-  editor.activeShape ? (
+  editor.activeShape && shapeValues[editor.activeShape] ? (
     <PropertiesEditorContainer>
       <ShapePropertiesView
         shapeKey={editor.activeShape}
         shape={shapes[editor.activeShape]}
+        shapeValues={shapeValues[editor.activeShape]}
         erroneousProps={{ ...editor.erroneousProps[editor.activeShape] }}
         handleUsingChange={updateUsing}
         handleUpdateConst={updateConst}
