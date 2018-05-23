@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { CanvasSpace, Pt } from 'pts';
+import { CanvasSpace, Pt, Rectangle, Group, Line } from 'pts';
 import type { ChangeActiveFrameType } from '../../actions/editor';
 
-const MARGIN_VERTICAL = 20;
+const MARGIN_VERTICAL = 40;
 
 const percentile = (min: number, max: number, val: number): number =>
   (val - min) / (max - min);
@@ -37,6 +37,7 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
 
   componentDidUpdate() {
     this.space.playOnce(0);
+    this.renderChart();
   }
 
   get interval(): number {
@@ -62,6 +63,13 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
     const minValue = Math.min(...values) - MARGIN_VERTICAL;
 
     return [(x + 1) * this.interval, (maxValue - minValue) * p + minValue];
+  };
+
+  getGraphValAtSpaceX = (x: number): Array<number> => {
+    const { values } = this.props;
+    const i = Math.floor(x / this.interval - 1);
+
+    return [i, values[i]];
   };
 
   createChart = () => {
@@ -95,7 +103,7 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
       this.form.strokeOnly('#000', 2);
       this.form.line(points);
 
-      this.form.strokeOnly('#aaa', 2, 'round');
+      this.form.strokeOnly('#aaa', 2);
       this.form.line(points.slice(0, 2));
       this.form.line(points.slice(points.length - 2));
 
@@ -103,6 +111,41 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
         new Pt((activeFrame + 1) * this.interval, 0),
         new Pt((activeFrame + 1) * this.interval, this.space.size.y),
       ]);
+
+      const rect = Rectangle.fromCenter(
+        new Pt((activeFrame + 1) * this.interval + 16, this.space.size.y - 16),
+        20,
+      );
+      this.form.font(12).textBox(rect, activeFrame, 'bottom', '', true);
+
+      // this code to draw the intersections between the y axis and the line is
+      // super intense. find a better way to do this in the future
+      const yAxisLine = new Group(
+        new Pt(0, this.space.pointer.y),
+        new Pt(this.space.size.x, this.space.pointer.y),
+      );
+
+      for (let i = 0; i < points.length - 1; i += 1) {
+        const valuesLine = new Group(points[i], points[i + 1]);
+        const intersect = Line.intersectLine2D(yAxisLine, valuesLine);
+
+        this.form
+          .stroke('#09f', 2)
+          .line(yAxisLine)
+          .point(intersect);
+
+        if (intersect) {
+          const [x, y] = this.getGraphValAtSpaceX(intersect[0]);
+
+          if (x >= 0 && x < values.length) {
+            const textRect = Rectangle.fromCenter(
+              new Pt(intersect[0] + 16, intersect[1] - 16),
+              [40, 12],
+            );
+            this.form.font(12).textBox(textRect, `${y}`, 'bottom', '');
+          }
+        }
+      }
     };
 
     this.space.add({
