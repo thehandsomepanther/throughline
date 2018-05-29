@@ -18,8 +18,8 @@
       "never"
     ],
     "function-paren-newline": [
-      2,
-      "consistent"
+      0,
+      "never"
     ],
     "flowtype/boolean-style": [
       2,

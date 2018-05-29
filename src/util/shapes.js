@@ -2,7 +2,7 @@
 /* global Worker */
 
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
-import { SHAPE_RECT } from '../types/shapes';
+import { SHAPE_RECT, SHAPE_RECT_PROPS } from '../types/shapes';
 import type { ShapeType } from '../types/shapes';
 import type { PropertyType } from '../types/properties';
 
@@ -65,11 +65,11 @@ export const calcPropValues = (
       if (prop.const === null || prop.const === undefined) {
         throw new Error('Tried to use const value of prop when none exists.');
       }
+
       const values = [];
       for (let i = 0; i < frames; i += 1) {
         values.push(prop.const || 0);
       }
-
       return Promise.resolve(values);
     case USING_CUSTOM:
       if (!prop.custom) {
@@ -94,61 +94,60 @@ export const calcShapeValues = (
       resolve: (val: { [key: string]: Array<number> }) => void,
       reject: (reason: Error) => void,
     ) => {
+      let propsKeys;
       switch (shape.type) {
         case SHAPE_RECT:
-          Promise.all([
-            calcPropValues(shape.fillR, frames).catch(() => {
-              handleCalcPropError('fillR');
-            }),
-            calcPropValues(shape.fillG, frames).catch(() => {
-              handleCalcPropError('fillG');
-            }),
-            calcPropValues(shape.fillB, frames).catch(() => {
-              handleCalcPropError('fillB');
-            }),
-            calcPropValues(shape.posX, frames).catch(() => {
-              handleCalcPropError('posX');
-            }),
-            calcPropValues(shape.posY, frames).catch(() => {
-              handleCalcPropError('posY');
-            }),
-            calcPropValues(shape.width, frames).catch(() => {
-              handleCalcPropError('width');
-            }),
-            calcPropValues(shape.height, frames).catch(() => {
-              handleCalcPropError('height');
-            }),
-          ]).then((values: Array<?Array<number>>) => {
-            let shouldResolve = true;
-            for (let i = 0; i < values.length; i += 1) {
-              if (values[i] === undefined) {
-                shouldResolve = false;
-                break;
-              }
-            }
-
-            if (shouldResolve) {
-              const [fillR, fillG, fillB, posX, posY, width, height] = values;
-
-              // we know that all the values in the resolved object will be of type
-              // Array<number> because of the for loop above, but Flow isn't smart
-              // enough to know that
-              // $FlowFixMe
-              resolve({
-                fillR,
-                fillG,
-                fillB,
-                posX,
-                posY,
-                width,
-                height,
-              });
-            } else {
-              reject(new Error('Some shapes have invalid props'));
-            }
-          });
+          propsKeys = SHAPE_RECT_PROPS;
           break;
         default:
+          throw new Error(
+            `Tried to calculate shape values for shape of unrecognized type: ${
+              shape.type
+            }`,
+          );
       }
+
+      // TODO: because calcShapeValues only gets called on init (and all subsequent
+      // updates are handled using calcPropValues), this error handling doesn't
+      // actually render any props in the props editor (and also no error messages)
+      // if there's an error in one of them. need to figure out a better way to handle that
+      Promise.all(
+        propsKeys.map((prop: string): Promise<?Array<number>> =>
+          calcPropValues(shape[prop], frames).catch((): Promise<null> => {
+            handleCalcPropError(prop);
+            return Promise.resolve(null);
+          }),
+        ),
+      ).then((values: Array<?Array<number>>) => {
+        let shouldResolve = true;
+        for (let i = 0; i < values.length; i += 1) {
+          if (values[i] === null) {
+            shouldResolve = false;
+            break;
+          }
+        }
+
+        if (shouldResolve) {
+          resolve(
+            // we know that all the values in the resolved object will be of type
+            // Array<number> because of the for loop above, but Flow isn't smart
+            // enough to know that
+            // $FlowFixMe
+            values.reduce(
+              (
+                acc: { [key: string]: Array<number> },
+                curr: Array<number>,
+                i: number,
+              ): { [key: string]: Array<number> } => ({
+                ...acc,
+                [propsKeys[i]]: curr,
+              }),
+              {},
+            ),
+          );
+        } else {
+          reject(new Error('Some shapes have invalid props'));
+        }
+      });
     },
   );

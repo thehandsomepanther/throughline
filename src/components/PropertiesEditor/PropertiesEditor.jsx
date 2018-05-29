@@ -103,7 +103,7 @@ const ShapePropertiesView = ({
   handleUpdateConst: UpdateConstType,
   handleUpdateFunction: UpdateFunctionType,
   changeActiveFrame: ChangeActiveFrameType,
-  updateShapeValues: UpdateShapeValuesActionType,
+  updateShapeValues: UpdateShapeValuesType,
 }): ?React$Element<any> => (
   <div>
     <ShapeInfo>
@@ -182,7 +182,7 @@ export default ({
   updateUsing: UpdateUsingType,
   updateFunction: UpdateFunctionType,
   changeActiveFrame: ChangeActiveFrameType,
-  updateShapeValues: UpdateShapeValuesActionType,
+  updateShapeValues: UpdateShapeValuesType,
 }): ?React$Element<any> =>
   editor.activeShape && shapeValues[editor.activeShape] ? (
     <PropertiesEditorContainer>

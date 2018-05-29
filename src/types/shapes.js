@@ -23,6 +23,10 @@ export const SHAPE_RECT_PROPS = [
   'fillB',
   'width',
   'height',
+  'skewX',
+  'skewY',
+  'scaleX',
+  'scaleY',
 ];
 
 export type ShapeRectType = {
@@ -35,6 +39,10 @@ export type ShapeRectType = {
   +fillB: PropertyType,
   +width: PropertyType,
   +height: PropertyType,
+  +skewX: PropertyType,
+  +skewY: PropertyType,
+  +scaleX: PropertyType,
+  +scaleY: PropertyType,
 };
 
 export type ShapeEllipseType = {
