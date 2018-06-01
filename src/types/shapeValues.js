@@ -26,11 +26,14 @@ export type ShapeEllipseValuesType = {
   +name: string,
   +posX: PropertyValuesType,
   +posY: PropertyValuesType,
+  +radiusX: PropertyValuesType,
+  +radiusY: PropertyValuesType,
   +fillR: PropertyValuesType,
   +fillG: PropertyValuesType,
   +fillB: PropertyValuesType,
-  +width: PropertyValuesType,
-  +height: PropertyValuesType,
+  +rotation: PropertyValuesType,
+  +startAngle: PropertyValuesType,
+  +endAngle: PropertyValuesType,
 };
 
 export type ShapeValuesType = ShapeRectValuesType | ShapeEllipseValuesType;

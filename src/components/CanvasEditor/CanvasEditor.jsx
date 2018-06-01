@@ -84,8 +84,6 @@ export default class CanvasEditor extends React.Component<
           ctx.save();
           const values = nextProps.shapeValues[key];
 
-          console.log(values);
-
           switch (values.type) {
             case 'SHAPE_RECT':
               ctx.translate(
@@ -109,7 +107,19 @@ export default class CanvasEditor extends React.Component<
                 values.height[frame],
               );
               break;
+            case 'SHAPE_ELLIPSE':
+              ctx.ellipse(
+                values.posX[frame],
+                values.posY[frame],
+                values.radiusX[frame],
+                values.radiusY[frame],
+                values.rotation[frame],
+                values.startAngle[frame],
+                values.endAngle[frame],
+              );
+              break;
             default:
+              throw new Error(`Unexpected shape type: ${values.type}`);
           }
 
           ctx.restore();
