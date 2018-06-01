@@ -81,32 +81,36 @@ export default class CanvasEditor extends React.Component<
         const ctx = canvasEl.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         nextProps.order.forEach((key: string) => {
-          const {
-            fillR,
-            fillG,
-            fillB,
-            posX,
-            posY,
-            width,
-            height,
-          } = nextProps.shapeValues[key];
+          ctx.save();
+          const values = nextProps.shapeValues[key];
 
           switch (nextProps.shapes[key].type) {
             case 'SHAPE_RECT':
+              ctx.translate(
+                values.posX[frame] + values.width[frame] / 2,
+                values.posY[frame] + values.height[frame] / 2,
+              );
+              ctx.rotate(values.rotation[frame]);
+              ctx.translate(
+                -(values.posX[frame] + values.width[frame] / 2),
+                -(values.posY[frame] + values.height[frame] / 2),
+              );
               ctx.fillStyle = rgbToHex(
-                fillR[frame],
-                fillG[frame],
-                fillB[frame],
+                values.fillR[frame],
+                values.fillG[frame],
+                values.fillB[frame],
               );
               ctx.fillRect(
-                posX[frame],
-                posY[frame],
-                width[frame],
-                height[frame],
+                values.posX[frame],
+                values.posY[frame],
+                values.width[frame],
+                values.height[frame],
               );
               break;
             default:
           }
+
+          ctx.restore();
         });
       });
 

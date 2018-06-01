@@ -18,6 +18,7 @@ export type ShapeRectValuesType = {
   +fillB: PropertyValuesType,
   +width: PropertyValuesType,
   +height: PropertyValuesType,
+  +rotation: PropertyValuesType,
 };
 
 export type ShapeEllipseValuesType = {

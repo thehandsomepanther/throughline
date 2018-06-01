@@ -61,27 +61,9 @@ const initialState: ShapesStateType = {
       custom: null,
       fn: null,
     },
-    scaleX: {
+    rotation: {
       using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    scaleY: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewX: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewY: {
-      using: USING_CONST,
-      const: 1,
+      const: 0,
       custom: null,
       fn: null,
     },
@@ -131,27 +113,9 @@ const initialState: ShapesStateType = {
       custom: null,
       fn: null,
     },
-    scaleX: {
+    rotation: {
       using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    scaleY: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewX: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewY: {
-      using: USING_CONST,
-      const: 1,
+      const: 0,
       custom: null,
       fn: null,
     },
@@ -201,27 +165,9 @@ const initialState: ShapesStateType = {
       custom: null,
       fn: null,
     },
-    scaleX: {
+    rotation: {
       using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    scaleY: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewX: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewY: {
-      using: USING_CONST,
-      const: 1,
+      const: 0,
       custom: null,
       fn: null,
     },
@@ -271,27 +217,9 @@ const initialState: ShapesStateType = {
       custom: null,
       fn: null,
     },
-    scaleX: {
+    rotation: {
       using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    scaleY: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewX: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewY: {
-      using: USING_CONST,
-      const: 1,
+      const: 0,
       custom: null,
       fn: null,
     },
@@ -341,27 +269,9 @@ const initialState: ShapesStateType = {
       custom: null,
       fn: null,
     },
-    scaleX: {
+    rotation: {
       using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    scaleY: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewX: {
-      using: USING_CONST,
-      const: 1,
-      custom: null,
-      fn: null,
-    },
-    skewY: {
-      using: USING_CONST,
-      const: 1,
+      const: 0,
       custom: null,
       fn: null,
     },
