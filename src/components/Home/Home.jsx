@@ -42,7 +42,7 @@ export default class Home extends Component<PropsType> {
             i: number,
           ): { [key: string]: Array<number> } => ({
             ...acc,
-            [order[i]]: curr,
+            [order[i]]: { ...curr, type: shapes[order[i]].type },
           }),
           {},
         );

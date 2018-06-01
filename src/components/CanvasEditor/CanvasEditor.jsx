@@ -84,7 +84,9 @@ export default class CanvasEditor extends React.Component<
           ctx.save();
           const values = nextProps.shapeValues[key];
 
-          switch (nextProps.shapes[key].type) {
+          console.log(values);
+
+          switch (values.type) {
             case 'SHAPE_RECT':
               ctx.translate(
                 values.posX[frame] + values.width[frame] / 2,
