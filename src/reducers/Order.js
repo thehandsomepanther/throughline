@@ -21,6 +21,9 @@ export default (
       return newState;
     case 'SHAPE_NEW_SHAPE':
       return [...state, action.id];
+    case 'SHAPE_DELETE_SHAPE':
+      const { id } = action;
+      return state.filter((value: string): boolean => value !== id);
     default:
       return state;
   }

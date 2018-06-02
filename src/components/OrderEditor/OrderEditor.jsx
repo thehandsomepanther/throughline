@@ -7,6 +7,7 @@ import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { ChangeActiveShapeType } from '../../actions/editor';
 import type { UpdateOrderType } from '../../actions/order';
+import type { DeleteShapeType } from '../../actions/shapes';
 
 const flipIndex = (index: number, length: number): number => length - 1 - index;
 
@@ -16,12 +17,14 @@ export default ({
   editor,
   changeActiveShape,
   updateOrder,
+  deleteShape,
 }: {
   shapes: ShapesStateType,
   order: OrderStateType,
   editor: EditorStateType,
   changeActiveShape: ChangeActiveShapeType,
   updateOrder: UpdateOrderType,
+  deleteShape: DeleteShapeType,
 }): ?React$Element<any> => (
   <ShapesList>
     {[...order].reverse().map((key: string, i: number): ?React$Element<any> => (
@@ -57,6 +60,13 @@ export default ({
             }}
           />
         )}
+        <input
+          type="button"
+          value="delete"
+          onClick={() => {
+            deleteShape(key);
+          }}
+        />
       </ShapesListItem>
     ))}
   </ShapesList>

@@ -5,6 +5,7 @@ import type {
   UpdateUsingActionType,
   UpdateFunctionActionType,
   AddNewShapeActionType,
+  DeleteShapeActionType,
 } from './shapes';
 import type {
   UpdateCanvasesActionType,
@@ -26,6 +27,7 @@ export type ActionType =
   | UpdateUsingActionType
   | UpdateFunctionActionType
   | AddNewShapeActionType
+  | DeleteShapeActionType
   | UpdateCanvasesActionType
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType

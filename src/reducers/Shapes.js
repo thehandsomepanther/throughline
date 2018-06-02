@@ -1,8 +1,9 @@
 // @flow
 
+import { pickBy } from 'lodash';
 import makeDefaultShape from '../util/makeDefaultShape';
 import { SHAPE_RECT, SHAPE_ELLIPSE } from '../types/shapes';
-import type { ShapesStateType } from '../types/shapes';
+import type { ShapesStateType, ShapeType } from '../types/shapes';
 import type { ActionType } from '../actions';
 
 export const shapesInitialState: ShapesStateType = {
@@ -53,6 +54,12 @@ export default (
         ...state,
         [action.id]: action.shape,
       };
+    case 'SHAPE_DELETE_SHAPE':
+      const { id } = action;
+      return pickBy(
+        state,
+        (value: ShapeType, key: string): boolean => key !== id,
+      );
     default:
       return { ...state };
   }

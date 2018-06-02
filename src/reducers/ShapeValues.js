@@ -1,6 +1,10 @@
 // @flow
 
-import type { ShapeValuesStateType } from '../types/shapeValues';
+import { pickBy } from 'lodash';
+import type {
+  ShapeValuesStateType,
+  ShapeValuesType,
+} from '../types/shapeValues';
 import type { ActionType } from '../actions';
 
 const initialState: ShapeValuesStateType = {};
@@ -27,6 +31,12 @@ export default (
           [action.prop]: action.values,
         },
       };
+    case 'SHAPE_DELETE_SHAPE':
+      const { id } = action;
+      return pickBy(
+        state,
+        (value: ShapeValuesType, key: string): boolean => key !== id,
+      );
     default:
       return { ...state };
   }

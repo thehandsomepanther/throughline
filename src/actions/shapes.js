@@ -6,8 +6,13 @@ import {
   SHAPE_UPDATE_CONST,
   SHAPE_UPDATE_FN,
   SHAPE_NEW_SHAPE,
+  SHAPE_DELETE_SHAPE,
 } from '../types/shapes';
-import { updateShapeValues, setShapeValues } from './shapeValues';
+import {
+  updateShapeValues,
+  setShapeValues,
+  resetShapeValues,
+} from './shapeValues';
 import { addErroneousProp, removeErroneousProp } from './editor';
 import type { EditorStateType } from '../types/editor';
 import type { UsingType } from '../types/properties';
@@ -17,6 +22,7 @@ import type {
   ShapeUpdateFunctionType,
   ShapesStateType,
   ShapeNewShapeType,
+  ShapeDeleteShapeType,
   ShapeType,
 } from '../types/shapes';
 import type { GetStateType } from '../types/store';
@@ -162,4 +168,26 @@ export const addNewShape = (
       dispatch(setShapeValues(shapeId, { type: shapeType, ...values }));
     },
   );
+};
+
+export type DeleteShapeActionType = {
+  type: ShapeDeleteShapeType,
+  id: string,
+};
+export type DeleteShapeType = (
+  id: string,
+) => (dispatch: DispatchType, getState: GetStateType) => void;
+export const deleteShape = (
+  id: string,
+): ((dispatch: DispatchType, getState: GetStateType) => void) => (
+  dispatch: DispatchType,
+  getState: GetStateType,
+) => {
+  dispatch({
+    type: SHAPE_DELETE_SHAPE,
+    id,
+  });
+
+  const { shapeValues } = getState();
+  dispatch(resetShapeValues({ ...shapeValues }));
 };
