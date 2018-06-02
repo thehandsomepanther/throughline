@@ -69,8 +69,6 @@ export default class CanvasEditor extends React.Component<
   componentWillUpdate(nextProps: PropsType) {
     const { updateCanvases } = this.props;
 
-    console.log(nextProps.shapeValues);
-
     if (
       nextProps.editor.shouldRedrawCanvases &&
       Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0

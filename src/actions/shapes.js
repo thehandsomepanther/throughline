@@ -159,7 +159,7 @@ export const addNewShape = (
   const { editor } = getState();
   calcShapeValues(newShape, editor.numFrames, () => {}).then(
     (values: { [key: string]: Array<number> }) => {
-      dispatch(setShapeValues(shapeId, values));
+      dispatch(setShapeValues(shapeId, { type: shapeType, ...values }));
     },
   );
 };
