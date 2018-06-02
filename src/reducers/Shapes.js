@@ -1,12 +1,13 @@
 // @flow
 
-import { makeDefaultRect, makeDefaultEllipse } from '../defaultShapes';
+import makeDefaultShape from '../util/makeDefaultShape';
+import { SHAPE_RECT, SHAPE_ELLIPSE } from '../types/shapes';
 import type { ShapesStateType } from '../types/shapes';
 import type { ActionType } from '../actions';
 
 export const shapesInitialState: ShapesStateType = {
-  rect: makeDefaultRect('rect'),
-  ellipse: makeDefaultEllipse('ellipse'),
+  rect: makeDefaultShape(SHAPE_RECT, 'rect'),
+  ellipse: makeDefaultShape(SHAPE_ELLIPSE, 'ellipse'),
 };
 
 export default (
@@ -46,6 +47,11 @@ export default (
             fn: action.value || '',
           },
         },
+      };
+    case 'SHAPE_NEW_SHAPE':
+      return {
+        ...state,
+        [action.id]: action.shape,
       };
     default:
       return { ...state };

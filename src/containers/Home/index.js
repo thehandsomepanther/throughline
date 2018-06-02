@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Home from '../../components/Home';
-import { setShapeValues } from '../../actions/shapeValues';
+import { resetShapeValues } from '../../actions/shapeValues';
 import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
@@ -25,7 +25,7 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch: any): any =>
   bindActionCreators(
     {
-      setShapeValues,
+      resetShapeValues,
     },
     dispatch,
   );

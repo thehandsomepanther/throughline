@@ -1,12 +1,13 @@
 // @flow
 
+import { uniqueId } from 'lodash';
 import {
   SHAPE_UPDATE_USING,
   SHAPE_UPDATE_CONST,
   SHAPE_UPDATE_FN,
   SHAPE_NEW_SHAPE,
 } from '../types/shapes';
-import { updateShapeValues } from './shapeValues';
+import { updateShapeValues, setShapeValues } from './shapeValues';
 import { addErroneousProp, removeErroneousProp } from './editor';
 import type { EditorStateType } from '../types/editor';
 import type { UsingType } from '../types/properties';
@@ -16,10 +17,12 @@ import type {
   ShapeUpdateFunctionType,
   ShapesStateType,
   ShapeNewShapeType,
+  ShapeType,
 } from '../types/shapes';
 import type { GetStateType } from '../types/store';
 import type { DispatchType } from './';
-import { calcPropValues } from '../util/shapes';
+import { calcPropValues, calcShapeValues } from '../util/shapes';
+import makeDefaultShape from '../util/makeDefaultShape';
 
 const updatePropValues = (
   dispatch: DispatchType,
@@ -130,25 +133,33 @@ export const updateFunction = (
 
 export type AddNewShapeActionType = {
   type: ShapeNewShapeType,
-  shapeType: string,
+  shape: ShapeType,
+  id: string,
 };
 export type AddNewShapeType = (
   shapeType: string,
+  name: string,
 ) => (dispatch: DispatchType, getState: GetStateType) => void;
 export const addNewShape = (
   shapeType: string,
+  name: string,
 ): ((dispatch: DispatchType, getState: GetStateType) => void) => (
   dispatch: DispatchType,
   getState: GetStateType,
 ) => {
-  const shapeId = `${Math.random()}`;
+  const shapeId = uniqueId();
+  const newShape = makeDefaultShape(shapeType, name);
 
   dispatch({
     type: SHAPE_NEW_SHAPE,
-    shapeType,
+    shape: newShape,
     id: shapeId,
   });
 
-  // const { shapes, editor } = getState();
-  // updatePropValues(dispatch, shapes, shapeId, prop, editor);
+  const { editor } = getState();
+  calcShapeValues(newShape, editor.numFrames, () => {}).then(
+    (values: { [key: string]: Array<number> }) => {
+      dispatch(setShapeValues(shapeId, values));
+    },
+  );
 };

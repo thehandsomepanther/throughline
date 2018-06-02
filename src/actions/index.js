@@ -16,6 +16,7 @@ import type {
 } from './editor';
 import type { UpdateOrderActionType } from './order';
 import type {
+  ResetShapeValuesActionType,
   SetShapeValuesActionType,
   UpdateShapeValuesActionType,
 } from './shapeValues';
@@ -32,6 +33,7 @@ export type ActionType =
   | ResetErroneousPropsActionType
   | ChangeActiveFrameActionType
   | UpdateOrderActionType
+  | ResetShapeValuesActionType
   | SetShapeValuesActionType
   | UpdateShapeValuesActionType;
 

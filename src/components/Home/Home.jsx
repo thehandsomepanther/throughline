@@ -9,7 +9,7 @@ import { calcShapeValues } from '../../util/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { ShapesStateType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
-import type { SetShapeValuesType } from '../../actions/shapeValues';
+import type { ResetShapeValuesType } from '../../actions/shapeValues';
 
 import { HomeDiv } from './styles';
 
@@ -17,7 +17,7 @@ type PropsType = {
   order: OrderStateType,
   shapes: ShapesStateType,
   editor: EditorStateType,
-  setShapeValues: SetShapeValuesType,
+  resetShapeValues: ResetShapeValuesType,
 };
 
 export default class Home extends Component<PropsType> {
@@ -27,7 +27,7 @@ export default class Home extends Component<PropsType> {
   }
 
   initShapeValues = () => {
-    const { order, shapes, editor, setShapeValues } = this.props;
+    const { order, shapes, editor, resetShapeValues } = this.props;
 
     Promise.all(
       order.map((key: string): Promise<{
@@ -47,7 +47,7 @@ export default class Home extends Component<PropsType> {
           {},
         );
 
-        setShapeValues(newShapeValues);
+        resetShapeValues(newShapeValues);
       })
       .catch(() => {});
   };

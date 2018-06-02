@@ -5,7 +5,7 @@ import {
   SHAPE_ELLIPSE,
   shapeTypeToProperties,
 } from '../types/shapes';
-import type { ShapeRectType, ShapeEllipseType } from '../types/shapes';
+import type { ShapeType } from '../types/shapes';
 import { USING_CONST } from '../types/properties';
 import type { PropertyType } from '../types/properties';
 
@@ -45,14 +45,8 @@ const shapePropsObject = (shape: string): { [key: string]: PropertyType } =>
     {},
   );
 
-export const makeDefaultRect = (name: string): ShapeRectType => ({
-  type: SHAPE_RECT,
+export default (type: string, name: string): ShapeType => ({
+  type,
   name,
-  ...shapePropsObject(SHAPE_RECT),
-});
-
-export const makeDefaultEllipse = (name: string): ShapeEllipseType => ({
-  type: SHAPE_ELLIPSE,
-  name,
-  ...shapePropsObject(SHAPE_ELLIPSE),
+  ...shapePropsObject(type),
 });

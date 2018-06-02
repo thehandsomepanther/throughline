@@ -19,6 +19,8 @@ export default (
       newState.splice(action.oldIndex, 1);
       newState.splice(action.newIndex, 0, state[action.oldIndex]);
       return newState;
+    case 'SHAPE_NEW_SHAPE':
+      return [...state, action.id];
     default:
       return state;
   }

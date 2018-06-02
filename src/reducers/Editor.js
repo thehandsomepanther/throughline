@@ -23,7 +23,7 @@ export default (
     case 'SHAPE_UPDATE_CONST':
     case 'SHAPE_UPDATE_FN':
     case 'ORDER_UPDATE_ORDER':
-    case 'SHAPE_VALUES_SET_VALUES':
+    case 'SHAPE_VALUES_RESET_VALUES':
     case 'SHAPE_VALUES_UPDATE_VALUES':
       return {
         ...state,

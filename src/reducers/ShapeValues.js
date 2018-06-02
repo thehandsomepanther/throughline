@@ -10,9 +10,14 @@ export default (
   action: ActionType,
 ): ShapeValuesStateType => {
   switch (action.type) {
-    case 'SHAPE_VALUES_SET_VALUES':
+    case 'SHAPE_VALUES_RESET_VALUES':
       return {
         ...action.shapeValues,
+      };
+    case 'SHAPE_VALUES_SET_VALUES':
+      return {
+        ...state,
+        [action.shape]: action.shapeValues,
       };
     case 'SHAPE_VALUES_UPDATE_VALUES':
       return {

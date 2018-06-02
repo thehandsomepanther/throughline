@@ -2,6 +2,9 @@
 
 import type { PropertyValuesType } from './properties';
 
+export const SHAPE_VALUES_RESET_VALUES = 'SHAPE_VALUES_RESET_VALUES';
+export type ShapeValuesResetValuesType = 'SHAPE_VALUES_RESET_VALUES';
+
 export const SHAPE_VALUES_SET_VALUES = 'SHAPE_VALUES_SET_VALUES';
 export type ShapeValuesSetValuesType = 'SHAPE_VALUES_SET_VALUES';
 
