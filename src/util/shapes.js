@@ -2,7 +2,7 @@
 /* global Worker */
 
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
-import { SHAPE_RECT, SHAPE_RECT_PROPS } from '../types/shapes';
+import { shapeTypeToProperties } from '../types/shapes';
 import type { ShapeType } from '../types/shapes';
 import type { PropertyType } from '../types/properties';
 
@@ -94,18 +94,7 @@ export const calcShapeValues = (
       resolve: (val: { [key: string]: Array<number> }) => void,
       reject: (reason: Error) => void,
     ) => {
-      let propsKeys;
-      switch (shape.type) {
-        case SHAPE_RECT:
-          propsKeys = SHAPE_RECT_PROPS;
-          break;
-        default:
-          throw new Error(
-            `Tried to calculate shape values for shape of unrecognized type: ${
-              shape.type
-            }`,
-          );
-      }
+      const propsKeys = shapeTypeToProperties[shape.type];
 
       // TODO: because calcShapeValues only gets called on init (and all subsequent
       // updates are handled using calcPropValues), this error handling doesn't

@@ -1,18 +1,15 @@
 // @flow
 
+import { shapesInitialState } from './Shapes';
 import type { OrderStateType } from '../types/order';
 import type { ActionType } from '../actions';
 
-const initialState: OrderStateType = [
-  'test1',
-  'test2',
-  'test3',
-  'test4',
-  'test5',
-];
+export const orderInitialState: OrderStateType = Object.keys(
+  shapesInitialState,
+);
 
 export default (
-  state: OrderStateType = initialState,
+  state: OrderStateType = orderInitialState,
   action: ActionType,
 ): OrderStateType => {
   let newState;

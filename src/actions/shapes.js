@@ -4,6 +4,7 @@ import {
   SHAPE_UPDATE_USING,
   SHAPE_UPDATE_CONST,
   SHAPE_UPDATE_FN,
+  SHAPE_NEW_SHAPE,
 } from '../types/shapes';
 import { updateShapeValues } from './shapeValues';
 import { addErroneousProp, removeErroneousProp } from './editor';
@@ -14,6 +15,7 @@ import type {
   ShapeUpdateConstType,
   ShapeUpdateFunctionType,
   ShapesStateType,
+  ShapeNewShapeType,
 } from '../types/shapes';
 import type { GetStateType } from '../types/store';
 import type { DispatchType } from './';
@@ -46,7 +48,7 @@ export type UpdateUsingType = (
   shape: string,
   prop: string,
   using: UsingType,
-) => UpdateUsingActionType;
+) => (dispatch: DispatchType, getState: GetStateType) => void;
 export const updateUsing = (
   shape: string,
   prop: string,
@@ -76,7 +78,7 @@ export type UpdateConstType = (
   shape: string,
   prop: string,
   value: number,
-) => UpdateConstActionType;
+) => (dispatch: DispatchType, getState: GetStateType) => void;
 export const updateConst = (
   shape: string,
   prop: string,
@@ -106,7 +108,7 @@ export type UpdateFunctionType = (
   shape: string,
   prop: string,
   value: string,
-) => UpdateFunctionActionType;
+) => (dispatch: DispatchType, getState: GetStateType) => void;
 export const updateFunction = (
   shape: string,
   prop: string,
@@ -124,4 +126,29 @@ export const updateFunction = (
 
   const { shapes, editor } = getState();
   updatePropValues(dispatch, shapes, shape, prop, editor);
+};
+
+export type AddNewShapeActionType = {
+  type: ShapeNewShapeType,
+  shapeType: string,
+};
+export type AddNewShapeType = (
+  shapeType: string,
+) => (dispatch: DispatchType, getState: GetStateType) => void;
+export const addNewShape = (
+  shapeType: string,
+): ((dispatch: DispatchType, getState: GetStateType) => void) => (
+  dispatch: DispatchType,
+  getState: GetStateType,
+) => {
+  const shapeId = `${Math.random()}`;
+
+  dispatch({
+    type: SHAPE_NEW_SHAPE,
+    shapeType,
+    id: shapeId,
+  });
+
+  // const { shapes, editor } = getState();
+  // updatePropValues(dispatch, shapes, shapeId, prop, editor);
 };

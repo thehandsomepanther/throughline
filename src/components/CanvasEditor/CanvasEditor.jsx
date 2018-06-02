@@ -69,6 +69,8 @@ export default class CanvasEditor extends React.Component<
   componentWillUpdate(nextProps: PropsType) {
     const { updateCanvases } = this.props;
 
+    console.log(nextProps.shapeValues);
+
     if (
       nextProps.editor.shouldRedrawCanvases &&
       Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0
@@ -108,6 +110,12 @@ export default class CanvasEditor extends React.Component<
               );
               break;
             case 'SHAPE_ELLIPSE':
+              ctx.beginPath();
+              ctx.fillStyle = rgbToHex(
+                values.fillR[frame],
+                values.fillG[frame],
+                values.fillB[frame],
+              );
               ctx.ellipse(
                 values.posX[frame],
                 values.posY[frame],
@@ -117,6 +125,8 @@ export default class CanvasEditor extends React.Component<
                 values.startAngle[frame],
                 values.endAngle[frame],
               );
+              ctx.fill();
+              ctx.closePath();
               break;
             default:
               throw new Error(`Unexpected shape type: ${values.type}`);

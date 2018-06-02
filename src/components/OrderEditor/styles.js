@@ -11,8 +11,6 @@ import {
 export const ShapesList = styled('ol')`
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
-  margin-top: 1rem;
 `;
 
 type ShapesListItemPropsType = {

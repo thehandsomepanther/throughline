@@ -12,7 +12,7 @@ import {
   ConstantPropertyInput,
   InvalidPropNotification,
 } from './styles';
-import { SHAPE_RECT_PROPS } from '../../types/shapes';
+import { SHAPE_RECT_PROPS, shapeTypeToProperties } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
@@ -109,7 +109,9 @@ const ShapePropertiesView = ({
     <ShapeInfo>
       {shape.name}, a {shape.type}
     </ShapeInfo>
-    {SHAPE_RECT_PROPS.map((prop: string): ?React$Element<any> => (
+    {shapeTypeToProperties[shape.type].map((prop: string): ?React$Element<
+      any,
+    > => (
       <PropertyInfoContainer key={prop}>
         {erroneousProps &&
           erroneousProps[prop] && (

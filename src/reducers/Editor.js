@@ -1,10 +1,11 @@
 // @flow
 
+import { orderInitialState } from './Order';
 import type { EditorStateType } from '../types/editor';
 import type { ActionType } from '../actions';
 
 const initialState: EditorStateType = {
-  activeShape: 'test1',
+  activeShape: orderInitialState[0],
   shouldRedrawCanvases: false,
   erroneousProps: {},
   numFrames: 60,

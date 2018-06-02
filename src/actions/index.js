@@ -4,6 +4,7 @@ import type {
   UpdateConstActionType,
   UpdateUsingActionType,
   UpdateFunctionActionType,
+  AddNewShapeActionType,
 } from './shapes';
 import type {
   UpdateCanvasesActionType,
@@ -23,6 +24,7 @@ export type ActionType =
   | UpdateConstActionType
   | UpdateUsingActionType
   | UpdateFunctionActionType
+  | AddNewShapeActionType
   | UpdateCanvasesActionType
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType
