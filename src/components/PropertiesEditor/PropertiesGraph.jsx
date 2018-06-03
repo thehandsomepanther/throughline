@@ -37,7 +37,6 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
 
   componentDidUpdate() {
     this.space.playOnce(0);
-    this.renderChart();
   }
 
   get interval(): number {
@@ -155,6 +154,10 @@ export default class PropertiesGraph extends Component<PropsType, StateType> {
         }
       },
       action: (type: string) => {
+        if (!this.form.ready) {
+          return;
+        }
+
         const {
           changeActiveFrame,
           activeFrame,

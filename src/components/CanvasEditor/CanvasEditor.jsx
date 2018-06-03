@@ -249,13 +249,6 @@ export default class CanvasEditor extends React.Component<
             onClick={this.incrementActiveCanvas}
           />
         </ControlsContainer>
-        <input
-          type="button"
-          value="print shapes"
-          onClick={() => {
-            console.log(shapes);
-          }}
-        />
       </CanvasEditorContainer>
     );
   }
