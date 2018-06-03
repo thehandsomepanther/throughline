@@ -15,6 +15,8 @@ const defaultPropertyValues = {
     posY: 250,
     width: 100,
     height: 100,
+    scaleX: 1,
+    scaleY: 1,
   },
   [SHAPE_ELLIPSE]: {
     posX: 300,
@@ -23,6 +25,8 @@ const defaultPropertyValues = {
     radiusY: 100,
     startAngle: 0,
     endAngle: 2 * Math.PI,
+    scaleX: 1,
+    scaleY: 1,
   },
 };
 

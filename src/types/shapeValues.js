@@ -22,6 +22,8 @@ export type ShapeRectValuesType = {
   +width: PropertyValuesType,
   +height: PropertyValuesType,
   +rotation: PropertyValuesType,
+  +scaleX: PropertyValuesType,
+  +scaleY: PropertyValuesType,
 };
 
 export type ShapeEllipseValuesType = {
@@ -37,6 +39,8 @@ export type ShapeEllipseValuesType = {
   +rotation: PropertyValuesType,
   +startAngle: PropertyValuesType,
   +endAngle: PropertyValuesType,
+  +scaleX: PropertyValuesType,
+  +scaleY: PropertyValuesType,
 };
 
 export type ShapeValuesType = ShapeRectValuesType | ShapeEllipseValuesType;

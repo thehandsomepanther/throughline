@@ -1,6 +1,7 @@
 // @flow
 /* global Worker */
 
+import { toNumber } from 'lodash';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
 import { shapeTypeToProperties } from '../types/shapes';
 import type { ShapeType } from '../types/shapes';
@@ -64,6 +65,10 @@ export const calcPropValues = (
     case USING_CONST:
       if (prop.const === null || prop.const === undefined) {
         throw new Error('Tried to use const value of prop when none exists.');
+      }
+
+      if (Number.isNaN(toNumber(prop.const))) {
+        return Promise.reject(new Error('Const value is not a number'));
       }
 
       const values = [];

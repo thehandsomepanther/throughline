@@ -103,8 +103,8 @@ export default class CanvasEditor extends React.Component<
               ctx.fillRect(
                 values.posX[frame],
                 values.posY[frame],
-                values.width[frame],
-                values.height[frame],
+                values.width[frame] * values.scaleX[frame],
+                values.height[frame] * values.scaleY[frame],
               );
               break;
             case 'SHAPE_ELLIPSE':
@@ -169,7 +169,7 @@ export default class CanvasEditor extends React.Component<
   canvasEls: Array<?HTMLCanvasElement>;
 
   render(): ?React$Element<any> {
-    const { editor } = this.props;
+    const { editor, shapes } = this.props;
     const { lastActiveCanvas } = this.state;
 
     const tickMarkers = [];
@@ -249,6 +249,13 @@ export default class CanvasEditor extends React.Component<
             onClick={this.incrementActiveCanvas}
           />
         </ControlsContainer>
+        <input
+          type="button"
+          value="print shapes"
+          onClick={() => {
+            console.log(shapes);
+          }}
+        />
       </CanvasEditorContainer>
     );
   }

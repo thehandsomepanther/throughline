@@ -12,7 +12,7 @@ import {
   ConstantPropertyInput,
   InvalidPropNotification,
 } from './styles';
-import { SHAPE_RECT_PROPS, shapeTypeToProperties } from '../../types/shapes';
+import { shapeTypeToProperties } from '../../types/shapes';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../../types/properties';
 import type { ShapesStateType, ShapeType } from '../../types/shapes';
 import type { EditorStateType } from '../../types/editor';
@@ -59,7 +59,7 @@ const ConstInput = ({
     value={value || ''}
     placeholder={0}
     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-      handleUpdateConst(parseInt(e.target.value, 10));
+      handleUpdateConst(e.target.value);
     }}
   />
 );
@@ -150,18 +150,20 @@ const ShapePropertiesView = ({
             }
           />
         )}
-        <PropertiesGraph
-          values={shapeValues[prop]}
-          activeFrame={activeFrame}
-          changeActiveFrame={changeActiveFrame}
-          updateShapeValues={
-            shape[prop].using === USING_CUSTOM
-              ? (values: Array<number>) => {
-                  updateShapeValues(shapeKey, prop, values);
-                }
-              : null
-          }
-        />
+        {shape[prop].using !== USING_CONST && (
+          <PropertiesGraph
+            values={shapeValues[prop]}
+            activeFrame={activeFrame}
+            changeActiveFrame={changeActiveFrame}
+            updateShapeValues={
+              shape[prop].using === USING_CUSTOM
+                ? (values: Array<number>) => {
+                    updateShapeValues(shapeKey, prop, values);
+                  }
+                : null
+            }
+          />
+        )}
       </PropertyInfoContainer>
     ))}
   </div>

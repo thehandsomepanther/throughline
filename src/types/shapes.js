@@ -32,6 +32,8 @@ export const SHAPE_RECT_PROPS = [
   'width',
   'height',
   'rotation',
+  'scaleX',
+  'scaleY',
 ];
 
 export const SHAPE_ELLIPSE_PROPS = [
@@ -45,6 +47,8 @@ export const SHAPE_ELLIPSE_PROPS = [
   'rotation',
   'startAngle',
   'endAngle',
+  'scaleX',
+  'scaleY',
 ];
 
 export const shapeTypeToProperties = {
@@ -63,6 +67,8 @@ export type ShapeRectType = {
   +width: PropertyType,
   +height: PropertyType,
   +rotation: PropertyType,
+  +scaleX: PropertyType,
+  +scaleY: PropertyType,
 };
 
 export type ShapeEllipseType = {
@@ -78,6 +84,8 @@ export type ShapeEllipseType = {
   +rotation: PropertyType,
   +startAngle: PropertyType,
   +endAngle: PropertyType,
+  +scaleX: PropertyType,
+  +scaleY: PropertyType,
 };
 
 export type ShapeType = ShapeRectType | ShapeEllipseType;

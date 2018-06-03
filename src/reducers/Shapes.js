@@ -8,7 +8,7 @@ import type { ActionType } from '../actions';
 
 export const shapesInitialState: ShapesStateType = {
   rect: makeDefaultShape(SHAPE_RECT, 'rect'),
-  ellipse: makeDefaultShape(SHAPE_ELLIPSE, 'ellipse'),
+  // ellipse: makeDefaultShape(SHAPE_ELLIPSE, 'ellipse'),
 };
 
 export default (
