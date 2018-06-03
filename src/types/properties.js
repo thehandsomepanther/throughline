@@ -12,7 +12,7 @@ export type UsingType = UsingCustomType | UsingFunctionType | UsingConstantType;
 
 export type PropertyType = {
   +using: UsingType,
-  +const: ?number,
+  +const: ?string | ?number,
   +fn: ?string,
   +custom: ?Array<number>,
 };

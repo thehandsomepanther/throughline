@@ -57,6 +57,52 @@ export const evalFunctionProp = (
   );
 };
 
+// TODO: refactor this to be less repetitive
+export const evalConstProp = (
+  value: string,
+  frames: number,
+): Promise<Array<number>> => {
+  let worker: ?Worker = new Worker('worker.js');
+
+  return new Promise(
+    (
+      resolve: (val: Array<number>) => void,
+      reject: (reason: Error) => void,
+    ) => {
+      if (worker) {
+        const timeout = setTimeout(() => {
+          if (worker) {
+            worker.terminate();
+            worker = null;
+          }
+          reject(new Error('Timeout'));
+        }, 2000);
+
+        worker.postMessage([`(function(){return ${value}})()`]);
+
+        worker.onmessage = (e: MessageEvent) => {
+          clearTimeout(timeout);
+          const { data } = e;
+          if (Number.isNaN(toNumber(data))) {
+            reject(new Error('Const value is not a number'));
+          }
+
+          const values = [];
+          for (let i = 0; i < frames; i += 1) {
+            values.push(parseFloat(data));
+          }
+          resolve(values);
+        };
+
+        worker.onerror = (e: ErrorEvent) => {
+          clearTimeout(timeout);
+          reject(new Error(e.message));
+        };
+      }
+    },
+  );
+};
+
 export const calcPropValues = (
   prop: PropertyType,
   frames: number,
@@ -67,19 +113,7 @@ export const calcPropValues = (
         throw new Error('Tried to use const value of prop when none exists.');
       }
 
-      if (Number.isNaN(toNumber(prop.const))) {
-        return Promise.reject(new Error('Const value is not a number'));
-      }
-
-      const values = [];
-      for (let i = 0; i < frames; i += 1) {
-        values.push(prop.const);
-      }
-
-      // flow for some reason can't tell that prop.const can only be a number
-      // at this point
-      // $FlowFixMe
-      return Promise.resolve(values);
+      return evalConstProp(prop.const, frames);
     case USING_CUSTOM:
       if (!prop.custom) {
         throw new Error('Tried to use custom value of prop when none exists.');

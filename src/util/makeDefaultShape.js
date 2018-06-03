@@ -24,7 +24,7 @@ const defaultPropertyValues = {
     radiusX: 100,
     radiusY: 100,
     startAngle: 0,
-    endAngle: 2 * Math.PI,
+    endAngle: '2 * Math.PI',
     scaleX: 1,
     scaleY: 1,
   },
