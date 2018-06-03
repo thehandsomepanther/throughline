@@ -73,8 +73,12 @@ export const calcPropValues = (
 
       const values = [];
       for (let i = 0; i < frames; i += 1) {
-        values.push(prop.const || 0);
+        values.push(prop.const);
       }
+
+      // flow for some reason can't tell that prop.const can only be a number
+      // at this point
+      // $FlowFixMe
       return Promise.resolve(values);
     case USING_CUSTOM:
       if (!prop.custom) {

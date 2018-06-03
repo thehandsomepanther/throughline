@@ -2,13 +2,12 @@
 
 import { pickBy } from 'lodash';
 import makeDefaultShape from '../util/makeDefaultShape';
-import { SHAPE_RECT, SHAPE_ELLIPSE } from '../types/shapes';
+import { SHAPE_RECT } from '../types/shapes';
 import type { ShapesStateType, ShapeType } from '../types/shapes';
 import type { ActionType } from '../actions';
 
 export const shapesInitialState: ShapesStateType = {
   rect: makeDefaultShape(SHAPE_RECT, 'rect'),
-  // ellipse: makeDefaultShape(SHAPE_ELLIPSE, 'ellipse'),
 };
 
 export default (
