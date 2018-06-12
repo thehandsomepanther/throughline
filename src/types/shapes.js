@@ -52,8 +52,8 @@ export const SHAPE_ELLIPSE_PROPS = [
 ];
 
 export const shapeTypeToProperties = {
-  SHAPE_RECT: SHAPE_RECT_PROPS,
-  SHAPE_ELLIPSE: SHAPE_ELLIPSE_PROPS,
+  [SHAPE_RECT]: SHAPE_RECT_PROPS,
+  [SHAPE_ELLIPSE]: SHAPE_ELLIPSE_PROPS,
 };
 
 export type ShapeRectType = {

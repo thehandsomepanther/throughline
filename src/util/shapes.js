@@ -37,7 +37,7 @@ export const evalFunctionProp = (
           )}.map(function(t){${fn}})})()`,
         ]);
 
-        worker.onmessage = (e: MessageEvent) => {
+        worker.onmessage = (e) => {
           clearTimeout(timeout);
           const values = JSON.parse(e.data);
           values.forEach((value: ?number) => {
@@ -48,7 +48,7 @@ export const evalFunctionProp = (
           resolve(JSON.parse(e.data));
         };
 
-        worker.onerror = (e: ErrorEvent) => {
+        worker.onerror = (e) => {
           clearTimeout(timeout);
           reject(new Error(e.message));
         };
@@ -94,7 +94,7 @@ export const evalConstProp = (
           resolve(values);
         };
 
-        worker.onerror = (e: ErrorEvent) => {
+        worker.onerror = (e) => {
           clearTimeout(timeout);
           reject(new Error(e.message));
         };
@@ -113,7 +113,7 @@ export const calcPropValues = (
         throw new Error('Tried to use const value of prop when none exists.');
       }
 
-      return evalConstProp(prop.const, frames);
+      return evalConstProp(`${prop.const}`, frames);
     case USING_CUSTOM:
       if (!prop.custom) {
         throw new Error('Tried to use custom value of prop when none exists.');
@@ -144,11 +144,14 @@ export const calcShapeValues = (
       // actually render any props in the props editor (and also no error messages)
       // if there's an error in one of them. need to figure out a better way to handle that
       Promise.all(
-        propsKeys.map((prop: string): Promise<?Array<number>> =>
-          calcPropValues(shape[prop], frames).catch((): Promise<null> => {
-            handleCalcPropError(prop);
-            return Promise.resolve(null);
-          }),
+        propsKeys.map(
+          (prop: string): Promise<?Array<number>> =>
+            calcPropValues(shape[prop], frames).catch(
+              (): Promise<null> => {
+                handleCalcPropError(prop);
+                return Promise.resolve(null);
+              },
+            ),
         ),
       ).then((values: Array<?Array<number>>) => {
         let shouldResolve = true;

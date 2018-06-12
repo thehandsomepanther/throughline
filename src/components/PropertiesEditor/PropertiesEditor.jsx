@@ -53,12 +53,12 @@ const ConstInput = ({
   handleUpdateConst,
 }: {
   value: string | number | Array<number>,
-  handleUpdateConst: (val: number) => UpdateConstActionType,
+  handleUpdateConst: (val: number) => void,
 }): ?React$Element<any> => (
   <ConstantPropertyInput
     value={value || ''}
     placeholder={0}
-    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange={(e) => {
       handleUpdateConst(e.target.value);
     }}
   />
@@ -69,13 +69,13 @@ const FunctionInput = ({
   handleUpdateFunction,
 }: {
   code: string | number | Array<number>,
-  handleUpdateFunction: (code: string) => UpdateFunctionActionType,
+  handleUpdateFunction: (code: string) => void,
 }): ?React$Element<any> => (
   <div>
     <FunctionPropertyInput
       value={code || ''}
       placeholder="return 0"
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange={(e) => {
         handleUpdateFunction(e.target.value);
       }}
     />
@@ -109,63 +109,63 @@ const ShapePropertiesView = ({
     <ShapeInfo>
       {shape.name}, a {shape.type}
     </ShapeInfo>
-    {shapeTypeToProperties[shape.type].map((prop: string): ?React$Element<
-      any,
-    > => (
-      <PropertyInfoContainer key={prop}>
-        {erroneousProps &&
-          erroneousProps[prop] && (
-            <InvalidPropNotification>
-              <span role="img" aria-label="warning">
-                ⛔️
-              </span>{' '}
-              This prop is invalid
-            </InvalidPropNotification>
+    {shapeTypeToProperties[shape.type].map(
+      (prop: string): ?React$Element<any> => (
+        <PropertyInfoContainer key={prop}>
+          {erroneousProps &&
+            erroneousProps[prop] && (
+              <InvalidPropNotification>
+                <span role="img" aria-label="warning">
+                  ⛔️
+                </span>{' '}
+                This prop is invalid
+              </InvalidPropNotification>
+            )}
+          <PropertyName>{prop}</PropertyName>
+          <select
+            value={shape[prop].using}
+            onChange={(e) => {
+              handleUsingChange(shapeKey, prop, e.target.value);
+            }}
+          >
+            <option value={USING_CONST}>Constant</option>
+            <option value={USING_CUSTOM}>Custom</option>
+            <option value={USING_FN}>Function</option>
+          </select>
+          {shape[prop].using === USING_CONST && (
+            <ConstInput
+              value={getPropValue(shape, prop)}
+              handleUpdateConst={(val: number) => {
+                handleUpdateConst(shapeKey, prop, val);
+              }}
+            />
           )}
-        <PropertyName>{prop}</PropertyName>
-        <select
-          value={shape[prop].using}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            handleUsingChange(shapeKey, prop, e.target.value);
-          }}
-        >
-          <option value={USING_CONST}>Constant</option>
-          <option value={USING_CUSTOM}>Custom</option>
-          <option value={USING_FN}>Function</option>
-        </select>
-        {shape[prop].using === USING_CONST && (
-          <ConstInput
-            value={getPropValue(shape, prop)}
-            handleUpdateConst={(val: number): UpdateConstActionType =>
-              handleUpdateConst(shapeKey, prop, val)
-            }
-          />
-        )}
-        {shape[prop].using === USING_CUSTOM}
-        {shape[prop].using === USING_FN && (
-          <FunctionInput
-            code={getPropValue(shape, prop)}
-            handleUpdateFunction={(code: string): UpdateFunctionActionType =>
-              handleUpdateFunction(shapeKey, prop, code)
-            }
-          />
-        )}
-        {shape[prop].using !== USING_CONST && (
-          <PropertiesGraph
-            values={shapeValues[prop]}
-            activeFrame={activeFrame}
-            changeActiveFrame={changeActiveFrame}
-            updateShapeValues={
-              shape[prop].using === USING_CUSTOM
-                ? (values: Array<number>) => {
-                    updateShapeValues(shapeKey, prop, values);
-                  }
-                : null
-            }
-          />
-        )}
-      </PropertyInfoContainer>
-    ))}
+          {shape[prop].using === USING_CUSTOM}
+          {shape[prop].using === USING_FN && (
+            <FunctionInput
+              code={getPropValue(shape, prop)}
+              handleUpdateFunction={(code: string) => {
+                handleUpdateFunction(shapeKey, prop, code);
+              }}
+            />
+          )}
+          {shape[prop].using !== USING_CONST && (
+            <PropertiesGraph
+              values={shapeValues[prop]}
+              activeFrame={activeFrame}
+              changeActiveFrame={changeActiveFrame}
+              updateShapeValues={
+                shape[prop].using === USING_CUSTOM
+                  ? (values: Array<number>) => {
+                      updateShapeValues(shapeKey, prop, values);
+                    }
+                  : null
+              }
+            />
+          )}
+        </PropertyInfoContainer>
+      ),
+    )}
   </div>
 );
 

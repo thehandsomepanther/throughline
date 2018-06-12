@@ -58,7 +58,7 @@ export default class NewShapeEditor extends Component<PropsType, StateType> {
           <form onSubmit={this.handleNewShapeInfoFormSubmit}>
             <select
               value={newShapeType}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              onChange={(e) => {
                 this.handleNewShapeTypeChange(e.target.value);
               }}
             >
@@ -74,7 +74,7 @@ export default class NewShapeEditor extends Component<PropsType, StateType> {
               type="text"
               value={newShapeName}
               placeholder="shape name"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(e) => {
                 this.handleNewShapeNameChange(e.target.value);
               }}
             />
