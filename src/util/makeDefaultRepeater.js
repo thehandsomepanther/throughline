@@ -12,5 +12,7 @@ export default (type: string): RepeaterType =>
       ...acc,
       [property]: 0,
     }),
-    {},
+    {
+      times: 1,
+    },
   );

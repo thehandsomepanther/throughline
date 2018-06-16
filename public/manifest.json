@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "throughline",
+  "name": "throughline is an app for making looping gifs",
   "icons": [
     {
       "src": "favicon.ico",

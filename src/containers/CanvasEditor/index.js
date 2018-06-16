@@ -10,6 +10,7 @@ import type { OrderStateType } from '../../types/order';
 import type { StoreType } from '../../types/store';
 import type { EditorStateType } from '../../types/editor';
 import type { ShapeValuesStateType } from '../../types/shapeValues';
+import type { RepeatersStateType } from '../../types/repeaters';
 
 const mapStateToProps = (
   state: StoreType,
@@ -18,11 +19,13 @@ const mapStateToProps = (
   order: OrderStateType,
   editor: EditorStateType,
   shapeValues: ShapeValuesStateType,
+  repeaters: RepeatersStateType,
 } => ({
   shapes: state.shapes,
   order: state.order,
   editor: state.editor,
   shapeValues: state.shapeValues,
+  repeaters: state.repeaters,
 });
 
 const mapDispatchToProps = (dispatch: any): any =>
@@ -34,4 +37,7 @@ const mapDispatchToProps = (dispatch: any): any =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Canvas);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Canvas);
