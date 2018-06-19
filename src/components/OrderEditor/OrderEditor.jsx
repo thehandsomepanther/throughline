@@ -13,6 +13,7 @@ import type { DeleteShapeType } from '../../actions/shapes';
 import type {
   AddRepeaterType,
   DeleteRepeaterType,
+  UpdateRepeaterType,
 } from '../../actions/repeaters';
 
 const flipIndex = (index: number, length: number): number => length - 1 - index;
@@ -27,6 +28,7 @@ type PropsType = {
   deleteShape: DeleteShapeType,
   addRepeater: AddRepeaterType,
   deleteRepeater: DeleteRepeaterType,
+  updateRepeater: UpdateRepeaterType,
 };
 
 export default class OrderEditor extends Component<PropsType> {
@@ -41,6 +43,7 @@ export default class OrderEditor extends Component<PropsType> {
       deleteShape,
       addRepeater,
       deleteRepeater,
+      updateRepeater,
     } = this.props;
 
     return (
@@ -104,7 +107,16 @@ export default class OrderEditor extends Component<PropsType> {
                       deleteRepeater(key);
                     }}
                   />
-                  <RepeaterEditor repeater={repeaters[key]} />
+                  <RepeaterEditor
+                    repeater={repeaters[key]}
+                    updateRepeater={updateRepeater}
+                    handleUpdateRepeater={(
+                      property: string,
+                      value: string | number,
+                    ) => {
+                      updateRepeater(key, property, value);
+                    }}
+                  />
                 </div>
               )}
             </ShapesListItem>

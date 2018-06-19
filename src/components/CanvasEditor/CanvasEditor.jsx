@@ -20,6 +20,7 @@ import type {
   ChangeActiveFrameType,
 } from '../../actions/editor';
 import { rgbToHex } from '../../util';
+import { paintShapes } from './painter';
 
 type PropsType = {
   shapes: ShapesStateType,
@@ -80,58 +81,28 @@ export default class CanvasEditor extends React.Component<
 
         const ctx = canvasEl.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        nextProps.order.forEach((key: string) => {
-          ctx.save();
-          const values = nextProps.shapeValues[key];
-
-          switch (values.type) {
-            case 'SHAPE_RECT':
-              ctx.translate(
-                values.posX[frame] + values.width[frame] / 2,
-                values.posY[frame] + values.height[frame] / 2,
-              );
-              ctx.rotate(values.rotation[frame]);
-              ctx.translate(
-                -(values.posX[frame] + values.width[frame] / 2),
-                -(values.posY[frame] + values.height[frame] / 2),
-              );
-              ctx.fillStyle = rgbToHex(
-                values.fillR[frame],
-                values.fillG[frame],
-                values.fillB[frame],
-              );
-              ctx.fillRect(
-                values.posX[frame],
-                values.posY[frame],
-                values.width[frame] * values.scaleX[frame],
-                values.height[frame] * values.scaleY[frame],
-              );
-              break;
-            case 'SHAPE_ELLIPSE':
-              ctx.beginPath();
-              ctx.fillStyle = rgbToHex(
-                values.fillR[frame],
-                values.fillG[frame],
-                values.fillB[frame],
-              );
-              ctx.ellipse(
-                values.posX[frame],
-                values.posY[frame],
-                values.radiusX[frame],
-                values.radiusY[frame],
-                values.rotation[frame],
-                values.startAngle[frame],
-                values.endAngle[frame],
-              );
-              ctx.fill();
-              ctx.closePath();
-              break;
-            default:
-              throw new Error(`Unexpected shape type: ${values.type}`);
-          }
-
-          ctx.restore();
-        });
+        paintShapes(
+          Object.keys(nextProps.shapeValues).reduce(
+            (shapeValues, key: string) => ({
+              ...shapeValues,
+              [key]: {
+                ...Object.keys(nextProps.shapeValues[key]).reduce(
+                  (properties, property: string) => ({
+                    ...properties,
+                    [property]:
+                      property === 'type' || property === 'name'
+                        ? nextProps.shapeValues[key][property]
+                        : nextProps.shapeValues[key][property][frame],
+                  }),
+                  {},
+                ),
+              },
+            }),
+            {},
+          ),
+          nextProps.order,
+          ctx,
+        );
       });
 
       updateCanvases();

@@ -23,6 +23,15 @@ export default (
         state,
         (value: RepeaterType, k: string): boolean => k !== key,
       );
+    case 'REPEATER_UPDATE_REPEATER':
+      console.log(action);
+      return {
+        ...state,
+        [action.key]: {
+          ...state[action.key],
+          [action.property]: action.value,
+        },
+      };
     default:
       return state;
   }
