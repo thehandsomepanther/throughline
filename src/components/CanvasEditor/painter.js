@@ -54,6 +54,8 @@ export const paintShapes = (
           v[key] += r[key];
         });
 
+        ctx.save();
+
         switch (v.type) {
           case 'SHAPE_RECT':
             ctx.translate(v.posX + v.width / 2, v.posY + v.height / 2);
@@ -85,6 +87,8 @@ export const paintShapes = (
           default:
             throw new Error(`Unexpected shape type: ${v.type}`);
         }
+
+        ctx.restore();
       }
     }
 
