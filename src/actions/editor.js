@@ -1,7 +1,8 @@
 // @flow
 
 import {
-  EDITOR_UPDATE_CANVASES,
+  EDITOR_REDRAW_CANVASES,
+  EDITOR_RESET_REDRAW_CANVASES,
   EDITOR_CHANGE_ACTIVE_SHAPE,
   EDITOR_ADD_ERRONEOUS_PROP,
   EDITOR_RESET_ERRONEOUS_PROP,
@@ -9,7 +10,8 @@ import {
   EDITOR_REMOVE_ERRONEOUS_PROP,
 } from '../types/editor';
 import type {
-  EditorUpdateCanvasesType,
+  EditorRedrawCanvasesType,
+  EditorResetRedrawCanvasesType,
   EditorChangeActiveShapeType,
   EditorAddErroneousPropType,
   EditorResetErroneousPropType,
@@ -17,12 +19,20 @@ import type {
   EditorRemoveErroneousPropType,
 } from '../types/editor';
 
-export type UpdateCanvasesActionType = {
-  type: EditorUpdateCanvasesType,
+export type RedrawCanvasesActionType = {
+  type: EditorRedrawCanvasesType,
 };
-export type UpdateCanvasesType = () => UpdateCanvasesActionType;
-export const updateCanvases = (): UpdateCanvasesActionType => ({
-  type: EDITOR_UPDATE_CANVASES,
+export type RedrawCanvasesType = () => RedrawCanvasesActionType;
+export const redrawCanvases = (): RedrawCanvasesActionType => ({
+  type: EDITOR_REDRAW_CANVASES,
+});
+
+export type ResetRedrawCanvasesActionType = {
+  type: EditorResetRedrawCanvasesType,
+};
+export type ResetRedrawCanvasesType = () => ResetRedrawCanvasesActionType;
+export const resetRedrawCanvases = (): ResetRedrawCanvasesActionType => ({
+  type: EDITOR_RESET_REDRAW_CANVASES,
 });
 
 export type ChangeActiveShapeActionType = {

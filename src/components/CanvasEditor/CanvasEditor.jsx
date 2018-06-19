@@ -15,8 +15,9 @@ import type { ShapesStateType } from '../../types/shapes';
 import type { OrderStateType } from '../../types/order';
 import type { EditorStateType } from '../../types/editor';
 import type { ShapeValuesStateType } from '../../types/shapeValues';
+import type { RepeatersStateType } from '../../types/repeaters';
 import type {
-  UpdateCanvasesType,
+  ResetRedrawCanvasesType,
   ChangeActiveFrameType,
 } from '../../actions/editor';
 import { rgbToHex } from '../../util';
@@ -27,7 +28,8 @@ type PropsType = {
   order: OrderStateType,
   editor: EditorStateType,
   shapeValues: ShapeValuesStateType,
-  updateCanvases: UpdateCanvasesType,
+  repeaters: RepeatersStateType,
+  resetRedrawCanvases: ResetRedrawCanvasesType,
   changeActiveFrame: ChangeActiveFrameType,
 };
 
@@ -68,7 +70,8 @@ export default class CanvasEditor extends React.Component<
   }
 
   componentWillUpdate(nextProps: PropsType) {
-    const { updateCanvases } = this.props;
+    const { resetRedrawCanvases } = this.props;
+    const { repeaters } = nextProps;
 
     if (
       nextProps.editor.shouldRedrawCanvases &&
@@ -101,11 +104,12 @@ export default class CanvasEditor extends React.Component<
             {},
           ),
           nextProps.order,
+          repeaters,
           ctx,
         );
       });
 
-      updateCanvases();
+      resetRedrawCanvases();
     }
   }
 

@@ -8,7 +8,8 @@ import type {
   DeleteShapeActionType,
 } from './shapes';
 import type {
-  UpdateCanvasesActionType,
+  RedrawCanvasesActionType,
+  ResetRedrawCanvasesActionType,
   ChangeActiveShapeActionType,
   AddErroneousPropActionType,
   RemoveErroneousPropActionType,
@@ -33,7 +34,8 @@ export type ActionType =
   | UpdateFunctionActionType
   | AddNewShapeActionType
   | DeleteShapeActionType
-  | UpdateCanvasesActionType
+  | RedrawCanvasesActionType
+  | ResetRedrawCanvasesActionType
   | ChangeActiveShapeActionType
   | AddErroneousPropActionType
   | RemoveErroneousPropActionType

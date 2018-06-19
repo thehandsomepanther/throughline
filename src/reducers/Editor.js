@@ -26,6 +26,7 @@ export default (
     case 'SHAPE_VALUES_RESET_VALUES':
     case 'SHAPE_VALUES_SET_VALUES':
     case 'SHAPE_VALUES_UPDATE_VALUES':
+    case 'REPEATER_UPDATE_REPEATER':
       return {
         ...state,
         shouldRedrawCanvases: true,
@@ -35,7 +36,7 @@ export default (
         ...state,
         activeShape: action.shape,
       };
-    case 'EDITOR_UPDATE_CANVASES':
+    case 'EDITOR_RESET_REDRAW_CANVASES':
       return {
         ...state,
         shouldRedrawCanvases: false,

@@ -22,7 +22,10 @@ export default class RepeaterEditor extends Component<PropsType> {
               <input
                 value={repeater[property]}
                 onChange={(e) => {
-                  handleUpdateRepeater(property, e.target.value);
+                  handleUpdateRepeater(
+                    property,
+                    Number.parseFloat(e.target.value),
+                  );
                 }}
               />
             </div>

@@ -24,7 +24,6 @@ export default (
         (value: RepeaterType, k: string): boolean => k !== key,
       );
     case 'REPEATER_UPDATE_REPEATER':
-      console.log(action);
       return {
         ...state,
         [action.key]: {
