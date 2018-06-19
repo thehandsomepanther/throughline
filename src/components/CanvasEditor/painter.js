@@ -44,17 +44,16 @@ export const paintShapes = (
       }
     } else {
       const r = repeaters[key];
-      Object.keys(r).forEach((key: string) => {
-        if (key === 'type' || key === 'name') {
-          return;
-        }
-
-        v[key] += r[key];
-      });
-
-      console.log(r);
 
       for (let i = 0; i < r.times; i++) {
+        Object.keys(r).forEach((key: string) => {
+          if (key === 'type' || key === 'name') {
+            return;
+          }
+
+          v[key] += r[key];
+        });
+
         switch (v.type) {
           case 'SHAPE_RECT':
             ctx.translate(v.posX + v.width / 2, v.posY + v.height / 2);
