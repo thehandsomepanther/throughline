@@ -34,16 +34,18 @@ const getPropValue = (
   shape: ShapeType,
   prop: string,
 ): string | number | Array<number> => {
-  switch (shape[prop].using) {
+  switch (shape.properties[prop].using) {
     case USING_CONST:
-      return shape[prop].const;
+      return shape.properties[prop].const;
     case USING_CUSTOM:
-      return shape[prop].custom;
+      return shape.properties[prop].custom;
     case USING_FN:
-      return shape[prop].fn;
+      return shape.properties[prop].fn;
     default:
       throw new Error(
-        `Attempted to using an unrecognized value, ${shape[prop].using}`,
+        `Attempted to using an unrecognized value, ${
+          shape.properties[prop].using
+        }`,
       );
   }
 };
@@ -123,7 +125,7 @@ const ShapePropertiesView = ({
             )}
           <PropertyName>{prop}</PropertyName>
           <select
-            value={shape[prop].using}
+            value={shape.properties[prop].using}
             onChange={(e) => {
               handleUsingChange(shapeKey, prop, e.target.value);
             }}
@@ -132,7 +134,7 @@ const ShapePropertiesView = ({
             <option value={USING_CUSTOM}>Custom</option>
             <option value={USING_FN}>Function</option>
           </select>
-          {shape[prop].using === USING_CONST && (
+          {shape.properties[prop].using === USING_CONST && (
             <ConstInput
               value={getPropValue(shape, prop)}
               handleUpdateConst={(val: number) => {
@@ -140,8 +142,8 @@ const ShapePropertiesView = ({
               }}
             />
           )}
-          {shape[prop].using === USING_CUSTOM}
-          {shape[prop].using === USING_FN && (
+          {shape.properties[prop].using === USING_CUSTOM}
+          {shape.properties[prop].using === USING_FN && (
             <FunctionInput
               code={getPropValue(shape, prop)}
               handleUpdateFunction={(code: string) => {
@@ -149,13 +151,13 @@ const ShapePropertiesView = ({
               }}
             />
           )}
-          {shape[prop].using !== USING_CONST && (
+          {shape.properties[prop].using !== USING_CONST && (
             <PropertiesGraph
-              values={shapeValues[prop]}
+              values={shapeValues.properties[prop]}
               activeFrame={activeFrame}
               changeActiveFrame={changeActiveFrame}
               updateShapeValues={
-                shape[prop].using === USING_CUSTOM
+                shape.properties[prop].using === USING_CUSTOM
                   ? (values: Array<number>) => {
                       updateShapeValues(shapeKey, prop, values);
                     }

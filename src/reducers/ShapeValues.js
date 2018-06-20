@@ -28,7 +28,10 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.prop]: action.values,
+          properties: {
+            ...state[action.shape].properties,
+            [action.prop]: action.values,
+          },
         },
       };
     case 'SHAPE_DELETE_SHAPE':

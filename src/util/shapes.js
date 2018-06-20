@@ -1,7 +1,7 @@
 // @flow
 /* global Worker */
 
-import { toNumber } from 'lodash';
+import { toNumber, range } from 'lodash';
 import { USING_CONST, USING_CUSTOM, USING_FN } from '../types/properties';
 import { shapeTypeToProperties } from '../types/shapes';
 import type { ShapeType } from '../types/shapes';
@@ -12,10 +12,7 @@ export const evalFunctionProp = (
   frames: number,
 ): Promise<Array<number>> => {
   let worker: ?Worker = new Worker('worker.js');
-  const frameIndices = [];
-  for (let i = 0; i < frames; i += 1) {
-    frameIndices.push(i);
-  }
+  const frameIndices: Array<number> = range(frames);
 
   return new Promise(
     (
@@ -107,6 +104,7 @@ export const calcPropValues = (
   prop: PropertyType,
   frames: number,
 ): Promise<Array<number>> => {
+  console.log(prop);
   switch (prop.using) {
     case USING_CONST:
       if (prop.const === null || prop.const === undefined) {
@@ -146,7 +144,7 @@ export const calcShapeValues = (
       Promise.all(
         propsKeys.map(
           (prop: string): Promise<?Array<number>> =>
-            calcPropValues(shape[prop], frames).catch(
+            calcPropValues(shape.properties[prop], frames).catch(
               (): Promise<null> => {
                 handleCalcPropError(prop);
                 return Promise.resolve(null);

@@ -30,9 +30,13 @@ export default class Home extends Component<PropsType> {
     const { order, shapes, editor, resetShapeValues } = this.props;
 
     Promise.all(
-      order.map((key: string): Promise<{
-        [key: string]: Array<number>,
-      }> => calcShapeValues(shapes[key], editor.numFrames, () => {})),
+      order.map(
+        (
+          key: string,
+        ): Promise<{
+          [key: string]: Array<number>,
+        }> => calcShapeValues(shapes[key], editor.numFrames, () => {}),
+      ),
     )
       .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
         const newShapeValues = shapePropValues.reduce(
@@ -42,7 +46,10 @@ export default class Home extends Component<PropsType> {
             i: number,
           ): { [key: string]: Array<number> } => ({
             ...acc,
-            [order[i]]: { ...curr, type: shapes[order[i]].type },
+            [order[i]]: {
+              type: shapes[order[i]].type,
+              properties: curr,
+            },
           }),
           {},
         );

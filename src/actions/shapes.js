@@ -37,7 +37,7 @@ const updatePropValues = (
   prop: string,
   editor: EditorStateType,
 ) => {
-  calcPropValues(shapes[shape][prop], editor.numFrames)
+  calcPropValues(shapes[shape].properties[prop], editor.numFrames)
     .then((values: Array<number>) => {
       dispatch(removeErroneousProp(shape, prop));
       dispatch(updateShapeValues(shape, prop, values));
@@ -165,7 +165,9 @@ export const addNewShape = (
   const { editor } = getState();
   calcShapeValues(newShape, editor.numFrames, () => {}).then(
     (values: { [key: string]: Array<number> }) => {
-      dispatch(setShapeValues(shapeId, { type: shapeType, ...values }));
+      dispatch(
+        setShapeValues(shapeId, { type: shapeType, properties: values }),
+      );
     },
   );
 };

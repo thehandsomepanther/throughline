@@ -89,13 +89,14 @@ export default class CanvasEditor extends React.Component<
             (shapeValues, key: string) => ({
               ...shapeValues,
               [key]: {
-                ...Object.keys(nextProps.shapeValues[key]).reduce(
+                ...nextProps.shapeValues[key],
+                properties: Object.keys(
+                  nextProps.shapeValues[key].properties,
+                ).reduce(
                   (properties, property: string) => ({
                     ...properties,
                     [property]:
-                      property === 'type' || property === 'name'
-                        ? nextProps.shapeValues[key][property]
-                        : nextProps.shapeValues[key][property][frame],
+                      nextProps.shapeValues[key].properties[property][frame],
                   }),
                   {},
                 ),
@@ -144,7 +145,7 @@ export default class CanvasEditor extends React.Component<
   canvasEls: Array<?HTMLCanvasElement>;
 
   render(): ?React$Element<any> {
-    const { editor, shapes } = this.props;
+    const { editor } = this.props;
     const { lastActiveCanvas } = this.state;
 
     const tickMarkers = [];

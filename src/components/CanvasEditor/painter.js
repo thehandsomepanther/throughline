@@ -14,82 +14,33 @@ export const paintShapes = (
   order.forEach((key: string) => {
     ctx.save();
     const v = { ...shapeValues[key] };
+    const p = { ...v.properties };
 
-    if (!repeaters[key]) {
-      switch (v.type) {
-        case 'SHAPE_RECT':
-          ctx.translate(v.posX + v.width / 2, v.posY + v.height / 2);
-          ctx.rotate(v.rotation);
-          ctx.translate(-(v.posX + v.width / 2), -(v.posY + v.height / 2));
-          ctx.fillStyle = rgbToHex(v.fillR, v.fillG, v.fillB);
-          ctx.fillRect(v.posX, v.posY, v.width * v.scaleX, v.height * v.scaleY);
-          break;
-        case 'SHAPE_ELLIPSE':
-          ctx.beginPath();
-          ctx.fillStyle = rgbToHex(v.fillR, v.fillG, v.fillB);
-          ctx.ellipse(
-            v.posX,
-            v.posY,
-            v.radiusX,
-            v.radiusY,
-            v.rotation,
-            v.startAngle,
-            v.endAngle,
-          );
-          ctx.fill();
-          ctx.closePath();
-          break;
-        default:
-          throw new Error(`Unexpected shape type: ${v.type}`);
-      }
-    } else {
-      const r = repeaters[key];
-
-      for (let i = 0; i < r.times; i++) {
-        Object.keys(r).forEach((key: string) => {
-          if (key === 'type' || key === 'name') {
-            return;
-          }
-
-          v[key] += r[key];
-        });
-
-        ctx.save();
-
-        switch (v.type) {
-          case 'SHAPE_RECT':
-            ctx.translate(v.posX + v.width / 2, v.posY + v.height / 2);
-            ctx.rotate(v.rotation);
-            ctx.translate(-(v.posX + v.width / 2), -(v.posY + v.height / 2));
-            ctx.fillStyle = rgbToHex(v.fillR, v.fillG, v.fillB);
-            ctx.fillRect(
-              v.posX,
-              v.posY,
-              v.width * v.scaleX,
-              v.height * v.scaleY,
-            );
-            break;
-          case 'SHAPE_ELLIPSE':
-            ctx.beginPath();
-            ctx.fillStyle = rgbToHex(v.fillR, v.fillG, v.fillB);
-            ctx.ellipse(
-              v.posX,
-              v.posY,
-              v.radiusX,
-              v.radiusY,
-              v.rotation,
-              v.startAngle,
-              v.endAngle,
-            );
-            ctx.fill();
-            ctx.closePath();
-            break;
-          default:
-            throw new Error(`Unexpected shape type: ${v.type}`);
-        }
-
-        ctx.restore();
-      }
+    switch (v.type) {
+      case 'SHAPE_RECT':
+        ctx.translate(p.posX + p.width / 2, p.posY + p.height / 2);
+        ctx.rotate(p.rotation);
+        ctx.translate(-(p.posX + p.width / 2), -(p.posY + p.height / 2));
+        ctx.fillStyle = rgbToHex(p.fillR, p.fillG, p.fillB);
+        ctx.fillRect(p.posX, p.posY, p.width * p.scaleX, p.height * p.scaleY);
+        break;
+      case 'SHAPE_ELLIPSE':
+        ctx.beginPath();
+        ctx.fillStyle = rgbToHex(p.fillR, p.fillG, p.fillB);
+        ctx.ellipse(
+          p.posX,
+          p.posY,
+          p.radiusX,
+          p.radiusY,
+          p.rotation,
+          p.startAngle,
+          p.endAngle,
+        );
+        ctx.fill();
+        ctx.closePath();
+        break;
+      default:
+        throw new Error(`Unexpected shape type: ${v.type}`);
     }
 
     ctx.restore();

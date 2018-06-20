@@ -20,9 +20,12 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.prop]: {
-            ...state[action.shape][action.prop],
-            using: action.using,
+          properties: {
+            ...state[action.shape].properties,
+            [action.prop]: {
+              ...state[action.shape].properties[action.prop],
+              using: action.using,
+            },
           },
         },
       };
@@ -31,9 +34,12 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.prop]: {
-            ...state[action.shape][action.prop],
-            const: action.value || 0,
+          properties: {
+            ...state[action.shape].properties,
+            [action.prop]: {
+              ...state[action.shape].properties[action.prop],
+              const: action.value || 0,
+            },
           },
         },
       };
@@ -42,9 +48,12 @@ export default (
         ...state,
         [action.shape]: {
           ...state[action.shape],
-          [action.prop]: {
-            ...state[action.shape][action.prop],
-            fn: action.value || '',
+          properties: {
+            ...state[action.shape].properties,
+            [action.prop]: {
+              ...state[action.shape].properties[action.prop],
+              fn: action.value || '',
+            },
           },
         },
       };

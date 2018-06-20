@@ -49,8 +49,11 @@ const shapePropsObject = (shape: string): { [key: string]: PropertyType } =>
     {},
   );
 
-export default (type: string, name: string): ShapeType => ({
+export default (
+  type: 'SHAPE_RECT' | 'SHAPE_ELLIPSE',
+  name: string,
+): ShapeType => ({
   type,
   name,
-  ...shapePropsObject(type),
+  properties: shapePropsObject(type),
 });
