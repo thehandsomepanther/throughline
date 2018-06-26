@@ -59,6 +59,7 @@ export const shapeTypeToProperties = {
 export type ShapeRectType = {
   +type: 'SHAPE_RECT',
   +name: string,
+  +children: ?Array<string>,
   +properties: {
     +posX: PropertyType,
     +posY: PropertyType,
@@ -76,6 +77,7 @@ export type ShapeRectType = {
 export type ShapeEllipseType = {
   +type: 'SHAPE_ELLIPSE',
   +name: string,
+  +children: ?Array<string>,
   +properties: {
     +posX: PropertyType,
     +posY: PropertyType,

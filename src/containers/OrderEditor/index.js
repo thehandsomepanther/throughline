@@ -9,7 +9,7 @@ import { updateOrder } from '../../actions/order';
 import { deleteShape } from '../../actions/shapes';
 import {
   addRepeater,
-  deleteRepeater,
+  deleteRepetition,
   updateRepeater,
 } from '../../actions/repeaters';
 import type { ShapesStateType } from '../../types/shapes';
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch: any): any =>
       updateOrder,
       deleteShape,
       addRepeater,
-      deleteRepeater,
+      deleteRepetition,
       updateRepeater,
     },
     dispatch,

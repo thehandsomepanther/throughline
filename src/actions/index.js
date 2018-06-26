@@ -24,7 +24,7 @@ import type {
 } from './shapeValues';
 import type {
   AddRepeaterActionType,
-  DeleteRepeaterActionType,
+  DeleteRepetitionActionType,
   UpdateRepeaterActionType,
 } from './repeaters';
 
@@ -46,7 +46,7 @@ export type ActionType =
   | SetShapeValuesActionType
   | UpdateShapeValuesActionType
   | AddRepeaterActionType
-  | DeleteRepeaterActionType
+  | DeleteRepetitionActionType
   | UpdateRepeaterActionType;
 
 export type DispatchType = (action: ActionType) => void;

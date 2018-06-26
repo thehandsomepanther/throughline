@@ -12,7 +12,7 @@ import type { UpdateOrderType } from '../../actions/order';
 import type { DeleteShapeType } from '../../actions/shapes';
 import type {
   AddRepeaterType,
-  DeleteRepeaterType,
+  DeleteRepetitionType,
   UpdateRepeaterType,
 } from '../../actions/repeaters';
 
@@ -27,7 +27,7 @@ type PropsType = {
   updateOrder: UpdateOrderType,
   deleteShape: DeleteShapeType,
   addRepeater: AddRepeaterType,
-  deleteRepeater: DeleteRepeaterType,
+  deleteRepetition: DeleteRepetitionType,
   updateRepeater: UpdateRepeaterType,
 };
 
@@ -42,7 +42,7 @@ export default class OrderEditor extends Component<PropsType> {
       updateOrder,
       deleteShape,
       addRepeater,
-      deleteRepeater,
+      deleteRepetition,
       updateRepeater,
     } = this.props;
 
@@ -82,15 +82,13 @@ export default class OrderEditor extends Component<PropsType> {
                   }}
                 />
               )}
-              {!repeaters[key] && (
-                <input
-                  type="button"
-                  value="add repeater"
-                  onClick={() => {
-                    addRepeater(key, shapes[key].type);
-                  }}
-                />
-              )}
+              <input
+                type="button"
+                value="add repeater"
+                onClick={() => {
+                  addRepeater(key);
+                }}
+              />
               <input
                 type="button"
                 value="delete"
@@ -100,21 +98,18 @@ export default class OrderEditor extends Component<PropsType> {
               />
               {repeaters[key] && (
                 <div>
-                  <input
-                    type="button"
-                    value="delete repeater"
-                    onClick={() => {
-                      deleteRepeater(key);
-                    }}
-                  />
                   <RepeaterEditor
                     repeater={repeaters[key]}
                     updateRepeater={updateRepeater}
                     handleUpdateRepeater={(
-                      property: string,
-                      value: string | number,
+                      i: number,
+                      times: number,
+                      variable: string,
                     ) => {
-                      updateRepeater(key, property, value);
+                      updateRepeater(key, i, times, variable);
+                    }}
+                    handleDeleteRepetition={(i: number) => {
+                      deleteRepetition(key, i);
                     }}
                   />
                 </div>

@@ -12,7 +12,6 @@ export const evalFunctionProp = (
   frames: number,
 ): Promise<Array<number>> => {
   let worker: ?Worker = new Worker('worker.js');
-  const frameIndices: Array<number> = range(frames);
 
   return new Promise(
     (
@@ -30,7 +29,7 @@ export const evalFunctionProp = (
 
         worker.postMessage([
           `(function(){return ${JSON.stringify(
-            frameIndices,
+            range(frames),
           )}.map(function(t){${fn}})})()`,
         ]);
 
@@ -38,11 +37,15 @@ export const evalFunctionProp = (
           clearTimeout(timeout);
           const values = JSON.parse(e.data);
           values.forEach((value: ?number) => {
-            if (typeof value !== 'number') {
-              reject(new Error(e.message));
+            if (Number.isNaN(toNumber(value))) {
+              reject(
+                new Error(
+                  'Expression evaluated to something other than an number',
+                ),
+              );
             }
           });
-          resolve(JSON.parse(e.data));
+          resolve(values);
         };
 
         worker.onerror = (e) => {
@@ -54,7 +57,6 @@ export const evalFunctionProp = (
   );
 };
 
-// TODO: refactor this to be less repetitive
 export const evalConstProp = (
   value: string,
   frames: number,
@@ -104,7 +106,6 @@ export const calcPropValues = (
   prop: PropertyType,
   frames: number,
 ): Promise<Array<number>> => {
-  console.log(prop);
   switch (prop.using) {
     case USING_CONST:
       if (prop.const === null || prop.const === undefined) {

@@ -3,12 +3,12 @@
 import { redrawCanvases } from './editor';
 import {
   REPEATER_ADD_REPEATER,
-  REPEATER_DELETE_REPEATER,
+  REPEATER_DELETE_REPETITION,
   REPEATER_UPDATE_REPEATER,
 } from '../types/repeaters';
 import type {
   RepeaterAddRepeaterType,
-  RepeaterDeleteRepeaterType,
+  RepeaterDeleteRepetitionType,
   RepeaterUpdateRepeaterType,
 } from '../types/repeaters';
 import type { DispatchType } from './';
@@ -16,49 +16,53 @@ import type { DispatchType } from './';
 export type AddRepeaterActionType = {
   type: RepeaterAddRepeaterType,
   key: string,
-  shape: string,
 };
-export type AddRepeaterType = (
-  key: string,
-  shape: string,
-) => AddRepeaterActionType;
-export const addRepeater = (
-  key: string,
-  shape: string,
-): AddRepeaterActionType => ({
+export type AddRepeaterType = (key: string) => AddRepeaterActionType;
+export const addRepeater = (key: string): AddRepeaterActionType => ({
   type: REPEATER_ADD_REPEATER,
   key,
-  shape,
 });
 
-export type DeleteRepeaterActionType = {
-  type: RepeaterDeleteRepeaterType,
+export type DeleteRepetitionActionType = {
+  type: RepeaterDeleteRepetitionType,
   key: string,
+  index: number,
 };
-export type DeleteRepeaterType = (key: string) => DeleteRepeaterActionType;
-export const deleteRepeater = (key: string): DeleteRepeaterActionType => ({
-  type: REPEATER_DELETE_REPEATER,
+export type DeleteRepetitionType = (
+  key: string,
+  index: number,
+) => DeleteRepetitionActionType;
+export const deleteRepetition = (
+  key: string,
+  index: number,
+): DeleteRepetitionActionType => ({
+  type: REPEATER_DELETE_REPETITION,
   key,
+  index,
 });
 
 export type UpdateRepeaterActionType = {
   type: RepeaterUpdateRepeaterType,
   key: string,
-  property: string,
-  value: string | number,
+  index: number,
+  times: number,
+  variable: string,
 };
 export type UpdateRepeaterType = (
   key: string,
-  property: string,
-  value: string | number,
+  index: number,
+  times: number,
+  variable: string,
 ) => UpdateRepeaterActionType;
 export const updateRepeater = (
   key: string,
-  property: string,
-  value: string | number,
+  index: number,
+  times: number,
+  variable: string,
 ): UpdateRepeaterActionType => ({
   type: REPEATER_UPDATE_REPEATER,
   key,
-  property,
-  value,
+  index,
+  times,
+  variable,
 });
