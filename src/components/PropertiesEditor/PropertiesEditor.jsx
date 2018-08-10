@@ -24,8 +24,6 @@ import type {
   UpdateUsingType,
   UpdateConstType,
   UpdateFunctionType,
-  UpdateConstActionType,
-  UpdateFunctionActionType,
 } from '../../actions/shapes';
 import type { ChangeActiveFrameType } from '../../actions/editor';
 import type { UpdateShapeValuesType } from '../../actions/shapeValues';

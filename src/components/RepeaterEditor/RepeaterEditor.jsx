@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import type { RepeaterType, RepetitionType } from '../../types/repeaters';
-import type { UpdateRepeaterType } from '../../actions/repeaters';
 
 type PropsType = {
   repeater: RepeaterType,

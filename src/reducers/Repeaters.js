@@ -1,7 +1,6 @@
 // @flow
 
-import { pickBy } from 'lodash';
-import type { RepeatersStateType, RepeaterType } from '../types/repeaters';
+import type { RepeatersStateType } from '../types/repeaters';
 import type { ActionType } from '../actions';
 
 const CHARCODE_LOWERCASE_A = 97;
@@ -49,7 +48,6 @@ export default (
         );
       }
 
-      const { key, index } = action;
       newRepeater = [...state[action.key]];
       newRepeater.splice(action.index, 1);
       return {

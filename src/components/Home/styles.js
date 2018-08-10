@@ -1,12 +1,7 @@
 // @flow
 
 import styled from 'react-emotion';
-import {
-  COLOR_NEAR_BLACK,
-  COLOR_NEAR_WHITE,
-  COLOR_YELLOW,
-  FONT_STACK_LUNCH,
-} from '../../styles';
+import { COLOR_YELLOW, FONT_STACK_LUNCH } from '../../styles';
 
 export const HomeDiv = styled('div')`
   display: flex;

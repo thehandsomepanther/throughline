@@ -1,6 +1,5 @@
 // @flow
 
-import { redrawCanvases } from './editor';
 import {
   REPEATER_ADD_REPEATER,
   REPEATER_DELETE_REPETITION,
@@ -11,7 +10,6 @@ import type {
   RepeaterDeleteRepetitionType,
   RepeaterUpdateRepeaterType,
 } from '../types/repeaters';
-import type { DispatchType } from './';
 
 export type AddRepeaterActionType = {
   type: RepeaterAddRepeaterType,

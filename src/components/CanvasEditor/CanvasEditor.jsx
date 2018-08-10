@@ -20,7 +20,6 @@ import type {
   ResetRedrawCanvasesType,
   ChangeActiveFrameType,
 } from '../../actions/editor';
-import { rgbToHex } from '../../util';
 import { paintShapes } from './painter';
 
 type PropsType = {
