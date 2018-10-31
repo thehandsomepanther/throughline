@@ -1,5 +1,3 @@
-// @flow
-
 import styled from 'react-emotion';
 import { COLOR_YELLOW, FONT_STACK_LUNCH } from '../../styles';
 
