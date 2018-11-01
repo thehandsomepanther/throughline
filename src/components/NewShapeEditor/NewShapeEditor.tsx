@@ -1,18 +1,20 @@
 import * as React from 'react';
-import { shapeTypeToProperties } from '../../types/shapes';
+import { shapeTypeToProperties, ShapeType } from '../../types/shapes';
+import { addNewShape } from '../../actions/shapes';
+import { Dispatch } from '../../actions';
 
 type NewShapeEditorProps = {
-  addNewShape: (type: string, name: string) => void,
+  dispatch: Dispatch,
 };
 type NewShapeEditorState = {
   shouldShowNewShapeInfoForm: boolean,
-  newShapeType: string,
+  newShapeType: ShapeType,
   newShapeName: string,
 };
 
-const initialState = {
+const initialState: NewShapeEditorState = {
   shouldShowNewShapeInfoForm: false,
-  newShapeType: Object.keys(shapeTypeToProperties)[0],
+  newShapeType: ShapeType.Rect,
   newShapeName: '',
 };
 
@@ -29,7 +31,7 @@ export default class NewShapeEditor extends React.Component<
     this.setState({ shouldShowNewShapeInfoForm: true });
   };
 
-  private handleNewShapeTypeChange = (value: string) => {
+  private handleNewShapeTypeChange = (value: ShapeType) => {
     this.setState({ newShapeType: value });
   };
 
@@ -38,10 +40,9 @@ export default class NewShapeEditor extends React.Component<
   };
 
   private handleNewShapeInfoFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const { addNewShape } = this.props;
     const { newShapeName, newShapeType } = this.state;
     e.preventDefault();
-    addNewShape(newShapeType, newShapeName);
+    this.props.dispatch(addNewShape(newShapeType, newShapeName));
     this.setState({ ...initialState });
   };
 
@@ -59,11 +60,11 @@ export default class NewShapeEditor extends React.Component<
             <select
               value={newShapeType}
               onChange={(e) => {
-                this.handleNewShapeTypeChange(e.target.value);
+                this.handleNewShapeTypeChange(e.target.value as ShapeType);
               }}
             >
               {Object.keys(shapeTypeToProperties).map(
-                (shapeType: string) => (
+                (shapeType: ShapeType) => (
                   <option value={shapeType} key={shapeType}>
                     {shapeType}
                   </option>

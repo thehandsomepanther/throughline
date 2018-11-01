@@ -15,9 +15,10 @@ import { Using } from '../../types/properties';
 import { ShapesState, Shape } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
 import { ShapeValuesState, ShapeValues } from '../../types/shapeValues';
-import { UpdateUsing, UpdateConst, UpdateFunction } from '../../actions/shapes';
-import { ChangeActiveFrame } from '../../actions/editor';
-import { UpdateShapeValues } from '../../actions/shapeValues';
+import { updateUsing, updateConst, updateFunction } from '../../actions/shapes';
+import { changeActiveFrame } from '../../actions/editor';
+import { updateShapeValues } from '../../actions/shapeValues';
+import { Dispatch } from 'src/actions';
 
 const getPropValue = (
   shape: Shape,
@@ -79,22 +80,14 @@ const ShapePropertiesView = ({
   shapeValues,
   activeFrame,
   erroneousProps,
-  handleUsingChange,
-  handleUpdateConst,
-  handleUpdateFunction,
-  changeActiveFrame,
-  updateShapeValues,
+  dispatch,
 }: {
   shape: Shape,
   shapeKey: string,
   shapeValues: ShapeValues,
   activeFrame: number,
   erroneousProps?: { [key: string]: true },
-  handleUsingChange: UpdateUsing,
-  handleUpdateConst: UpdateConst,
-  handleUpdateFunction: UpdateFunction,
-  changeActiveFrame: ChangeActiveFrame,
-  updateShapeValues: UpdateShapeValues,
+  dispatch: Dispatch,
 }) => (
   <div>
     <ShapeInfo>
@@ -116,7 +109,7 @@ const ShapePropertiesView = ({
           <select
             value={shape.properties[prop].using}
             onChange={(e) => {
-              handleUsingChange(shapeKey, prop, e.target.value);
+              dispatch(updateUsing(shapeKey, prop, e.target.value as Using));
             }}
           >
             <option value={Using.Constant}>Constant</option>
@@ -127,7 +120,7 @@ const ShapePropertiesView = ({
             <ConstInput
               value={getPropValue(shape, prop)}
               handleUpdateConst={(val: number) => {
-                handleUpdateConst(shapeKey, prop, val);
+                dispatch(updateConst(shapeKey, prop, val));
               }}
             />
           )}
@@ -136,7 +129,7 @@ const ShapePropertiesView = ({
             <FunctionInput
               code={getPropValue(shape, prop)}
               handleUpdateFunction={(code: string) => {
-                handleUpdateFunction(shapeKey, prop, code);
+                dispatch(updateFunction(shapeKey, prop, code));
               }}
             />
           )}
@@ -164,20 +157,12 @@ export default ({
   shapes,
   editor,
   shapeValues,
-  updateConst,
-  updateUsing,
-  updateFunction,
-  changeActiveFrame,
-  updateShapeValues,
+  dispatch,
 }: {
   shapes: ShapesState,
   editor: EditorState,
   shapeValues: ShapeValuesState,
-  updateConst: UpdateConst,
-  updateUsing: UpdateUsing,
-  updateFunction: UpdateFunction,
-  changeActiveFrame: ChangeActiveFrame,
-  updateShapeValues: UpdateShapeValues,
+  dispatch: Dispatch,
 }) =>
   editor.activeShape && shapeValues[editor.activeShape] ? (
     <PropertiesEditorContainer>
@@ -187,11 +172,7 @@ export default ({
         shapeValues={shapeValues[editor.activeShape]}
         activeFrame={editor.activeFrame}
         erroneousProps={{ ...editor.erroneousProps[editor.activeShape] }}
-        handleUsingChange={updateUsing}
-        handleUpdateConst={updateConst}
-        handleUpdateFunction={updateFunction}
-        changeActiveFrame={changeActiveFrame}
-        updateShapeValues={updateShapeValues}
+        dispatch={dispatch}
       />
     </PropertiesEditorContainer>
   ) : null;

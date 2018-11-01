@@ -23,6 +23,7 @@ export default (
     case ShapesAction.UpdateUsing:
     case ShapesAction.UpdateConst:
     case ShapesAction.UpdateFunction:
+    case ShapesAction.DeleteShape:
     case ShapeValuesAction.ResetValues:
     case ShapeValuesAction.SetValues:
     case ShapeValuesAction.UpdateValues:

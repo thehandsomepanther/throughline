@@ -14,6 +14,8 @@ import { OrderState } from '../../types/order';
 import { EditorState } from '../../types/editor';
 import { ShapeValuesState } from '../../types/shapeValues';
 import { RepeatersState } from '../../types/repeaters';
+import { Dispatch } from '../../actions';
+import { resetRedrawCanvases, changeActiveFrame } from '../../actions/editor';
 import { paintShapes } from './painter';
 
 type PropsType = {
@@ -22,9 +24,7 @@ type PropsType = {
   editor: EditorState,
   shapeValues: ShapeValuesState,
   repeaters: RepeatersState,
-  // TODO: refactor props to just pass in dispatch
-  resetRedrawCanvases: any,
-  changeActiveFrame: any,
+  dispatch: Dispatch,
 };
 
 type StateType = {
@@ -64,7 +64,6 @@ export default class CanvasEditor extends React.Component<
   }
 
   componentWillUpdate(nextProps: PropsType) {
-    const { resetRedrawCanvases } = this.props;
     const { repeaters } = nextProps;
 
     if (
@@ -77,6 +76,11 @@ export default class CanvasEditor extends React.Component<
         }
 
         const ctx = canvasEl.getContext('2d');
+
+        if (!ctx) {
+          return;
+        }
+
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         paintShapes(
           Object.keys(nextProps.shapeValues).reduce(
@@ -104,13 +108,13 @@ export default class CanvasEditor extends React.Component<
         );
       });
 
-      resetRedrawCanvases();
+      this.props.dispatch(resetRedrawCanvases());
     }
   }
 
   private setActiveCanvas = (n: number) => {
-    const { changeActiveFrame, editor } = this.props;
-    changeActiveFrame(n % editor.numFrames);
+    const { editor, dispatch } = this.props;
+    dispatch(changeActiveFrame(n % editor.numFrames));
   };
 
   private decrementActiveCanvas = () => {

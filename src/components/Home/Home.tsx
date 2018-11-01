@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
 import LeftSidebar from '../LeftSidebar';
 import CanvasView from '../CanvasView';
@@ -7,25 +7,26 @@ import { calcShapeValues } from '../../util/shapes';
 import { OrderState } from '../../types/order';
 import { ShapesState } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
+import { resetShapeValues } from '../../actions/shapeValues';
 
 import { HomeDiv } from './styles';
+import { Dispatch } from '../../actions';
 
 type HomeProps = {
   order: OrderState,
   shapes: ShapesState,
   editor: EditorState,
-  // TODO: refactor props to just pass in dispatch
-  resetShapeValues: any,
+  dispatch: Dispatch,
 };
 
-export default class Home extends Component<HomeProps> {
+export default class Home extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props);
     this.initShapeValues();
   }
 
   initShapeValues = () => {
-    const { order, shapes, editor, resetShapeValues } = this.props;
+    const { order, shapes, editor } = this.props;
 
     Promise.all(
       order.map(
@@ -52,7 +53,7 @@ export default class Home extends Component<HomeProps> {
           {},
         );
 
-        resetShapeValues(newShapeValues);
+        this.props.dispatch(resetShapeValues(newShapeValues));
       })
       .catch(() => {});
   };

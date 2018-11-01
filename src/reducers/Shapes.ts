@@ -59,7 +59,7 @@ export default (
         ...state,
         [action.id]: action.shape,
       };
-    case 'SHAPE_DELETE_SHAPE':
+    case ShapesAction.DeleteShape:
       const { id } = action;
       return pickBy(state, (_, key: string): boolean => key !== id);
     default:

@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Repeater, Repetition } from '../../types/repeaters';
+import { Dispatch } from '../../actions';
+import { updateRepeater, deleteRepetition } from '../../actions/repeaters';
 
-type PropsType = {
+type RepeaterEditorProps = {
   repeater: Repeater,
-  handleUpdateRepeater: (i: number, times: number, variable: string) => {},
-  handleDeleteRepetition: (i: number) => {},
+  dispatch: Dispatch,
+  key: string,
 };
 
-export default class RepeaterEditor extends Component<PropsType> {
+export default class RepeaterEditor extends React.Component<
+  RepeaterEditorProps,
+> {
   render() {
-    const {
-      repeater,
-      handleUpdateRepeater,
-      handleDeleteRepetition,
-    } = this.props;
+    const { repeater, key } = this.props;
 
     return (
       <div>
@@ -25,7 +25,9 @@ export default class RepeaterEditor extends Component<PropsType> {
                 <input
                   value={repetition.variable}
                   onChange={(e) => {
-                    handleUpdateRepeater(i, repetition.times, e.target.value);
+                    this.props.dispatch(
+                      updateRepeater(key, i, repetition.times, e.target.value),
+                    );
                   }}
                 />
               </div>
@@ -34,10 +36,13 @@ export default class RepeaterEditor extends Component<PropsType> {
                 <input
                   value={repetition.times}
                   onChange={(e) => {
-                    handleUpdateRepeater(
-                      i,
-                      Number.parseFloat(e.target.value),
-                      repetition.variable,
+                    this.props.dispatch(
+                      updateRepeater(
+                        key,
+                        i,
+                        Number.parseFloat(e.target.value),
+                        repetition.variable,
+                      ),
                     );
                   }}
                 />
@@ -46,7 +51,7 @@ export default class RepeaterEditor extends Component<PropsType> {
                 type="button"
                 value="delete repeater"
                 onClick={() => {
-                  handleDeleteRepetition(i);
+                  this.props.dispatch(deleteRepetition(key, i));
                 }}
               />
             </div>

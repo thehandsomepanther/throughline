@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { CanvasSpace, Pt, Rectangle, Group, Line } from 'pts';
 
 const MARGIN_VERTICAL = 40;
@@ -6,19 +6,22 @@ const MARGIN_VERTICAL = 40;
 const percentile = (min: number, max: number, val: number): number =>
   (val - min) / (max - min);
 
-type PropsType = {
+type PropertiesGraphProps = {
   values: Array<number>,
   activeFrame: number,
   changeActiveFrame: any,
   updateShapeValues: any,
 };
 
-type StateType = {
+type PropertiesGraphState = {
   lastActiveCanvas: number,
 };
 
-export default class PropertiesGraph extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
+export default class PropertiesGraph extends React.Component<
+  PropertiesGraphProps,
+  PropertiesGraphState,
+> {
+  constructor(props: PropertiesGraphProps) {
     super(props);
     this.state = {
       lastActiveCanvas: 0,
