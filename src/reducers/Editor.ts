@@ -1,7 +1,6 @@
 import { orderInitialState } from './Order';
 import { EditorState, EditorAction } from '../types/editor';
 import { ShapesAction } from '../types/shapes';
-import { ShapeValuesAction } from '../types/shapeValues';
 import { RepeatersAction } from '../types/repeaters';
 import { Action } from '../actions';
 
@@ -24,9 +23,8 @@ export default (
     case ShapesAction.UpdateConst:
     case ShapesAction.UpdateFunction:
     case ShapesAction.DeleteShape:
-    case ShapeValuesAction.ResetValues:
-    case ShapeValuesAction.SetValues:
-    case ShapeValuesAction.UpdateValues:
+    case ShapesAction.SetValues:
+    case ShapesAction.UpdateValues:
     case RepeatersAction.UpdateRepeater:
       return {
         ...state,

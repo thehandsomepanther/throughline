@@ -4,6 +4,8 @@ import {
   UpdateFunctionAction,
   AddNewShapeAction,
   DeleteShapeAction,
+  SetShapeValuesAction,
+  UpdateShapeValuesAction
 } from './shapes';
 import {
   RedrawCanvasesAction,
@@ -12,18 +14,13 @@ import {
   AddErroneousPropAction,
   RemoveErroneousPropAction,
   ResetErroneousPropsAction,
-  ChangeActiveFrameAction,
+  ChangeActiveFrameAction
 } from './editor';
 import { UpdateOrderAction } from './order';
 import {
-  ResetShapeValuesAction,
-  SetShapeValuesAction,
-  UpdateShapeValuesAction,
-} from './shapeValues';
-import {
   AddRepeaterAction,
   DeleteRepetitionAction,
-  UpdateRepeaterAction,
+  UpdateRepeaterAction
 } from './repeaters';
 
 export type Action =
@@ -32,6 +29,8 @@ export type Action =
   | UpdateFunctionAction
   | AddNewShapeAction
   | DeleteShapeAction
+  | SetShapeValuesAction
+  | UpdateShapeValuesAction
   | RedrawCanvasesAction
   | ResetRedrawCanvasesAction
   | ChangeActiveShapeAction
@@ -40,9 +39,6 @@ export type Action =
   | ResetErroneousPropsAction
   | ChangeActiveFrameAction
   | UpdateOrderAction
-  | ResetShapeValuesAction
-  | SetShapeValuesAction
-  | UpdateShapeValuesAction
   | AddRepeaterAction
   | DeleteRepetitionAction
   | UpdateRepeaterAction;

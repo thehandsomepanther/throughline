@@ -2,12 +2,11 @@ import { OrderState } from '../../types/order';
 import { RepeatersState } from '../../types/repeaters';
 import { ShapeType, ShapesState, RectProperties, EllipseProperties } from '../../types/shapes';
 import { rgbToHex } from '../../util';
-import { ShapeValuesState, FormulaValues } from '../..//types/shapeValues';
+import { FormulaValues } from '../../types/shapes';
 
 // Paints a given canvas context with the values of shapes at a given frame.
 export const paintShapesAtFrame = (
   shapes: ShapesState,
-  shapeValues: ShapeValuesState,
   order: OrderState,
   repeaters: RepeatersState,
   frame: number,
@@ -18,7 +17,7 @@ export const paintShapesAtFrame = (
     // TODO: The typing around here is pretty atrocious. I should probably
     // figure out a better way of handling this. It may have to involve including
     // a ShapeType property in each ShapeValue
-    let sv = shapeValues[shapeID]
+    let sv = shapes[shapeID].values
 
     switch (shapes[shapeID].type) {
       case ShapeType.Rect:

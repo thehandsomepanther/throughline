@@ -7,7 +7,6 @@ import { calcShapeValues } from '../../util/shapes';
 import { OrderState } from '../../types/order';
 import { ShapesState, ShapeType } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
-import { resetShapeValues } from '../../actions/shapeValues';
 
 import { HomeDiv } from './styles';
 import { Dispatch } from '../../actions';
@@ -31,11 +30,11 @@ export default class Home extends React.Component<HomeProps> {
     Promise.all(
       order.map(
         (
-          key: string,
+          key: string
         ): Promise<{
-          [key: string]: Array<number>,
-        }> => calcShapeValues(shapes[key], editor.numFrames, () => {}),
-      ),
+          [key: string]: Array<number>
+        }> => calcShapeValues(shapes[key], editor.numFrames, () => {})
+      )
     )
       .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
         const newShapeValues = shapePropValues.reduce(
@@ -43,27 +42,28 @@ export default class Home extends React.Component<HomeProps> {
             acc: {
               [key: string]: {
                 type: ShapeType,
-                properties: { [key: string]: Array<number> },
-              },
+                properties: { [key: string]: Array<number> }
+              }
             },
             curr: { [key: string]: Array<number> },
-            i: number,
+            i: number
           ): {
             [key: string]: {
               type: ShapeType,
-              properties: { [key: string]: Array<number> },
-            },
+              properties: { [key: string]: Array<number> }
+            }
           } => ({
             ...acc,
             [order[i]]: {
               type: shapes[order[i]].type,
-              properties: curr,
-            },
+              properties: curr
+            }
           }),
-          {},
+          {}
         );
 
-        this.props.dispatch(resetShapeValues(newShapeValues));
+        // TODO: Figure out what to do here
+        // this.props.dispatch(resetShapeValues(newShapeValues));
       })
       .catch(() => {});
   };

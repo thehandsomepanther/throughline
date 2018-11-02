@@ -15,15 +15,13 @@ export default (
 
   switch (action.type) {
     case ShapesAction.UpdateUsing:
-      newState[action.shapeID].properties[action.prop].using = action.using;
+      newState[action.shapeID].formulas[action.prop].using = action.using;
       return newState;
     case ShapesAction.UpdateConst:
-      newState[action.shapeID].properties[action.prop].const =
-        action.value || 0;
+      newState[action.shapeID].formulas[action.prop].const = action.value || 0;
       return newState;
     case ShapesAction.UpdateFunction:
-      newState[action.shapeID].properties[action.prop].using =
-        action.value || '';
+      newState[action.shapeID].formulas[action.prop].using = action.value || '';
       return newState;
     case ShapesAction.NewShape:
       return {
@@ -32,6 +30,12 @@ export default (
       };
     case ShapesAction.DeleteShape:
       return pickBy(state, (_, key: string): boolean => key !== action.shapeID);
+    case ShapesAction.SetValues:
+      newState[action.shapeID].values = action.values;
+      return newState;
+    case ShapesAction.UpdateValues:
+      newState[action.shapeID][action.prop] = action.values;
+      return newState;
     default:
       return { ...state };
   }

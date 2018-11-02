@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { CanvasSpace, Pt, Rectangle, Group, Line } from 'pts';
+import { Dispatch } from '../../actions';
+import { changeActiveFrame } from '../../actions/editor';
+import { updateShapeValues } from '../../actions/shapes';
 
 const MARGIN_VERTICAL = 40;
 
@@ -9,12 +12,13 @@ const percentile = (min: number, max: number, val: number): number =>
 type PropertiesGraphProps = {
   values: Array<number>,
   activeFrame: number,
-  changeActiveFrame: any,
-  updateShapeValues: any,
+  shapeID: string,
+  shapeProperty: string,
+  dispatch: Dispatch
 };
 
 type PropertiesGraphState = {
-  lastActiveCanvas: number,
+  lastActiveCanvas: number
 };
 
 export default class PropertiesGraph extends React.Component<
@@ -24,7 +28,7 @@ export default class PropertiesGraph extends React.Component<
   constructor(props: PropertiesGraphProps) {
     super(props);
     this.state = {
-      lastActiveCanvas: 0,
+      lastActiveCanvas: 0
     };
   }
 
@@ -50,7 +54,7 @@ export default class PropertiesGraph extends React.Component<
 
     return [
       (x + 1) * this.interval,
-      this.space.size.y * (1 - percentile(minValue, maxValue, y)),
+      this.space.size.y * (1 - percentile(minValue, maxValue, y))
     ];
   };
 
@@ -78,7 +82,7 @@ export default class PropertiesGraph extends React.Component<
 
     this.space = new CanvasSpace(this.ptsCanvas).setup({
       resize: true,
-      retina: true,
+      retina: true
     });
     this.form = this.space.getForm();
 
@@ -87,16 +91,16 @@ export default class PropertiesGraph extends React.Component<
 
       const points = values.map(
         (n: number, i: number): any =>
-          new Pt(...this.getSpacePointFromGraphPoint(i, n)),
+          new Pt(...this.getSpacePointFromGraphPoint(i, n))
       );
 
       points.unshift(
         new Pt(
-          ...this.getSpacePointFromGraphPoint(-1, values[values.length - 1]),
-        ),
+          ...this.getSpacePointFromGraphPoint(-1, values[values.length - 1])
+        )
       );
       points.push(
-        new Pt(...this.getSpacePointFromGraphPoint(values.length, values[0])),
+        new Pt(...this.getSpacePointFromGraphPoint(values.length, values[0]))
       );
 
       this.form.strokeOnly('#000', 2);
@@ -108,12 +112,12 @@ export default class PropertiesGraph extends React.Component<
 
       this.form.line([
         new Pt((activeFrame + 1) * this.interval, 0),
-        new Pt((activeFrame + 1) * this.interval, this.space.size.y),
+        new Pt((activeFrame + 1) * this.interval, this.space.size.y)
       ]);
 
       const rect = Rectangle.fromCenter(
         new Pt((activeFrame + 1) * this.interval + 16, this.space.size.y - 16),
-        20,
+        20
       );
       this.form.font(12).textBox(rect, activeFrame, 'bottom', '', true);
 
@@ -121,7 +125,7 @@ export default class PropertiesGraph extends React.Component<
       // super intense. find a better way to do this in the future
       const yAxisLine = new Group(
         new Pt(0, this.space.pointer.y),
-        new Pt(this.space.size.x, this.space.pointer.y),
+        new Pt(this.space.size.x, this.space.pointer.y)
       );
 
       for (let i = 0; i < points.length - 1; i += 1) {
@@ -139,7 +143,7 @@ export default class PropertiesGraph extends React.Component<
           if (x >= 0 && x < values.length) {
             const textRect = Rectangle.fromCenter(
               new Pt(intersect[0] + 16, intersect[1] - 16),
-              [40, 12],
+              [40, 12]
             );
             this.form.font(12).textBox(textRect, `${y}`, 'bottom', '');
           }
@@ -159,10 +163,11 @@ export default class PropertiesGraph extends React.Component<
         }
 
         const {
-          changeActiveFrame,
           activeFrame,
           values,
-          updateShapeValues,
+          dispatch,
+          shapeProperty,
+          shapeID
         } = this.props;
         const { lastActiveCanvas } = this.state;
         const frame = Math.floor(this.space.pointer.x / this.interval);
@@ -178,19 +183,21 @@ export default class PropertiesGraph extends React.Component<
           case 'move':
             if (frame >= 0 && frame < values.length) {
               changeActiveFrame(
-                Math.floor(this.space.pointer.x / this.interval),
+                Math.floor(this.space.pointer.x / this.interval)
               );
             }
             break;
           case 'down':
           case 'drag':
-            if (frame >= 0 && frame < values.length && updateShapeValues) {
+            if (frame >= 0 && frame < values.length) {
               [, graphY] = this.getGraphPointFromSpacePoint(
                 this.space.pointer.x,
-                this.space.pointer.y,
+                this.space.pointer.y
               );
               values[frame] = graphY;
-              updateShapeValues(values);
+              // TODO: shapeTypeToProperties needs better typing, or else we'll have
+              // to keep patching type mischecks like this one
+              dispatch(updateShapeValues(shapeID, shapeProperty, values));
             }
             break;
           default:
@@ -204,7 +211,7 @@ export default class PropertiesGraph extends React.Component<
           this.space.clear();
           this.renderChart();
         }
-      },
+      }
     });
 
     this.space.bindMouse().bindTouch();

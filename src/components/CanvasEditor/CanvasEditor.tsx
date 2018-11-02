@@ -12,7 +12,6 @@ import {
 import { ShapesState } from '../../types/shapes';
 import { OrderState } from '../../types/order';
 import { EditorState } from '../../types/editor';
-import { ShapeValuesState } from '../../types/shapeValues';
 import { RepeatersState } from '../../types/repeaters';
 import { Dispatch } from '../../actions';
 import { resetRedrawCanvases, changeActiveFrame } from '../../actions/editor';
@@ -22,7 +21,6 @@ interface CanvasEditorProps {
   shapes: ShapesState;
   order: OrderState;
   editor: EditorState;
-  shapeValues: ShapeValuesState;
   repeaters: RepeatersState;
   dispatch: Dispatch;
 };
@@ -49,7 +47,7 @@ export default class CanvasEditor extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: CanvasEditorProps) {
-    const { repeaters, editor, shapes, order, shapeValues } = nextProps;
+    const { repeaters, editor, shapes, order } = nextProps;
 
     if (
       nextProps.editor.shouldRedrawFrames &&
@@ -64,7 +62,7 @@ export default class CanvasEditor extends React.Component<
         }
 
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        paintShapesAtFrame(shapes, shapeValues, order, repeaters, i, ctx);
+        paintShapesAtFrame(shapes, order, repeaters, i, ctx);
         this.frames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
       }
 

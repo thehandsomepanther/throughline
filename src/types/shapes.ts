@@ -7,6 +7,8 @@ export enum ShapesAction {
   UpdateFunction = 'SHAPE_UPDATE_FN',
   NewShape = 'SHAPE_NEW_SHAPE',
   DeleteShape = 'SHAPE_DELETE_SHAPE',
+  SetValues = 'SHAPE_SET_VALUES',
+  UpdateValues = 'SHAPE_UPDATE_VALUES',
 };
 
 // The shapes branch of the state tree maps shape IDs to their corresponding
@@ -53,7 +55,7 @@ export const shapeTypeToProperties = {
   [ShapeType.Ellipse]: SHAPE_ELLIPSE_PROPS,
 };
 
-interface ShapeProperties<T> {
+export interface ShapeProperties<T> {
   posX: T,
   posY: T,
   fillR: T,
@@ -82,22 +84,29 @@ export interface EllipseProperties<T> extends ShapeProperties<T> {
 // determines how those values are determined.
 export type Shape = RectShape | EllipseShape;
 
+// Calculated values for a formula are stored as an array of numbers (one for each
+// frame)
+export type FormulaValues = Array<number>;
+
 // This interface only exists to be extended by actual shapes which can be
 // rendered.
 interface VirtualShape {
   type: ShapeType,
   name: string,
   children?: Array<string>,
-  properties: ShapeProperties<Formula>,
+  formulas: ShapeProperties<Formula>,
+  values: ShapeProperties<FormulaValues>,
 };
 
 export interface RectShape extends VirtualShape {
   type: ShapeType.Rect,
-  properties: RectProperties<Formula>,
+  formulas: RectProperties<Formula>,
+  values: RectProperties<FormulaValues>,
 };
 
 export interface EllipseShape extends VirtualShape {
   type: ShapeType.Ellipse,
-  properties: EllipseProperties<Formula>,
+  formulas: EllipseProperties<Formula>,
+  values: EllipseProperties<FormulaValues>,
 };
 
