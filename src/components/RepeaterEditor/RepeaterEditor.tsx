@@ -9,9 +9,7 @@ type RepeaterEditorProps = {
   key: string,
 };
 
-export default class RepeaterEditor extends React.Component<
-  RepeaterEditorProps,
-> {
+export default class RepeaterEditor extends React.Component<RepeaterEditorProps> {
   render() {
     const { repeater, key } = this.props;
 

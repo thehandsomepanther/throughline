@@ -19,7 +19,7 @@ type PropertiesGraphState = {
 
 export default class PropertiesGraph extends React.Component<
   PropertiesGraphProps,
-  PropertiesGraphState,
+  PropertiesGraphState
 > {
   constructor(props: PropertiesGraphProps) {
     super(props);
@@ -220,7 +220,7 @@ export default class PropertiesGraph extends React.Component<
     return (
       <div>
         <canvas
-          ref={(canvas?: HTMLCanvasElement) => {
+          ref={(canvas: HTMLCanvasElement | null) => {
             if (canvas) {
               this.ptsCanvas = canvas;
             }

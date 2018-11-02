@@ -4,11 +4,15 @@ export enum Using {
   Constant = 'USING_CONST',
 }
 
+export type ConstValue = number
+export type FunctionValue = string
+export type CustomValue = Array<number>
+
 export type Property = {
   using: Using,
-  const?: string | number,
-  custom?: Array<number>,
-  fn?: string,
+  const?: ConstValue,
+  custom?: CustomValue,
+  fn?: FunctionValue,
 };
 
 export type PropertyValues = Array<number>;

@@ -3,13 +3,16 @@ import { OrderState } from './order';
 import { EditorState } from './editor';
 import { ShapeValuesState } from './shapeValues';
 import { RepeatersState } from './repeaters';
+import { Action } from '../actions';
 
-export type Store = {
-  shapes: ShapesState,
-  order: OrderState,
-  editor: EditorState,
-  shapeValues: ShapeValuesState,
-  repeaters: RepeatersState,
+export interface Store {
+  shapes: ShapesState;
+  order: OrderState;
+  editor: EditorState;
+  shapeValues: ShapeValuesState;
+  repeaters: RepeatersState;
+  getState: () => Store;
+  dispatch: (action: Action) => void;
 };
 
 export type GetState = () => Store;

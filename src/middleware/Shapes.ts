@@ -5,6 +5,7 @@ import { EditorState } from '../types/editor';
 import { addErroneousProp, removeErroneousProp } from '../actions/editor';
 import { calcShapeValues, calcPropValues } from '../util/shapes';
 import { Dispatch } from '../actions';
+import { Store } from '../types/store';
 
 const updatePropValues = (
   dispatch: Dispatch,
@@ -23,7 +24,7 @@ const updatePropValues = (
     });
 };
 
-export const shapesMiddleware = (store) => (next) => (action: Action) => {
+export const shapesMiddleware = (store: Store) => (next: Dispatch) => (action: Action) => {
   const { editor, shapes } = store.getState();
 
   switch (action.type) {

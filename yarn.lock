@@ -137,6 +137,10 @@
   version "0.0.29"
   resolved "http://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
 
+"@types/lodash@^4.14.117":
+  version "4.14.117"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.117.tgz#695a7f514182771a1e0f4345d189052ee33c8778"
+
 "@types/node@*", "@types/node@^10.12.1":
   version "10.12.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.1.tgz#da61b64a2930a80fa708e57c45cd5441eb379d5b"
@@ -151,6 +155,13 @@
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
+
+"@types/react-redux@^6.0.9":
+  version "6.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-6.0.9.tgz#96aa7f5b0716bcc3bfb36ceaa1223118d509f79a"
+  dependencies:
+    "@types/react" "*"
+    redux "^4.0.0"
 
 "@types/react@*", "@types/react@^16.4.18":
   version "16.4.18"
@@ -6310,9 +6321,9 @@ psl@^1.1.24:
   version "1.1.29"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.1.29.tgz#60f580d360170bb722a797cc704411e6da850c67"
 
-pts@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/pts/-/pts-0.4.2.tgz#699761fe1c5be3bc9210cdda1c9e12b5fd226b85"
+pts@^0.6.6:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/pts/-/pts-0.6.6.tgz#f46622ce7f4a547646f31f8829f22436bc61058b"
 
 public-encrypt@^4.0.0:
   version "4.0.2"
@@ -6645,9 +6656,9 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-thunk@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.2.0.tgz#e615a16e16b47a19a515766133d1e3e99b7852e5"
+redux-thunk@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
 
 redux@^4.0.0:
   version "4.0.0"

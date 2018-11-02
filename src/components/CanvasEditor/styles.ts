@@ -12,14 +12,7 @@ export const CanvasesContainer = styled('div')`
   position: relative;
 `;
 
-type CanvasContainerProps = {
-  index: number,
-  activeCanvas: number,
-  key: string | number,
-};
 export const CanvasContainer = styled('div')`
-  display: ${(props: CanvasContainerProps): string =>
-    props.index === props.activeCanvas ? 'block' : 'none'};
   background-color: ${COLOR_NEAR_WHITE};
   width: 600px;
   height: 600px;

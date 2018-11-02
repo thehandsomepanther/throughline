@@ -11,7 +11,7 @@ import {
   InvalidPropNotification,
 } from './styles';
 import { shapeTypeToProperties } from '../../types/shapes';
-import { Using } from '../../types/properties';
+import { Using, ConstValue, FunctionValue } from '../../types/properties';
 import { ShapesState, Shape } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
 import { ShapeValuesState, ShapeValues } from '../../types/shapeValues';
@@ -20,25 +20,8 @@ import { changeActiveFrame } from '../../actions/editor';
 import { updateShapeValues } from '../../actions/shapeValues';
 import { Dispatch } from 'src/actions';
 
-const getPropValue = (
-  shape: Shape,
-  prop: string,
-): string | number | Array<number> => {
-  switch (shape.properties[prop].using as Using) {
-    case Using.Constant:
-      return shape.properties[prop].const;
-    case Using.Custom:
-      return shape.properties[prop].custom;
-    case Using.Function:
-      return shape.properties[prop].fn;
-    default:
-      throw new Error(
-        `Attempted to using an unrecognized value, ${
-          shape.properties[prop].using
-        }`,
-      );
-  }
-};
+const getConstValue = (shape: Shape, prop: string): ConstValue =>  shape.properties[prop].const
+const getFunctionValue = (shape: Shape, prop: string): FunctionValue => shape.properties[prop].fn
 
 const ConstInput = ({
   value,
@@ -51,7 +34,8 @@ const ConstInput = ({
     value={value || ''}
     placeholder='0'
     onChange={(e) => {
-      handleUpdateConst(e.target.value);
+      // TODO: more rigorous checks here
+      handleUpdateConst(parseInt(e.target.value));
     }}
   />
 );
@@ -118,7 +102,7 @@ const ShapePropertiesView = ({
           </select>
           {shape.properties[prop].using === Using.Constant && (
             <ConstInput
-              value={getPropValue(shape, prop)}
+              value={getConstValue(shape, prop)}
               handleUpdateConst={(val: number) => {
                 dispatch(updateConst(shapeKey, prop, val));
               }}
@@ -127,7 +111,7 @@ const ShapePropertiesView = ({
           {shape.properties[prop].using === Using.Custom}
           {shape.properties[prop].using === Using.Function && (
             <FunctionInput
-              code={getPropValue(shape, prop)}
+              code={getFunctionValue(shape, prop)}
               handleUpdateFunction={(code: string) => {
                 dispatch(updateFunction(shapeKey, prop, code));
               }}

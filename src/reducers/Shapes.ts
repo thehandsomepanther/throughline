@@ -15,12 +15,12 @@ export default (
     case ShapesAction.UpdateUsing:
       return {
         ...state,
-        [action.shape]: {
-          ...state[action.shape],
+        [action.shapeKey]: {
+          ...state[action.shapeKey],
           properties: {
-            ...state[action.shape].properties,
+            ...state[action.shapeKey].properties,
             [action.prop]: {
-              ...state[action.shape].properties[action.prop],
+              ...state[action.shapeKey].properties[action.prop],
               using: action.using,
             },
           },
@@ -29,12 +29,12 @@ export default (
     case ShapesAction.UpdateConst:
       return {
         ...state,
-        [action.shape]: {
-          ...state[action.shape],
+        [action.shapeKey]: {
+          ...state[action.shapeKey],
           properties: {
-            ...state[action.shape].properties,
+            ...state[action.shapeKey].properties,
             [action.prop]: {
-              ...state[action.shape].properties[action.prop],
+              ...state[action.shapeKey].properties[action.prop],
               const: action.value || 0,
             },
           },
@@ -43,12 +43,12 @@ export default (
     case ShapesAction.UpdateFunction:
       return {
         ...state,
-        [action.shape]: {
-          ...state[action.shape],
+        [action.shapeKey]: {
+          ...state[action.shapeKey],
           properties: {
-            ...state[action.shape].properties,
+            ...state[action.shapeKey].properties,
             [action.prop]: {
-              ...state[action.shape].properties[action.prop],
+              ...state[action.shapeKey].properties[action.prop],
               fn: action.value || '',
             },
           },

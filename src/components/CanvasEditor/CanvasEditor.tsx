@@ -18,64 +18,47 @@ import { Dispatch } from '../../actions';
 import { resetRedrawCanvases, changeActiveFrame } from '../../actions/editor';
 import { paintShapes } from './painter';
 
-type PropsType = {
-  shapes: ShapesState,
-  order: OrderState,
-  editor: EditorState,
-  shapeValues: ShapeValuesState,
-  repeaters: RepeatersState,
-  dispatch: Dispatch,
+interface CanvasEditorProps {
+  shapes: ShapesState;
+  order: OrderState;
+  editor: EditorState;
+  shapeValues: ShapeValuesState;
+  repeaters: RepeatersState;
+  dispatch: Dispatch;
 };
 
-type StateType = {
-  interval: number | null,
-  lastActiveCanvas: number,
+interface CanvasEditorState {
+  interval: number | null;
+  lastActiveCanvas: number;
 };
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
 
 export default class CanvasEditor extends React.Component<
-  PropsType,
-  StateType
+  CanvasEditorProps,
+  CanvasEditorState
 > {
-  constructor(props: PropsType) {
+  constructor(props: CanvasEditorProps) {
     super(props);
-    this.canvases = [];
-    this.canvasEls = [];
-
-    for (let i = 0; i < props.editor.numFrames; i += 1) {
-      this.canvases.push(
-        <canvas
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          key={i}
-          ref={(canvasEl?: HTMLCanvasElement) => {
-            this.canvasEls.push(canvasEl);
-          }}
-        />,
-      );
-    }
-
+    this.frames = [];
     this.state = {
       interval: null,
       lastActiveCanvas: 0,
     };
   }
 
-  componentWillUpdate(nextProps: PropsType) {
-    const { repeaters } = nextProps;
+  componentWillReceiveProps(nextProps: CanvasEditorProps) {
+    const { repeaters, editor } = nextProps;
 
     if (
       nextProps.editor.shouldRedrawCanvases &&
-      Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0
+      Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0 &&
+      this.dummyCanvasEl
     ) {
-      this.canvasEls.forEach((canvasEl: HTMLCanvasElement, frame: number) => {
-        if (!canvasEl) {
-          return;
-        }
-
-        const ctx = canvasEl.getContext('2d');
+      this.frames = [];
+      for (let i = 0; i < editor.numFrames; i++) {
+        const ctx = this.dummyCanvasEl.getContext('2d');
 
         if (!ctx) {
           return;
@@ -94,7 +77,7 @@ export default class CanvasEditor extends React.Component<
                   (properties, property: string) => ({
                     ...properties,
                     [property]:
-                      nextProps.shapeValues[key].properties[property][frame],
+                      nextProps.shapeValues[key].properties[property][i],
                   }),
                   {},
                 ),
@@ -106,9 +89,18 @@ export default class CanvasEditor extends React.Component<
           repeaters,
           ctx,
         );
-      });
+
+        this.frames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
+      }
 
       this.props.dispatch(resetRedrawCanvases());
+    }
+
+    if (editor.activeFrame !== this.props.editor.activeFrame && this.canvasEl) {
+      const ctx = this.canvasEl.getContext('2d');
+      if (ctx) {
+        ctx.putImageData(this.frames[editor.activeFrame], 0, 0);
+      }
     }
   }
 
@@ -138,8 +130,9 @@ export default class CanvasEditor extends React.Component<
     }
   };
 
-  canvases: Array<HTMLCanvasElement>;
-  canvasEls: Array<HTMLCanvasElement | undefined>;
+  frames: Array<ImageData>;
+  canvasEl: HTMLCanvasElement | null = null;
+  dummyCanvasEl: HTMLCanvasElement | null = null;
 
   public render() {
     const { editor } = this.props;
@@ -180,15 +173,14 @@ export default class CanvasEditor extends React.Component<
               Some of your shapes have invalid props
             </NotificationContainer>
           )}
-          {this.canvases.map((_, i: number) => (
-            <CanvasContainer
-              index={i}
-              activeCanvas={editor.activeFrame}
-              key={i}
-            >
-              {this.canvases[i]}
-            </CanvasContainer>
-          ))}
+          <CanvasContainer>
+            <canvas ref={(el: HTMLCanvasElement | null) => {
+              this.canvasEl = el;
+            }} />
+            <canvas ref={(el: HTMLCanvasElement | null) => {
+              this.dummyCanvasEl = el;
+            }} />
+          </CanvasContainer>
         </CanvasesContainer>
         <TickMarkersContainer
           onMouseEnter={() => {
