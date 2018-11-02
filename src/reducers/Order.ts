@@ -7,20 +7,18 @@ export const orderInitialState: OrderState = Object.keys(shapesInitialState);
 
 export default (
   state: OrderState = orderInitialState,
-  action: Action,
+  action: Action
 ): OrderState => {
-  let newState;
+  const newState = [...state];
   switch (action.type) {
     case OrderAction.UpdateOrder:
-      newState = [...state];
       newState.splice(action.oldIndex, 1);
       newState.splice(action.newIndex, 0, state[action.oldIndex]);
       return newState;
     case ShapesAction.NewShape:
-      return [...state, action.id];
+      return [...state, action.shapeID];
     case ShapesAction.DeleteShape:
-      const { id } = action;
-      return state.filter((value: string): boolean => value !== id);
+      return state.filter((value: string): boolean => value !== action.shapeID);
     default:
       return state;
   }

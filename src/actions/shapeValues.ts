@@ -1,45 +1,48 @@
-import { ShapeValuesAction } from '../types/shapeValues';
+import {
+  ShapeValuesAction,
+  ShapeValuesState,
+  ShapeValues,
+  FormulaValues
+} from '../types/shapeValues';
 
 export type ResetShapeValuesAction = {
   type: ShapeValuesAction.ResetValues,
-  shapeValues: { [key: string]: Array<number> },
+  shapeValues: ShapeValuesState
 };
-export const resetShapeValues = (shapeValues: {
-  [key: string]: Array<number>,
-}): ResetShapeValuesAction => ({
+export const resetShapeValues = (
+  shapeValues: ShapeValuesState
+): ResetShapeValuesAction => ({
   type: ShapeValuesAction.ResetValues,
-  shapeValues,
+  shapeValues
 });
 
 export type SetShapeValuesAction = {
   type: ShapeValuesAction.SetValues,
-  shape: string,
-  shapeValues: { [key: string]: Array<number> },
+  shapeID: string,
+  shapeValues: ShapeValues
 };
 export const setShapeValues = (
-  shape: string,
-  shapeValues: {
-    [key: string]: Array<number>,
-  },
+  shapeID: string,
+  shapeValues: ShapeValues
 ): SetShapeValuesAction => ({
   type: ShapeValuesAction.SetValues,
-  shape,
-  shapeValues,
+  shapeID,
+  shapeValues
 });
 
 export type UpdateShapeValuesAction = {
   type: ShapeValuesAction.UpdateValues,
-  shape: string,
-  prop: string,
-  values: Array<number>,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  values: FormulaValues
 };
 export const updateShapeValues = (
-  shape: string,
-  prop: string,
-  values: Array<number>,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  values: FormulaValues
 ): UpdateShapeValuesAction => ({
   type: ShapeValuesAction.UpdateValues,
-  shape,
+  shapeID,
   prop,
-  values,
+  values
 });

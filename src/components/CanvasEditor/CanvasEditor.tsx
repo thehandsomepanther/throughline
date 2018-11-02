@@ -16,7 +16,7 @@ import { ShapeValuesState } from '../../types/shapeValues';
 import { RepeatersState } from '../../types/repeaters';
 import { Dispatch } from '../../actions';
 import { resetRedrawCanvases, changeActiveFrame } from '../../actions/editor';
-import { paintShapes } from './painter';
+import { paintShapesAtFrame } from './painter';
 
 interface CanvasEditorProps {
   shapes: ShapesState;
@@ -49,7 +49,7 @@ export default class CanvasEditor extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: CanvasEditorProps) {
-    const { repeaters, editor } = nextProps;
+    const { repeaters, editor, shapes, order, shapeValues } = nextProps;
 
     if (
       nextProps.editor.shouldRedrawFrames &&
@@ -59,37 +59,12 @@ export default class CanvasEditor extends React.Component<
       this.frames = [];
       for (let i = 0; i < editor.numFrames; i++) {
         const ctx = this.dummyCanvasEl.getContext('2d');
-
         if (!ctx) {
-          return;
+          continue;
         }
 
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        paintShapes(
-          Object.keys(nextProps.shapeValues).reduce(
-            (shapeValues, key: string) => ({
-              ...shapeValues,
-              [key]: {
-                ...nextProps.shapeValues[key],
-                properties: Object.keys(
-                  nextProps.shapeValues[key].properties,
-                ).reduce(
-                  (properties, property: string) => ({
-                    ...properties,
-                    [property]:
-                      nextProps.shapeValues[key].properties[property][i],
-                  }),
-                  {},
-                ),
-              },
-            }),
-            {},
-          ),
-          nextProps.order,
-          repeaters,
-          ctx,
-        );
-
+        paintShapesAtFrame(shapes, shapeValues, order, repeaters, i, ctx);
         this.frames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
       }
 

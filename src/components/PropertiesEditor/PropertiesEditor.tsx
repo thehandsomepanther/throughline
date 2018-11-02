@@ -10,7 +10,7 @@ import {
   ConstantPropertyInput,
   InvalidPropNotification,
 } from './styles';
-import { shapeTypeToProperties } from '../../types/shapes';
+import { shapeTypeToProperties, RectProperties, EllipseProperties } from '../../types/shapes';
 import { Using, ConstValue, FunctionValue } from '../../types/formulas';
 import { ShapesState, Shape } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
@@ -70,7 +70,7 @@ const ShapePropertiesView = ({
   shapeKey: string,
   shapeValues: ShapeValues,
   activeFrame: number,
-  erroneousProps?: { [key: string]: true },
+  erroneousProps?: Partial<RectProperties<true>> | Partial<EllipseProperties<true>>,
   dispatch: Dispatch,
 }) => (
   <div>
@@ -119,13 +119,15 @@ const ShapePropertiesView = ({
           )}
           {shape.properties[prop].using !== Using.Constant && (
             <PropertiesGraph
-              values={shapeValues.properties[prop]}
+              values={shapeValues[prop]}
               activeFrame={activeFrame}
               changeActiveFrame={changeActiveFrame}
               updateShapeValues={
                 shape.properties[prop].using === Using.Custom
                   ? (values: Array<number>) => {
-                      updateShapeValues(shapeKey, prop, values);
+                    // TODO: shapeTypeToProperties needs better typing, or else we'll have
+                    // to keep patching type mischecks like this one
+                      updateShapeValues(shapeKey, prop as keyof ShapeValues, values);
                     }
                   : null
               }

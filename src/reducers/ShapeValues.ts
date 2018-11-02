@@ -7,32 +7,25 @@ const initialState: ShapeValuesState = {};
 
 export default (
   state: ShapeValuesState = initialState,
-  action: Action,
+  action: Action
 ): ShapeValuesState => {
+  const newState = { ...state };
+
   switch (action.type) {
     case ShapeValuesAction.ResetValues:
       return {
-        ...action.shapeValues,
+        ...action.shapeValues
       };
     case ShapeValuesAction.SetValues:
       return {
         ...state,
-        [action.shape]: action.shapeValues,
+        [action.shapeID]: action.shapeValues
       };
     case ShapeValuesAction.UpdateValues:
-      return {
-        ...state,
-        [action.shape]: {
-          ...state[action.shape],
-          properties: {
-            ...state[action.shape].properties,
-            [action.prop]: action.values,
-          },
-        },
-      };
+      newState[action.shapeID][action.prop] = action.values;
+      return newState;
     case ShapesAction.DeleteShape:
-      const { id } = action;
-      return pickBy(state, (_, key: string): boolean => key !== id);
+      return pickBy(state, (_, key: string): boolean => key !== action.shapeID);
     default:
       return { ...state };
   }

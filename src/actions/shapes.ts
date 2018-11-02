@@ -2,77 +2,78 @@ import { uniqueId } from 'lodash';
 import { ShapesAction, ShapeType, Shape } from '../types/shapes';
 import { Using } from '../types/formulas';
 import makeDefaultShape from '../util/makeDefaultShape';
+import { ShapeValues } from '../types/shapeValues';
 
 export type UpdateUsingAction = {
   type: ShapesAction.UpdateUsing,
-  shapeKey: string,
-  prop: string,
-  using: Using,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  using: Using
 };
 export const updateUsing = (
-  shapeKey: string,
-  prop: string,
-  using: Using,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  using: Using
 ): UpdateUsingAction => ({
   type: ShapesAction.UpdateUsing,
-  shapeKey,
+  shapeID,
   prop,
-  using,
+  using
 });
 
 export type UpdateConstAction = {
   type: ShapesAction.UpdateConst,
-  shapeKey: string,
-  prop: string,
-  value: number,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  value: number
 };
 export const updateConst = (
-  shapeKey: string,
-  prop: string,
-  value: number,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  value: number
 ): UpdateConstAction => ({
   type: ShapesAction.UpdateConst,
-  shapeKey,
+  shapeID,
   prop,
-  value,
+  value
 });
 
 export type UpdateFunctionAction = {
   type: ShapesAction.UpdateFunction,
-  shapeKey: string,
-  prop: string,
-  value: string,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  value: string
 };
 export const updateFunction = (
-  shapeKey: string,
-  prop: string,
-  value: string,
+  shapeID: string,
+  prop: keyof ShapeValues,
+  value: string
 ): UpdateFunctionAction => ({
   type: ShapesAction.UpdateFunction,
-  shapeKey,
+  shapeID,
   prop,
-  value,
+  value
 });
 
 export type AddNewShapeAction = {
   type: ShapesAction.NewShape,
   shape: Shape,
-  id: string,
+  shapeID: string
 };
 export const addNewShape = (
   shapeType: ShapeType,
-  name: string,
+  name: string
 ): AddNewShapeAction => ({
   type: ShapesAction.NewShape,
   shape: makeDefaultShape(shapeType, name),
-  id: uniqueId(),
+  shapeID: uniqueId()
 });
 
 export type DeleteShapeAction = {
   type: ShapesAction.DeleteShape,
-  id: string,
+  shapeID: string
 };
-export const deleteShape = (id: string): DeleteShapeAction => ({
+export const deleteShape = (shapeID: string): DeleteShapeAction => ({
   type: ShapesAction.DeleteShape,
-  id,
+  shapeID
 });

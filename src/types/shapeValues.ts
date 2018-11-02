@@ -14,7 +14,7 @@ export type ShapeValuesState = {
 
 // Calculated values for a formula are stored as an array of numbers (one for each
 // frame)
-type FormulaValues = Array<number>;
+export type FormulaValues = Array<number>;
 
 export type ShapeValues = RectProperties<FormulaValues> | EllipseProperties<FormulaValues>;
 

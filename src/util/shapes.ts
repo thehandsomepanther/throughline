@@ -2,18 +2,18 @@ import { toNumber, range } from 'lodash';
 import { Using } from '../types/formulas';
 import { shapeTypeToProperties } from '../types/shapes';
 import { Shape } from '../types/shapes';
-import { Property } from '../types/formulas';
+import { Formula } from '../types/formulas';
 
 export const evalFunctionProp = (
   fn: string,
-  frames: number,
+  frames: number
 ): Promise<Array<number>> => {
   let worker: Worker | undefined = new Worker('worker.js');
 
   return new Promise(
     (
       resolve: (val: Array<number>) => void,
-      reject: (reason: Error) => void,
+      reject: (reason: Error) => void
     ) => {
       if (worker) {
         const timeout = setTimeout(() => {
@@ -26,8 +26,8 @@ export const evalFunctionProp = (
 
         worker.postMessage([
           `(function(){return ${JSON.stringify(
-            range(frames),
-          )}.map(function(t){${fn}})})()`,
+            range(frames)
+          )}.map(function(t){${fn}})})()`
         ]);
 
         worker.onmessage = (e) => {
@@ -37,8 +37,8 @@ export const evalFunctionProp = (
             if (Number.isNaN(toNumber(value))) {
               reject(
                 new Error(
-                  'Expression evaluated to something other than an number',
-                ),
+                  'Expression evaluated to something other than an number'
+                )
               );
             }
           });
@@ -50,20 +50,20 @@ export const evalFunctionProp = (
           reject(new Error(e.message));
         };
       }
-    },
+    }
   );
 };
 
 export const evalConstProp = (
   value: string,
-  frames: number,
+  frames: number
 ): Promise<Array<number>> => {
   let worker: Worker | undefined = new Worker('worker.js');
 
   return new Promise(
     (
       resolve: (val: Array<number>) => void,
-      reject: (reason: Error) => void,
+      reject: (reason: Error) => void
     ) => {
       if (worker) {
         const timeout = setTimeout(() => {
@@ -95,13 +95,13 @@ export const evalConstProp = (
           reject(new Error(e.message));
         };
       }
-    },
+    }
   );
 };
 
-export const calcPropValues = (
-  prop: Property,
-  frames: number,
+export const calcFormulaValues = (
+  prop: Formula,
+  frames: number
 ): Promise<Array<number>> => {
   switch (prop.using) {
     case Using.Constant:
@@ -126,29 +126,29 @@ export const calcPropValues = (
 export const calcShapeValues = (
   shape: Shape,
   frames: number,
-  handleCalcPropError: (prop: string) => void,
+  handleCalcPropError: (prop: string) => void
 ): Promise<{ [key: string]: Array<number> }> =>
   new Promise(
     (
       resolve: (val: { [key: string]: Array<number> }) => void,
-      reject: (reason: Error) => void,
+      reject: (reason: Error) => void
     ) => {
       const propsKeys = shapeTypeToProperties[shape.type];
 
       // TODO: because calcShapeValues only gets called on init (and all subsequent
-      // updates are handled using calcPropValues), this error handling doesn't
+      // updates are handled using calcFormulaValues), this error handling doesn't
       // actually render any props in the props editor (and also no error messages)
       // if there's an error in one of them. need to figure out a better way to handle that
       Promise.all(
         propsKeys.map(
           (prop: string): Promise<Array<number> | undefined> =>
-            calcPropValues(shape.properties[prop], frames).catch(
+            calcFormulaValues(shape.properties[prop], frames).catch(
               (): Promise<null> => {
                 handleCalcPropError(prop);
                 return Promise.resolve(null);
-              },
-            ),
-        ),
+              }
+            )
+        )
       ).then((values: Array<Array<number> | undefined>) => {
         let shouldResolve = true;
         for (let i = 0; i < values.length; i += 1) {
@@ -168,17 +168,17 @@ export const calcShapeValues = (
               (
                 acc: { [key: string]: Array<number> },
                 curr: Array<number>,
-                i: number,
+                i: number
               ): { [key: string]: Array<number> } => ({
                 ...acc,
-                [propsKeys[i]]: curr,
+                [propsKeys[i]]: curr
               }),
-              {},
-            ),
+              {}
+            )
           );
         } else {
           reject(new Error('Some shapes have invalid props'));
         }
       });
-    },
+    }
   );
