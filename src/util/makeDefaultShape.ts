@@ -4,7 +4,7 @@ import {
   Shape,
   ShapeProperties,
 } from '../types/shapes';
-import { Using, Property } from '../types/properties';
+import { Using, Property } from '../types/formulas';
 
 const defaultPropertyValues = {
   [ShapeType.Rect]: {

@@ -12,5 +12,5 @@ export type Repetition = {
 export type Repeater = Array<Repetition>;
 
 export type RepeatersState = {
-  [key: string]: Repeater,
+  [shapeID: string]: Repeater,
 };

@@ -7,15 +7,15 @@ import { Action } from '../actions';
 
 const initialState: EditorState = {
   activeShape: orderInitialState[0],
-  shouldRedrawCanvases: false,
+  shouldRedrawFrames: false,
   erroneousProps: {},
   numFrames: 60,
-  activeFrame: 0,
+  activeFrame: 0
 };
 
 export default (
   state: EditorState = initialState,
-  action: Action,
+  action: Action
 ): EditorState => {
   let newState;
 
@@ -30,17 +30,17 @@ export default (
     case RepeatersAction.UpdateRepeater:
       return {
         ...state,
-        shouldRedrawCanvases: true,
+        shouldRedrawFrames: true
       };
     case EditorAction.ChangeActiveShape:
       return {
         ...state,
-        activeShape: action.shape,
+        activeShape: action.shape
       };
     case EditorAction.ResetRedrawCanvases:
       return {
         ...state,
-        shouldRedrawCanvases: false,
+        shouldRedrawFrames: false
       };
     case EditorAction.AddErroneousProp:
       return {
@@ -49,9 +49,9 @@ export default (
           ...state.erroneousProps,
           [action.shape]: {
             ...(state.erroneousProps[action.shape] || {}),
-            [action.prop]: true,
-          },
-        },
+            [action.prop]: true
+          }
+        }
       };
     case EditorAction.RemoveErroneousProp:
       newState = { ...state };
@@ -73,12 +73,12 @@ export default (
     case EditorAction.ResetErroneousProp:
       return {
         ...state,
-        erroneousProps: {},
+        erroneousProps: {}
       };
     case EditorAction.ChangeActiveFrame:
       return {
         ...state,
-        activeFrame: action.frame,
+        activeFrame: action.frame
       };
     default:
       return state;

@@ -1,38 +1,20 @@
-import { PropertyValues } from './properties';
-import { ShapeType } from './shapes';
+import { RectProperties, EllipseProperties } from './shapes';
 
 export enum ShapeValuesAction {
   ResetValues = 'SHAPE_VALUES_RESET_VALUES',
   SetValues = 'SHAPE_VALUES_SET_VALUES',
   UpdateValues = 'SHAPE_VALUES_UPDATE_VALUES',
-}
-
-interface BaseShapeValues {
-  name: string,
-  properties: {
-    posX: PropertyValues,
-    posY: PropertyValues,
-    fillR: PropertyValues,
-    fillG: PropertyValues,
-    fillB: PropertyValues,
-    width: PropertyValues,
-    height: PropertyValues,
-    rotation: PropertyValues,
-    scaleX: PropertyValues,
-    scaleY: PropertyValues,
-  },
 };
 
-export interface RectShapeValues extends BaseShapeValues {
-  type: ShapeType.Rect,
-};
-
-export interface EllipseShapeValues extends BaseShapeValues {
-  type: ShapeType.Ellipse,
-};
-
-export type ShapeValues = RectShapeValues | EllipseShapeValues;
-
+// The shapeValues branch of the state tree maps shape IDs to their corresponding
+// ShapeValues object
 export type ShapeValuesState = {
-  [key: string]: ShapeValues,
+  [shapeID: string]: ShapeValues,
 };
+
+// Calculated values for a formula are stored as an array of numbers (one for each
+// frame)
+type FormulaValues = Array<number>;
+
+export type ShapeValues = RectProperties<FormulaValues> | EllipseProperties<FormulaValues>;
+

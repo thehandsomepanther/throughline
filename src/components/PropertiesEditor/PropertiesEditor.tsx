@@ -11,7 +11,7 @@ import {
   InvalidPropNotification,
 } from './styles';
 import { shapeTypeToProperties } from '../../types/shapes';
-import { Using, ConstValue, FunctionValue } from '../../types/properties';
+import { Using, ConstValue, FunctionValue } from '../../types/formulas';
 import { ShapesState, Shape } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
 import { ShapeValuesState, ShapeValues } from '../../types/shapeValues';

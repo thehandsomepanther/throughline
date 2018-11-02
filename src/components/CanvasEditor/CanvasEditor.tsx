@@ -52,7 +52,7 @@ export default class CanvasEditor extends React.Component<
     const { repeaters, editor } = nextProps;
 
     if (
-      nextProps.editor.shouldRedrawCanvases &&
+      nextProps.editor.shouldRedrawFrames &&
       Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0 &&
       this.dummyCanvasEl
     ) {

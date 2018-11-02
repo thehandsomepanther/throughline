@@ -1,6 +1,6 @@
 import { uniqueId } from 'lodash';
 import { ShapesAction, ShapeType, Shape } from '../types/shapes';
-import { Using } from '../types/properties';
+import { Using } from '../types/formulas';
 import makeDefaultShape from '../util/makeDefaultShape';
 
 export type UpdateUsingAction = {

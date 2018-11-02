@@ -8,11 +8,9 @@ export type ConstValue = number
 export type FunctionValue = string
 export type CustomValue = Array<number>
 
-export type Property = {
+export type Formula = {
   using: Using,
   const?: ConstValue,
   custom?: CustomValue,
   fn?: FunctionValue,
 };
-
-export type PropertyValues = Array<number>;
