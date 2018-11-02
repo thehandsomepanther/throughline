@@ -19,11 +19,11 @@ export enum EditorAction {
 // - numFrames: The number of frames to draw.
 // - activeFrame: The index of the current frame being displayed.
 export interface EditorState {
+  activeFrame: number;
   activeShape?: string;
-  shouldRedrawFrames: boolean;
   erroneousProps: {
     [shapeID: string]: Partial<RectProperties<true>> | Partial<EllipseProperties<true>>,
   };
   numFrames: number;
-  activeFrame: number;
+  shouldRedrawFrames: boolean;
 };

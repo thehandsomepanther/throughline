@@ -10,7 +10,7 @@ const percentile = (min: number, max: number, val: number): number =>
   (val - min) / (max - min);
 
 type PropertiesGraphProps = {
-  values: Array<number>,
+  values: number[],
   activeFrame: number,
   shapeID: string,
   shapeProperty: string,
@@ -22,8 +22,8 @@ type PropertiesGraphState = {
 };
 
 export default class PropertiesGraph extends React.Component<
-  PropertiesGraphProps,
-  PropertiesGraphState
+PropertiesGraphProps,
+PropertiesGraphState
 > {
   constructor(props: PropertiesGraphProps) {
     super(props);
@@ -32,14 +32,19 @@ export default class PropertiesGraph extends React.Component<
     };
   }
 
-  componentDidMount() {
+  private space: any;
+  private form: any;
+  private ptsCanvas: HTMLCanvasElement;
+  private renderChart: () => void;
+
+  public componentDidMount() {
     if (!this.ptsCanvas) {
       return;
     }
     this.createChart();
   }
 
-  componentDidUpdate() {
+  public componentDidUpdate() {
     this.space.playOnce(0);
   }
 
@@ -47,7 +52,7 @@ export default class PropertiesGraph extends React.Component<
     return this.space.size.x / (this.props.values.length + 1);
   }
 
-  getSpacePointFromGraphPoint = (x: number, y: number): Array<number> => {
+  private getSpacePointFromGraphPoint = (x: number, y: number): number[] => {
     const { values } = this.props;
     const maxValue = Math.max(...values) + MARGIN_VERTICAL;
     const minValue = Math.min(...values) - MARGIN_VERTICAL;
@@ -58,7 +63,7 @@ export default class PropertiesGraph extends React.Component<
     ];
   };
 
-  getGraphPointFromSpacePoint = (x: number, y: number): Array<number> => {
+  private getGraphPointFromSpacePoint = (x: number, y: number): number[] => {
     const { values } = this.props;
 
     const p = 1 - y / this.space.size.y;
@@ -68,14 +73,14 @@ export default class PropertiesGraph extends React.Component<
     return [(x + 1) * this.interval, (maxValue - minValue) * p + minValue];
   };
 
-  getGraphValAtSpaceX = (x: number): Array<number> => {
+  private getGraphValAtSpaceX = (x: number): number[] => {
     const { values } = this.props;
     const i = Math.floor(x / this.interval - 1);
 
     return [i, values[i]];
   };
 
-  createChart = () => {
+  private createChart = () => {
     if (!this.ptsCanvas) {
       return;
     }
@@ -197,7 +202,7 @@ export default class PropertiesGraph extends React.Component<
               values[frame] = graphY;
               // TODO: shapeTypeToProperties needs better typing, or else we'll have
               // to keep patching type mischecks like this one
-              dispatch(updateShapeValues(shapeID, shapeProperty, values));
+              dispatch(updateShapeValues(shapeID, shapeProperty as any, values));
             }
             break;
           default:
@@ -218,12 +223,8 @@ export default class PropertiesGraph extends React.Component<
     this.space.playOnce(0);
   };
 
-  space: any;
-  form: any;
-  ptsCanvas: HTMLCanvasElement;
-  renderChart: () => void;
 
-  render() {
+  public render() {
     return (
       <div>
         <canvas

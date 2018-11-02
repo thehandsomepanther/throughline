@@ -5,11 +5,12 @@ import CanvasView from '../CanvasView';
 import RightSidebar from '../RightSidebar';
 import { calcShapeValues } from '../../util/shapes';
 import { OrderState } from '../../types/order';
-import { ShapesState, ShapeType } from '../../types/shapes';
+import { ShapesState } from '../../types/shapes';
 import { EditorState } from '../../types/editor';
 
 import { HomeDiv } from './styles';
 import { Dispatch } from '../../actions';
+import { setShapeValues } from '../../actions/shapes';
 
 interface HomeProps {
   order: OrderState;
@@ -24,51 +25,21 @@ export default class Home extends React.Component<HomeProps> {
     this.initShapeValues();
   }
 
-  initShapeValues = () => {
+  private initShapeValues = () => {
     const { order, shapes, editor } = this.props;
-
-    Promise.all(
-      order.map(
-        (
-          key: string
-        ): Promise<{
-          [key: string]: Array<number>
-        }> => calcShapeValues(shapes[key], editor.numFrames, () => {})
-      )
-    )
-      .then((shapePropValues: Array<{ [key: string]: Array<number> }>) => {
-        const newShapeValues = shapePropValues.reduce(
-          (
-            acc: {
-              [key: string]: {
-                type: ShapeType,
-                properties: { [key: string]: Array<number> }
-              }
-            },
-            curr: { [key: string]: Array<number> },
-            i: number
-          ): {
-            [key: string]: {
-              type: ShapeType,
-              properties: { [key: string]: Array<number> }
-            }
-          } => ({
-            ...acc,
-            [order[i]]: {
-              type: shapes[order[i]].type,
-              properties: curr
-            }
-          }),
-          {}
-        );
-
-        // TODO: Figure out what to do here
-        // this.props.dispatch(resetShapeValues(newShapeValues));
-      })
-      .catch(() => {});
+    const promises = order.map(
+      (shapeID: string): Promise<{ [key: string]: number[] }> =>
+        calcShapeValues(shapes[shapeID], editor.numFrames, () => {})
+    );
+    Promise.all(promises)
+      .then((shapePropValues: Array<{ [key: string]: number[] }>) => {
+        for (let i = 0; i < shapePropValues.length; i++) {
+          this.props.dispatch(setShapeValues(order[i], shapePropValues[i]));
+        }
+      });
   };
 
-  render() {
+  public render() {
     return (
       <HomeDiv>
         <LeftSidebar />

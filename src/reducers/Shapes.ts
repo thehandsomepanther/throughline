@@ -31,7 +31,7 @@ export default (
     case ShapesAction.DeleteShape:
       return pickBy(state, (_, key: string): boolean => key !== action.shapeID);
     case ShapesAction.SetValues:
-      newState[action.shapeID].values = action.values;
+      newState[action.shapeID].values = action.values as any;
       return newState;
     case ShapesAction.UpdateValues:
       newState[action.shapeID][action.prop] = action.values;

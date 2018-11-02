@@ -32,7 +32,7 @@ const ConstInput = ({
     placeholder='0'
     onChange={(e) => {
       // TODO: more rigorous checks here
-      handleUpdateConst(parseInt(e.target.value));
+      handleUpdateConst(parseInt(e.target.value, 10));
     }}
   />
 );
@@ -88,7 +88,7 @@ const ShapePropertiesView = ({
           <select
             value={shape.formulas[prop].using}
             onChange={(e) => {
-              dispatch(updateUsing(shapeID, prop, e.target.value as Using));
+              dispatch(updateUsing(shapeID, prop as any, e.target.value as Using));
             }}
           >
             <option value={Using.Constant}>Constant</option>
@@ -99,7 +99,7 @@ const ShapePropertiesView = ({
             <ConstInput
               value={getConstValue(shape, prop)}
               handleUpdateConst={(val: number) => {
-                dispatch(updateConst(shapeID, prop, val));
+                dispatch(updateConst(shapeID, prop as any, val));
               }}
             />
           )}
@@ -108,7 +108,7 @@ const ShapePropertiesView = ({
             <FunctionInput
               code={getFunctionValue(shape, prop)}
               handleUpdateFunction={(code: string) => {
-                dispatch(updateFunction(shapeID, prop, code));
+                dispatch(updateFunction(shapeID, prop as any, code));
               }}
             />
           )}

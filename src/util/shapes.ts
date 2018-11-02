@@ -7,14 +7,11 @@ import { Formula } from '../types/formulas';
 export const evalFunctionProp = (
   fn: string,
   frames: number
-): Promise<Array<number>> => {
-  let worker: Worker | undefined = new Worker('worker.js');
+): Promise<number[]> => {
+  let worker: Worker | null = new Worker('worker.js');
 
   return new Promise(
-    (
-      resolve: (val: Array<number>) => void,
-      reject: (reason: Error) => void
-    ) => {
+    (resolve: (val: number[]) => void, reject: (reason: Error) => void) => {
       if (worker) {
         const timeout = setTimeout(() => {
           if (worker) {
@@ -57,14 +54,11 @@ export const evalFunctionProp = (
 export const evalConstProp = (
   value: string,
   frames: number
-): Promise<Array<number>> => {
-  let worker: Worker | undefined = new Worker('worker.js');
+): Promise<number[]> => {
+  let worker: Worker | null = new Worker('worker.js');
 
   return new Promise(
-    (
-      resolve: (val: Array<number>) => void,
-      reject: (reason: Error) => void
-    ) => {
+    (resolve: (val: number[]) => void, reject: (reason: Error) => void) => {
       if (worker) {
         const timeout = setTimeout(() => {
           if (worker) {
@@ -102,7 +96,7 @@ export const evalConstProp = (
 export const calcFormulaValues = (
   prop: Formula,
   frames: number
-): Promise<Array<number>> => {
+): Promise<number[]> => {
   switch (prop.using) {
     case Using.Constant:
       if (prop.const === null || prop.const === undefined) {
@@ -123,14 +117,15 @@ export const calcFormulaValues = (
   }
 };
 
+// Given a shape, calculates the values for its provided formulas at a given frame.
 export const calcShapeValues = (
   shape: Shape,
   frames: number,
   handleCalcPropError: (prop: string) => void
-): Promise<{ [key: string]: Array<number> }> =>
+): Promise<{ [key: string]: number[] }> =>
   new Promise(
     (
-      resolve: (val: { [key: string]: Array<number> }) => void,
+      resolve: (val: { [key: string]: number[] }) => void,
       reject: (reason: Error) => void
     ) => {
       const propsKeys = shapeTypeToProperties[shape.type];
@@ -141,18 +136,18 @@ export const calcShapeValues = (
       // if there's an error in one of them. need to figure out a better way to handle that
       Promise.all(
         propsKeys.map(
-          (prop: string): Promise<Array<number> | undefined> =>
-            calcFormulaValues(shape.properties[prop], frames).catch(
+          (prop: string): Promise<number[] | null> =>
+            calcFormulaValues(shape.formulas[prop], frames).catch(
               (): Promise<null> => {
                 handleCalcPropError(prop);
                 return Promise.resolve(null);
               }
             )
         )
-      ).then((values: Array<Array<number> | undefined>) => {
+      ).then((values: Array<number[] | null>) => {
         let shouldResolve = true;
-        for (let i = 0; i < values.length; i += 1) {
-          if (values[i] === null) {
+        for (const value of values) {
+          if (value == null) {
             shouldResolve = false;
             break;
           }
@@ -161,15 +156,14 @@ export const calcShapeValues = (
         if (shouldResolve) {
           resolve(
             // we know that all the values in the resolved object will be of type
-            // Array<number> because of the for loop above, but Flow isn't smart
+            // number[] because of the for loop above, but Flow isn't smart
             // enough to know that
-            // $FlowFixMe
             values.reduce(
               (
-                acc: { [key: string]: Array<number> },
-                curr: Array<number>,
+                acc: { [key: string]: number[] },
+                curr: number[],
                 i: number
-              ): { [key: string]: Array<number> } => ({
+              ): { [key: string]: number[] } => ({
                 ...acc,
                 [propsKeys[i]]: curr
               }),

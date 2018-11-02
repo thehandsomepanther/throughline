@@ -3,8 +3,11 @@ import {
   shapeTypeToProperties,
   Shape,
   ShapeProperties,
+  EllipseProperties,
+  FormulaValues,
+  RectProperties,
 } from '../types/shapes';
-import { Using, Property } from '../types/formulas';
+import { Using, Formula } from '../types/formulas';
 
 const defaultPropertyValues = {
   [ShapeType.Rect]: {
@@ -30,27 +33,41 @@ const defaultPropertyValues = {
 // TODO: typescript is (understandably) not able to type this properly because it relies
 // on the value of shapeTypeToProperties at runtime. there is probably a better way to do
 // this
-const shapePropsObject = (shape: ShapeType): ShapeProperties =>
+const shapePropsObject = (shape: ShapeType): ShapeProperties<Formula> =>
   shapeTypeToProperties[shape].reduce(
     (
-      acc: { [key: string]: Property },
+      acc: { [key: string]: Formula },
       property: string,
-    ): { [key: string]: Property } => ({
+    ): { [key: string]: Formula } => ({
       ...acc,
       [property]: {
         using: Using.Constant,
         const: defaultPropertyValues[shape]
           ? defaultPropertyValues[shape][property] || 0
           : 0,
-        custom: null, // TODO: figure out a good way to initialize this
+        custom: [], // TODO: figure out a good way to initialize this
         fn: 'return 0;',
       },
     }),
     {},
-  ) as ShapeProperties;
+  ) as ShapeProperties<Formula>;
 
-export default (type: ShapeType, name: string): Shape => ({
-  type,
-  name,
-  properties: shapePropsObject(type),
-});
+export default (type: ShapeType, name: string): Shape => {
+  if (type === ShapeType.Ellipse) {
+    return {
+      type: ShapeType.Ellipse,
+      name,
+      formulas: shapePropsObject(type) as EllipseProperties<Formula>,
+      values: {} as EllipseProperties<FormulaValues>
+    }
+  } else if (type === ShapeType.Rect) {
+    return {
+      type: ShapeType.Rect,
+      name,
+      formulas: shapePropsObject(type) as RectProperties<Formula>,
+      values: {} as RectProperties<FormulaValues>
+    }
+  }
+
+  throw(new Error(''))
+}

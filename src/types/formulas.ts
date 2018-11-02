@@ -6,7 +6,7 @@ export enum Using {
 
 export type ConstValue = number
 export type FunctionValue = string
-export type CustomValue = Array<number>
+export type CustomValue = number[]
 
 export type Formula = {
   using: Using,

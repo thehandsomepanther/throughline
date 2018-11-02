@@ -86,14 +86,14 @@ export type Shape = RectShape | EllipseShape;
 
 // Calculated values for a formula are stored as an array of numbers (one for each
 // frame)
-export type FormulaValues = Array<number>;
+export type FormulaValues = number[];
 
 // This interface only exists to be extended by actual shapes which can be
 // rendered.
 interface VirtualShape {
   type: ShapeType,
   name: string,
-  children?: Array<string>,
+  children?: string[],
   formulas: ShapeProperties<Formula>,
   values: ShapeProperties<FormulaValues>,
 };

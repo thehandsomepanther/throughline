@@ -15,9 +15,9 @@ const updatePropValues = (
   editor: EditorState
 ) => {
   calcFormulaValues(shapes[shape].formulas[prop], editor.numFrames)
-    .then((values: Array<number>) => {
+    .then((values: number[]) => {
       dispatch(removeErroneousProp(shape, prop));
-      dispatch(updateShapeValues(shape, prop, values));
+      dispatch(updateShapeValues(shape, prop as any, values));
     })
     .catch(() => {
       dispatch(addErroneousProp(shape, prop));
@@ -32,7 +32,7 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
   switch (action.type) {
     case ShapesAction.NewShape:
       calcShapeValues(action.shape, editor.numFrames, () => {}).then(
-        (values: { [key: string]: Array<number> }) => {
+        (values: { [key: string]: number[] }) => {
           store.dispatch(setShapeValues(action.shapeID, values));
         }
       );

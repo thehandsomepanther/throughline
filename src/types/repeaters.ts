@@ -9,7 +9,7 @@ export type Repetition = {
   variable: string,
 };
 
-export type Repeater = Array<Repetition>;
+export type Repeater = Repetition[];
 
 export type RepeatersState = {
   [shapeID: string]: Repeater,

@@ -37,6 +37,10 @@ export default class CanvasEditor extends React.Component<
   CanvasEditorProps,
   CanvasEditorState
 > {
+  private frames: ImageData[];
+  private canvasEl: HTMLCanvasElement | null = null;
+  private dummyCanvasEl: HTMLCanvasElement | null = null;
+
   constructor(props: CanvasEditorProps) {
     super(props);
     this.frames = [];
@@ -46,7 +50,7 @@ export default class CanvasEditor extends React.Component<
     };
   }
 
-  componentWillReceiveProps(nextProps: CanvasEditorProps) {
+  public componentWillReceiveProps(nextProps: CanvasEditorProps) {
     const { repeaters, editor, shapes, order } = nextProps;
 
     if (
@@ -77,6 +81,7 @@ export default class CanvasEditor extends React.Component<
     }
   }
 
+
   private setActiveCanvas = (n: number) => {
     const { editor, dispatch } = this.props;
     dispatch(changeActiveFrame(n % editor.numFrames));
@@ -103,9 +108,6 @@ export default class CanvasEditor extends React.Component<
     }
   };
 
-  frames: Array<ImageData>;
-  canvasEl: HTMLCanvasElement | null = null;
-  dummyCanvasEl: HTMLCanvasElement | null = null;
 
   public render() {
     const { editor } = this.props;
@@ -127,7 +129,6 @@ export default class CanvasEditor extends React.Component<
           onMouseOver={() => {
             this.setActiveCanvas(i);
           }}
-          onFocus={() => {}}
         >
           {(i === 0 ||
             i === editor.activeFrame ||
@@ -164,7 +165,6 @@ export default class CanvasEditor extends React.Component<
           onMouseLeave={() => {
             this.setActiveCanvas(lastActiveCanvas);
           }}
-          onFocus={() => {}}
         >
           {tickMarkers}
         </TickMarkersContainer>

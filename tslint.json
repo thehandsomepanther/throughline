@@ -4,7 +4,19 @@
     "exclude": [
       "config/**/*.js",
       "node_modules/**/*.ts",
-      "coverage/lcov-report/*.js"
+      "coverage/lcov-report/*.js",
+      "public/worker.js",
+      "src/registerServiceWorker.js"
     ]
+  },
+  "rules": {
+    "interface-name" : [true, "never-prefix"],
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "interface-over-type-literal": false,
+    "member-ordering": false,
+    "jsx-no-lambda": false,
+    "no-empty": false,
+    "no-console": false
   }
 }
