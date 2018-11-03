@@ -1,5 +1,5 @@
 import styled from 'react-emotion';
-import { COLOR_NEAR_WHITE, COLOR_NEAR_BLACK } from '../../styles';
+import { COLOR_NEAR_BLACK, COLOR_NEAR_WHITE } from '../../styles';
 
 export const CanvasEditorContainer = styled('div')`
   padding-top: 1rem;
@@ -27,10 +27,10 @@ export const TickMarkersContainer = styled('div')`
   margin-top: 1rem;
 `;
 
-type TickMarkerProps = {
-  index: number,
-  activeCanvas: number
-};
+interface TickMarkerProps {
+  index: number;
+  activeCanvas: number;
+}
 export const TickMarker = styled('div')`
   position: relative;
   width: 2px;

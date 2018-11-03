@@ -1,11 +1,11 @@
 import { Action } from '../actions';
-import { ShapesAction, ShapesState } from '../types/shapes';
-import { EditorState } from '../types/editor';
-import { addErroneousProp, removeErroneousProp } from '../actions/editor';
-import { updateShapeValues, setShapeValues } from '../actions/shapes';
-import { calcShapeValues, calcFormulaValues } from '../util/shapes';
 import { Dispatch } from '../actions';
+import { addErroneousProp, removeErroneousProp } from '../actions/editor';
+import { setShapeValues, updateShapeValues } from '../actions/shapes';
+import { EditorState } from '../types/editor';
+import { ShapesAction, ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
+import { calcFormulaValues, calcShapeValues } from '../util/shapes';
 
 const updatePropValues = (
   dispatch: Dispatch,

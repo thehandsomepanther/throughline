@@ -5,12 +5,12 @@ import { Provider } from 'react-redux';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 
-import configureStore from './store';
 import Home from './containers/Home';
 import registerServiceWorker from './registerServiceWorker';
+import configureStore from './store';
 
-import './styles/css/reset.css';
 import './styles/css/fonts/stylesheet.css';
+import './styles/css/reset.css';
 
 const root = document.getElementById('root');
 
@@ -19,7 +19,7 @@ if (root) {
     <Provider store={configureStore()}>
       <Home />
     </Provider>,
-    root,
+    root
   );
 }
 

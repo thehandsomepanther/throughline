@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { shapesMiddleware } from './middleware/Shapes';
 import rootReducer from './reducers';
 

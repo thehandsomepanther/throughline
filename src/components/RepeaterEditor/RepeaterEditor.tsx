@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Repeater, Repetition } from '../../types/repeaters';
 import { Dispatch } from '../../actions';
-import { updateRepeater, deleteRepetition } from '../../actions/repeaters';
+import { deleteRepetition, updateRepeater } from '../../actions/repeaters';
+import { Repeater, Repetition } from '../../types/repeaters';
 
-type RepeaterEditorProps = {
-  repeater: Repeater,
-  dispatch: Dispatch,
-  key: string,
-};
+interface RepeaterEditorProps {
+  repeater: Repeater;
+  dispatch: Dispatch;
+  key: string;
+}
 
 export default class RepeaterEditor extends React.Component<RepeaterEditorProps> {
   public render() {

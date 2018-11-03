@@ -1,20 +1,11 @@
 import {
-  UpdateConstAction,
-  UpdateUsingAction,
-  UpdateFunctionAction,
-  AddNewShapeAction,
-  DeleteShapeAction,
-  SetShapeValuesAction,
-  UpdateShapeValuesAction
-} from './shapes';
-import {
-  RedrawCanvasesAction,
-  ResetRedrawCanvasesAction,
-  ChangeActiveShapeAction,
   AddErroneousPropAction,
+  ChangeActiveFrameAction,
+  ChangeActiveShapeAction,
+  RedrawCanvasesAction,
   RemoveErroneousPropAction,
   ResetErroneousPropsAction,
-  ChangeActiveFrameAction
+  ResetRedrawCanvasesAction
 } from './editor';
 import { UpdateOrderAction } from './order';
 import {
@@ -22,6 +13,15 @@ import {
   DeleteRepetitionAction,
   UpdateRepeaterAction
 } from './repeaters';
+import {
+  AddNewShapeAction,
+  DeleteShapeAction,
+  SetShapeValuesAction,
+  UpdateConstAction,
+  UpdateFunctionAction,
+  UpdateShapeValuesAction,
+  UpdateUsingAction
+} from './shapes';
 
 export type Action =
   | UpdateConstAction

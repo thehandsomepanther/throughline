@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-import LeftSidebar from '../LeftSidebar';
-import CanvasView from '../CanvasView';
-import RightSidebar from '../RightSidebar';
-import { calcShapeValues } from '../../util/shapes';
+import { EditorState } from '../../types/editor';
 import { OrderState } from '../../types/order';
 import { ShapesState } from '../../types/shapes';
-import { EditorState } from '../../types/editor';
+import { calcShapeValues } from '../../util/shapes';
+import CanvasView from '../CanvasView';
+import LeftSidebar from '../LeftSidebar';
+import RightSidebar from '../RightSidebar';
 
-import { HomeDiv } from './styles';
 import { Dispatch } from '../../actions';
 import { setShapeValues } from '../../actions/shapes';
+import { HomeDiv } from './styles';
 
 interface HomeProps {
   order: OrderState;
@@ -23,6 +23,16 @@ export default class Home extends React.Component<HomeProps> {
   constructor(props: HomeProps) {
     super(props);
     this.initShapeValues();
+  }
+
+  public render() {
+    return (
+      <HomeDiv>
+        <LeftSidebar />
+        <CanvasView />
+        <RightSidebar />
+      </HomeDiv>
+    );
   }
 
   private initShapeValues = () => {
@@ -38,14 +48,4 @@ export default class Home extends React.Component<HomeProps> {
         }
       });
   };
-
-  public render() {
-    return (
-      <HomeDiv>
-        <LeftSidebar />
-        <CanvasView />
-        <RightSidebar />
-      </HomeDiv>
-    );
-  }
 }

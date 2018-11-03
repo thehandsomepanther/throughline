@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import shapes from './Shapes';
-import order from './Order';
 import editor from './Editor';
+import order from './Order';
 import repeaters from './Repeaters';
+import shapes from './Shapes';
 
 export default combineReducers({
   shapes,

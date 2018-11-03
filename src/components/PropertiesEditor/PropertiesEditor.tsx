@@ -1,21 +1,21 @@
 import * as React from 'react';
 
+import { Dispatch } from 'src/actions';
+import { updateConst, updateFunction, updateUsing } from '../../actions/shapes';
+import { EditorState } from '../../types/editor';
+import { ConstValue, FunctionValue, Using } from '../../types/formulas';
+import { EllipseProperties, RectProperties, shapeTypeToProperties } from '../../types/shapes';
+import { Shape, ShapesState } from '../../types/shapes';
 import PropertiesGraph from './PropertiesGraph';
 import {
+  ConstantPropertyInput,
+  FunctionPropertyInput,
+  InvalidPropNotification,
   PropertiesEditorContainer,
-  ShapeInfo,
   PropertyInfoContainer,
   PropertyName,
-  FunctionPropertyInput,
-  ConstantPropertyInput,
-  InvalidPropNotification,
+  ShapeInfo,
 } from './styles';
-import { shapeTypeToProperties, RectProperties, EllipseProperties } from '../../types/shapes';
-import { Using, ConstValue, FunctionValue } from '../../types/formulas';
-import { ShapesState, Shape } from '../../types/shapes';
-import { EditorState } from '../../types/editor';
-import { updateUsing, updateConst, updateFunction } from '../../actions/shapes';
-import { Dispatch } from 'src/actions';
 
 const getConstValue = (shape: Shape, prop: string): ConstValue =>  shape.formulas[prop].const
 const getFunctionValue = (shape: Shape, prop: string): FunctionValue => shape.formulas[prop].fn

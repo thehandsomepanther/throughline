@@ -1,14 +1,14 @@
 import { uniqueId } from 'lodash';
-import { ShapesAction, ShapeType, Shape, FormulaValues, RectProperties, EllipseProperties } from '../types/shapes';
 import { Using } from '../types/formulas';
+import { EllipseProperties, FormulaValues, RectProperties, Shape, ShapesAction, ShapeType } from '../types/shapes';
 import makeDefaultShape from '../util/makeDefaultShape';
 
-export type UpdateUsingAction = {
-  type: ShapesAction.UpdateUsing,
-  shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
-  using: Using
-};
+export interface UpdateUsingAction {
+  type: ShapesAction.UpdateUsing;
+  shapeID: string;
+  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  using: Using;
+}
 export const updateUsing = (
   shapeID: string,
   prop: keyof RectProperties<any> & EllipseProperties<any>,
@@ -20,12 +20,12 @@ export const updateUsing = (
   using
 });
 
-export type UpdateConstAction = {
-  type: ShapesAction.UpdateConst,
-  shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
-  value: number
-};
+export interface UpdateConstAction {
+  type: ShapesAction.UpdateConst;
+  shapeID: string;
+  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  value: number;
+}
 export const updateConst = (
   shapeID: string,
   prop: keyof RectProperties<any> & EllipseProperties<any>,
@@ -37,12 +37,12 @@ export const updateConst = (
   value
 });
 
-export type UpdateFunctionAction = {
-  type: ShapesAction.UpdateFunction,
-  shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
-  value: string
-};
+export interface UpdateFunctionAction {
+  type: ShapesAction.UpdateFunction;
+  shapeID: string;
+  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  value: string;
+}
 export const updateFunction = (
   shapeID: string,
   prop: keyof RectProperties<any> & EllipseProperties<any>,
@@ -54,11 +54,11 @@ export const updateFunction = (
   value
 });
 
-export type AddNewShapeAction = {
-  type: ShapesAction.NewShape,
-  shape: Shape,
-  shapeID: string
-};
+export interface AddNewShapeAction {
+  type: ShapesAction.NewShape;
+  shape: Shape;
+  shapeID: string;
+}
 export const addNewShape = (
   shapeType: ShapeType,
   name: string
@@ -68,10 +68,10 @@ export const addNewShape = (
   shapeID: uniqueId()
 });
 
-export type DeleteShapeAction = {
-  type: ShapesAction.DeleteShape,
-  shapeID: string
-};
+export interface DeleteShapeAction {
+  type: ShapesAction.DeleteShape;
+  shapeID: string;
+}
 export const deleteShape = (shapeID: string): DeleteShapeAction => ({
   type: ShapesAction.DeleteShape,
   shapeID
@@ -79,11 +79,11 @@ export const deleteShape = (shapeID: string): DeleteShapeAction => ({
 
 // TODO: This typing is as generous as possible until I figure out a better way to
 // type these.
-export type SetShapeValuesAction = {
-  type: ShapesAction.SetValues,
-  shapeID: string,
-  values: Partial<RectProperties<FormulaValues> & EllipseProperties<FormulaValues>>
-};
+export interface SetShapeValuesAction {
+  type: ShapesAction.SetValues;
+  shapeID: string;
+  values: Partial<RectProperties<FormulaValues> & EllipseProperties<FormulaValues>>;
+}
 export const setShapeValues = (
   shapeID: string,
   values: Partial<RectProperties<FormulaValues> & EllipseProperties<FormulaValues>>
@@ -93,12 +93,12 @@ export const setShapeValues = (
   values,
 });
 
-export type UpdateShapeValuesAction = {
-  type: ShapesAction.UpdateValues,
-  shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
-  values: FormulaValues
-};
+export interface UpdateShapeValuesAction {
+  type: ShapesAction.UpdateValues;
+  shapeID: string;
+  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  values: FormulaValues;
+}
 export const updateShapeValues = (
   shapeID: string,
   prop: keyof RectProperties<any> & EllipseProperties<any>,

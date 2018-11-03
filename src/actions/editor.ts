@@ -4,14 +4,14 @@ export interface RedrawCanvasesAction {
   type: EditorAction.RedrawCanvases;
 }
 export const redrawCanvases = (): RedrawCanvasesAction => ({
-  type: EditorAction.RedrawCanvases,
+  type: EditorAction.RedrawCanvases
 });
 
 export interface ResetRedrawCanvasesAction {
   type: EditorAction.ResetRedrawCanvases;
 }
 export const resetRedrawCanvases = (): ResetRedrawCanvasesAction => ({
-  type: EditorAction.ResetRedrawCanvases,
+  type: EditorAction.ResetRedrawCanvases
 });
 
 export interface ChangeActiveShapeAction {
@@ -20,7 +20,7 @@ export interface ChangeActiveShapeAction {
 }
 export const changeActiveShape = (shape: string): ChangeActiveShapeAction => ({
   type: EditorAction.ChangeActiveShape,
-  shape,
+  shape
 });
 
 export interface AddErroneousPropAction {
@@ -30,11 +30,11 @@ export interface AddErroneousPropAction {
 }
 export const addErroneousProp = (
   shape: string,
-  prop: string,
+  prop: string
 ): AddErroneousPropAction => ({
   type: EditorAction.AddErroneousProp,
   shape,
-  prop,
+  prop
 });
 
 export interface RemoveErroneousPropAction {
@@ -44,18 +44,18 @@ export interface RemoveErroneousPropAction {
 }
 export const removeErroneousProp = (
   shape: string,
-  prop: string,
+  prop: string
 ): RemoveErroneousPropAction => ({
   type: EditorAction.RemoveErroneousProp,
   shape,
-  prop,
+  prop
 });
 
 export interface ResetErroneousPropsAction {
   type: EditorAction.ResetErroneousProp;
 }
 export const resetErroneousProps = (): ResetErroneousPropsAction => ({
-  type: EditorAction.ResetErroneousProp,
+  type: EditorAction.ResetErroneousProp
 });
 
 export interface ChangeActiveFrameAction {
@@ -64,5 +64,5 @@ export interface ChangeActiveFrameAction {
 }
 export const changeActiveFrame = (frame: number): ChangeActiveFrameAction => ({
   type: EditorAction.ChangeActiveFrame,
-  frame,
+  frame
 });

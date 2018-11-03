@@ -1,5 +1,5 @@
+import { CanvasSpace, Group, Line, Pt, Rectangle } from 'pts';
 import * as React from 'react';
-import { CanvasSpace, Pt, Rectangle, Group, Line } from 'pts';
 import { Dispatch } from '../../actions';
 import { changeActiveFrame } from '../../actions/editor';
 import { updateShapeValues } from '../../actions/shapes';
@@ -9,33 +9,37 @@ const MARGIN_VERTICAL = 40;
 const percentile = (min: number, max: number, val: number): number =>
   (val - min) / (max - min);
 
-type PropertiesGraphProps = {
-  values: number[],
-  activeFrame: number,
-  shapeID: string,
-  shapeProperty: string,
-  dispatch: Dispatch
-};
+interface PropertiesGraphProps {
+  values: number[];
+  activeFrame: number;
+  shapeID: string;
+  shapeProperty: string;
+  dispatch: Dispatch;
+}
 
-type PropertiesGraphState = {
-  lastActiveCanvas: number
-};
+interface PropertiesGraphState {
+  lastActiveCanvas: number;
+}
 
 export default class PropertiesGraph extends React.Component<
-PropertiesGraphProps,
-PropertiesGraphState
-> {
-  constructor(props: PropertiesGraphProps) {
-    super(props);
-    this.state = {
-      lastActiveCanvas: 0
-    };
+  PropertiesGraphProps,
+  PropertiesGraphState
+  > {
+
+  get interval(): number {
+    return this.space.size.x / (this.props.values.length + 1);
   }
 
   private space: any;
   private form: any;
   private ptsCanvas: HTMLCanvasElement;
   private renderChart: () => void;
+  constructor(props: PropertiesGraphProps) {
+    super(props);
+    this.state = {
+      lastActiveCanvas: 0
+    };
+  }
 
   public componentDidMount() {
     if (!this.ptsCanvas) {
@@ -48,8 +52,19 @@ PropertiesGraphState
     this.space.playOnce(0);
   }
 
-  get interval(): number {
-    return this.space.size.x / (this.props.values.length + 1);
+
+  public render() {
+    return (
+      <div>
+        <canvas
+          ref={(canvas: HTMLCanvasElement | null) => {
+            if (canvas) {
+              this.ptsCanvas = canvas;
+            }
+          }}
+        />
+      </div>
+    );
   }
 
   private getSpacePointFromGraphPoint = (x: number, y: number): number[] => {
@@ -222,19 +237,4 @@ PropertiesGraphState
     this.space.bindMouse().bindTouch();
     this.space.playOnce(0);
   };
-
-
-  public render() {
-    return (
-      <div>
-        <canvas
-          ref={(canvas: HTMLCanvasElement | null) => {
-            if (canvas) {
-              this.ptsCanvas = canvas;
-            }
-          }}
-        />
-      </div>
-    );
-  }
 }

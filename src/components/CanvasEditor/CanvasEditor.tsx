@@ -1,22 +1,22 @@
 import * as React from 'react';
+import { Dispatch } from '../../actions';
+import { changeActiveFrame, resetRedrawCanvases } from '../../actions/editor';
+import { EditorState } from '../../types/editor';
+import { OrderState } from '../../types/order';
+import { RepeatersState } from '../../types/repeaters';
+import { ShapesState } from '../../types/shapes';
+import { paintShapesAtFrame } from './painter';
 import {
+  CanvasContainer,
   CanvasEditorContainer,
   CanvasesContainer,
-  CanvasContainer,
-  TickMarkersContainer,
+  ControlsContainer,
+  DummyCanvasContainer,
+  NotificationContainer,
   TickMarker,
   TickMarkerNumber,
-  ControlsContainer,
-  NotificationContainer,
-  DummyCanvasContainer,
+  TickMarkersContainer,
 } from './styles';
-import { ShapesState } from '../../types/shapes';
-import { OrderState } from '../../types/order';
-import { EditorState } from '../../types/editor';
-import { RepeatersState } from '../../types/repeaters';
-import { Dispatch } from '../../actions';
-import { resetRedrawCanvases, changeActiveFrame } from '../../actions/editor';
-import { paintShapesAtFrame } from './painter';
 
 interface CanvasEditorProps {
   shapes: ShapesState;
@@ -88,33 +88,6 @@ export default class CanvasEditor extends React.Component<
       }
     }
   }
-
-
-  private setActiveCanvas = (n: number) => {
-    const { editor, dispatch } = this.props;
-    dispatch(changeActiveFrame(n % editor.numFrames));
-  };
-
-  private decrementActiveCanvas = () => {
-    const { editor } = this.props;
-    this.setActiveCanvas(editor.activeFrame - 1);
-  };
-
-  private incrementActiveCanvas = () => {
-    const { editor } = this.props;
-    this.setActiveCanvas(editor.activeFrame + 1);
-  };
-
-  private handleTogglePlayClick = () => {
-    const { interval } = this.state;
-    if (interval !== null) {
-      clearInterval(interval);
-      this.setState({ interval: null });
-    } else {
-      const newInterval = window.setInterval(this.incrementActiveCanvas, 16);
-      this.setState({ interval: newInterval });
-    }
-  };
 
 
   public render() {
@@ -206,4 +179,31 @@ export default class CanvasEditor extends React.Component<
       </CanvasEditorContainer>
     );
   }
+
+
+  private setActiveCanvas = (n: number) => {
+    const { editor, dispatch } = this.props;
+    dispatch(changeActiveFrame(n % editor.numFrames));
+  };
+
+  private decrementActiveCanvas = () => {
+    const { editor } = this.props;
+    this.setActiveCanvas(editor.activeFrame - 1);
+  };
+
+  private incrementActiveCanvas = () => {
+    const { editor } = this.props;
+    this.setActiveCanvas(editor.activeFrame + 1);
+  };
+
+  private handleTogglePlayClick = () => {
+    const { interval } = this.state;
+    if (interval !== null) {
+      clearInterval(interval);
+      this.setState({ interval: null });
+    } else {
+      const newInterval = window.setInterval(this.incrementActiveCanvas, 16);
+      this.setState({ interval: newInterval });
+    }
+  };
 }

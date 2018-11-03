@@ -1,10 +1,10 @@
 import styled from 'react-emotion';
 import {
-  FONT_STACK_MONOSPACE,
-  COLOR_NEAR_WHITE,
-  COLOR_NEAR_BLACK,
   COLOR_GREY,
+  COLOR_NEAR_BLACK,
+  COLOR_NEAR_WHITE,
   COLOR_YELLOW,
+  FONT_STACK_MONOSPACE,
 } from '../../styles';
 
 export const PropertiesEditorContainer = styled('div')`

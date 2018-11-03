@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 
 import Canvas from '../components/CanvasEditor';
-import { ShapesState } from '../types/shapes';
-import { OrderState } from '../types/order';
-import { Store } from '../types/store';
 import { EditorState } from '../types/editor';
+import { OrderState } from '../types/order';
 import { RepeatersState } from '../types/repeaters';
+import { ShapesState } from '../types/shapes';
+import { Store } from '../types/store';
 
 const mapStateToProps = (
   state: Store

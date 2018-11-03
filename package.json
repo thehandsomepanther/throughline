@@ -22,7 +22,7 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "format": "prettier-eslint \"src/**/*.ts*\"",
+    "format": "tslint --fix \"src/**/*.ts*\"",
     "redux": "^4.0.0"
   },
   "devDependencies": {
@@ -35,7 +35,8 @@
     "babel-eslint": "^8.2.3",
     "eslint-config-airbnb": "^16.1.0",
     "husky": "^0.14.3",
-    "prettier-eslint-cli": "^4.7.1",
+    "prettier": "^1.14.3",
+    "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.4"
   },
   "husky": {

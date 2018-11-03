@@ -8,9 +8,9 @@ export type ConstValue = number
 export type FunctionValue = string
 export type CustomValue = number[]
 
-export type Formula = {
-  using: Using,
-  const?: ConstValue,
-  custom?: CustomValue,
-  fn?: FunctionValue,
-};
+export interface Formula {
+  using: Using;
+  const?: ConstValue;
+  custom?: CustomValue;
+  fn?: FunctionValue;
+}

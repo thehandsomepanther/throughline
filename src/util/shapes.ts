@@ -1,7 +1,7 @@
-import { toNumber, range } from 'lodash';
+import { range, toNumber } from 'lodash';
 import { Using } from '../types/formulas';
-import { Shape } from '../types/shapes';
 import { Formula } from '../types/formulas';
+import { Shape } from '../types/shapes';
 
 export const evalFunctionProp = (
   fn: string,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'react-emotion';
-import OrderEditor from '../../containers/OrderEditor';
 import NewShapeEditor from '../../containers/NewShapeEditor';
+import OrderEditor from '../../containers/OrderEditor';
 
 const LeftSidebar = styled('div')`
   width: 20%;

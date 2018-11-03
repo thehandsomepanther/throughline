@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
 import PropertiesEditor from '../components/PropertiesEditor';
-import { ShapesState } from '../types/shapes';
 import { EditorState } from '../types/editor';
+import { ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
 
 const mapStateToProps = (

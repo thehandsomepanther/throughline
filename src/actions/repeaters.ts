@@ -1,44 +1,44 @@
 import { RepeatersAction } from '../types/repeaters';
 
-export type AddRepeaterAction = {
-  type: RepeatersAction.AddRepeater,
-  key: string,
-};
+export interface AddRepeaterAction {
+  type: RepeatersAction.AddRepeater;
+  key: string;
+}
 export const addRepeater = (key: string): AddRepeaterAction => ({
   type: RepeatersAction.AddRepeater,
-  key,
+  key
 });
 
-export type DeleteRepetitionAction = {
-  type: RepeatersAction.DeleteRepetition,
-  key: string,
-  index: number,
-};
+export interface DeleteRepetitionAction {
+  type: RepeatersAction.DeleteRepetition;
+  key: string;
+  index: number;
+}
 export const deleteRepetition = (
   key: string,
-  index: number,
+  index: number
 ): DeleteRepetitionAction => ({
   type: RepeatersAction.DeleteRepetition,
   key,
-  index,
+  index
 });
 
-export type UpdateRepeaterAction = {
-  type: RepeatersAction.UpdateRepeater,
-  key: string,
-  index: number,
-  times: number,
-  variable: string,
-};
+export interface UpdateRepeaterAction {
+  type: RepeatersAction.UpdateRepeater;
+  key: string;
+  index: number;
+  times: number;
+  variable: string;
+}
 export const updateRepeater = (
   key: string,
   index: number,
   times: number,
-  variable: string,
+  variable: string
 ): UpdateRepeaterAction => ({
   type: RepeatersAction.UpdateRepeater,
   key,
   index,
   times,
-  variable,
+  variable
 });

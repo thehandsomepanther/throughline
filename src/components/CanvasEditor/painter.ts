@@ -1,6 +1,6 @@
 import { OrderState } from '../../types/order';
 import { RepeatersState } from '../../types/repeaters';
-import { ShapeType, ShapesState } from '../../types/shapes';
+import { ShapesState, ShapeType } from '../../types/shapes';
 import { rgbToHex } from '../../util';
 
 // Paints a given canvas context with the values of shapes at a given frame.

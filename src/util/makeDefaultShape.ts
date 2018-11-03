@@ -1,13 +1,13 @@
+import { Formula, Using } from '../types/formulas';
 import {
-  ShapeType,
-  shapeTypeToProperties,
-  Shape,
-  ShapeProperties,
   EllipseProperties,
   FormulaValues,
   RectProperties,
+  Shape,
+  ShapeProperties,
+  ShapeType,
+  shapeTypeToProperties,
 } from '../types/shapes';
-import { Using, Formula } from '../types/formulas';
 
 const defaultPropertyValues = {
   [ShapeType.Rect]: {

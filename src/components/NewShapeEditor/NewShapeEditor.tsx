@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { shapeTypeToProperties, ShapeType } from '../../types/shapes';
-import { addNewShape } from '../../actions/shapes';
 import { Dispatch } from '../../actions';
+import { addNewShape } from '../../actions/shapes';
+import { ShapeType, shapeTypeToProperties } from '../../types/shapes';
 
-type NewShapeEditorProps = {
-  dispatch: Dispatch,
-};
-type NewShapeEditorState = {
-  shouldShowNewShapeInfoForm: boolean,
-  newShapeType: ShapeType,
-  newShapeName: string,
-};
+interface NewShapeEditorProps {
+  dispatch: Dispatch;
+}
+interface NewShapeEditorState {
+  shouldShowNewShapeInfoForm: boolean;
+  newShapeType: ShapeType;
+  newShapeName: string;
+}
 
 const initialState: NewShapeEditorState = {
   shouldShowNewShapeInfoForm: false,
@@ -21,30 +21,11 @@ const initialState: NewShapeEditorState = {
 export default class NewShapeEditor extends React.Component<
   NewShapeEditorProps,
   NewShapeEditorState
-> {
+  > {
   constructor(props: NewShapeEditorProps) {
     super(props);
     this.state = initialState;
   }
-
-  private handleNewShapeClick = () => {
-    this.setState({ shouldShowNewShapeInfoForm: true });
-  };
-
-  private handleNewShapeTypeChange = (value: ShapeType) => {
-    this.setState({ newShapeType: value });
-  };
-
-  private handleNewShapeNameChange = (value: string) => {
-    this.setState({ newShapeName: value });
-  };
-
-  private handleNewShapeInfoFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const { newShapeName, newShapeType } = this.state;
-    e.preventDefault();
-    this.props.dispatch(addNewShape(newShapeType, newShapeName));
-    this.setState({ ...initialState });
-  };
 
   public render() {
     const {
@@ -86,13 +67,32 @@ export default class NewShapeEditor extends React.Component<
             />
           </form>
         ) : (
-          <input
-            type="button"
-            value="new shape"
-            onClick={this.handleNewShapeClick}
-          />
-        )}
+            <input
+              type="button"
+              value="new shape"
+              onClick={this.handleNewShapeClick}
+            />
+          )}
       </div>
     );
   }
+
+  private handleNewShapeClick = () => {
+    this.setState({ shouldShowNewShapeInfoForm: true });
+  };
+
+  private handleNewShapeTypeChange = (value: ShapeType) => {
+    this.setState({ newShapeType: value });
+  };
+
+  private handleNewShapeNameChange = (value: string) => {
+    this.setState({ newShapeName: value });
+  };
+
+  private handleNewShapeInfoFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const { newShapeName, newShapeType } = this.state;
+    e.preventDefault();
+    this.props.dispatch(addNewShape(newShapeType, newShapeName));
+    this.setState({ ...initialState });
+  };
 }

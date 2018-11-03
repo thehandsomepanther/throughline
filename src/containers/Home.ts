@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import Home from '../components/Home';
-import { ShapesState } from '../types/shapes';
-import { OrderState } from '../types/order';
 import { EditorState } from '../types/editor';
+import { OrderState } from '../types/order';
+import { ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
 
 const mapStateToProps = (

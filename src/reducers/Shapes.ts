@@ -1,7 +1,7 @@
 import { pickBy } from 'lodash';
-import makeDefaultShape from '../util/makeDefaultShape';
-import { ShapesState, ShapeType, ShapesAction } from '../types/shapes';
 import { Action } from '../actions';
+import { ShapesAction, ShapesState, ShapeType } from '../types/shapes';
+import makeDefaultShape from '../util/makeDefaultShape';
 
 export const shapesInitialState: ShapesState = {
   rect: makeDefaultShape(ShapeType.Rect, 'rect')

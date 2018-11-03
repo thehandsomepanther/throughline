@@ -13,9 +13,9 @@ export enum ShapesAction {
 
 // The shapes branch of the state tree maps shape IDs to their corresponding
 // Shape objects.
-export type ShapesState = {
-  [shapeID: string]: Shape,
-};
+export interface ShapesState {
+  [shapeID: string]: Shape;
+}
 
 export enum ShapeType {
   Rect = 'SHAPE_RECT',
@@ -56,27 +56,27 @@ export const shapeTypeToProperties = {
 };
 
 export interface ShapeProperties<T> {
-  posX: T,
-  posY: T,
-  fillR: T,
-  fillG: T,
-  fillB: T,
-  rotation: T,
-  scaleX: T,
-  scaleY: T,
+  posX: T;
+  posY: T;
+  fillR: T;
+  fillG: T;
+  fillB: T;
+  rotation: T;
+  scaleX: T;
+  scaleY: T;
 };
 
 export interface RectProperties<T> extends ShapeProperties<T> {
-  width: T,
-  height: T,
+  width: T;
+  height: T;
 };
 
 export interface EllipseProperties<T> extends ShapeProperties<T> {
-  radiusX: T,
-  radiusY: T,
-  rotation: T,
-  startAngle: T,
-  endAngle: T,
+  radiusX: T;
+  radiusY: T;
+  rotation: T;
+  startAngle: T;
+  endAngle: T;
 };
 
 // A Shape maps a set of properties to a formula: the properties designate
@@ -91,22 +91,22 @@ export type FormulaValues = number[];
 // This interface only exists to be extended by actual shapes which can be
 // rendered.
 interface VirtualShape {
-  type: ShapeType,
-  name: string,
-  children?: string[],
-  formulas: ShapeProperties<Formula>,
-  values: ShapeProperties<FormulaValues>,
+  type: ShapeType;
+  name: string;
+  children?: string[];
+  formulas: ShapeProperties<Formula>;
+  values: ShapeProperties<FormulaValues>;
 };
 
 export interface RectShape extends VirtualShape {
-  type: ShapeType.Rect,
-  formulas: RectProperties<Formula>,
-  values: RectProperties<FormulaValues>,
+  type: ShapeType.Rect;
+  formulas: RectProperties<Formula>;
+  values: RectProperties<FormulaValues>;
 };
 
 export interface EllipseShape extends VirtualShape {
-  type: ShapeType.Ellipse,
-  formulas: EllipseProperties<Formula>,
-  values: EllipseProperties<FormulaValues>,
+  type: ShapeType.Ellipse;
+  formulas: EllipseProperties<Formula>;
+  values: EllipseProperties<FormulaValues>;
 };
 

@@ -4,13 +4,13 @@ export enum RepeatersAction {
   UpdateRepeater = 'REPEATER_UPDATE_REPEATER',
 }
 
-export type Repetition = {
-  times: number,
-  variable: string,
-};
+export interface Repetition {
+  times: number;
+  variable: string;
+}
 
 export type Repeater = Repetition[];
 
-export type RepeatersState = {
-  [shapeID: string]: Repeater,
-};
+export interface RepeatersState {
+  [shapeID: string]: Repeater;
+}

@@ -1,8 +1,8 @@
-import { orderInitialState } from './Order';
-import { EditorState, EditorAction } from '../types/editor';
-import { ShapesAction } from '../types/shapes';
-import { RepeatersAction } from '../types/repeaters';
 import { Action } from '../actions';
+import { EditorAction, EditorState } from '../types/editor';
+import { RepeatersAction } from '../types/repeaters';
+import { ShapesAction } from '../types/shapes';
+import { orderInitialState } from './Order';
 
 const initialState: EditorState = {
   activeShape: orderInitialState[0],

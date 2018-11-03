@@ -1,25 +1,25 @@
 import * as React from 'react';
-import RepeaterEditor from '../RepeaterEditor';
-import { ShapesList, ShapesListItem } from './styles';
-import { ShapesState } from '../../types/shapes';
-import { OrderState } from '../../types/order';
-import { EditorState } from '../../types/editor';
-import { RepeatersState } from '../../types/repeaters';
 import { Dispatch } from '../../actions';
 import { changeActiveShape } from '../../actions/editor';
 import { updateOrder } from '../../actions/order';
-import { deleteShape } from '../../actions/shapes';
 import { addRepeater } from '../../actions/repeaters';
+import { deleteShape } from '../../actions/shapes';
+import { EditorState } from '../../types/editor';
+import { OrderState } from '../../types/order';
+import { RepeatersState } from '../../types/repeaters';
+import { ShapesState } from '../../types/shapes';
+import RepeaterEditor from '../RepeaterEditor';
+import { ShapesList, ShapesListItem } from './styles';
 
 const flipIndex = (index: number, length: number): number => length - 1 - index;
 
-type OrderEditorProps = {
-  shapes: ShapesState,
-  order: OrderState,
-  editor: EditorState,
-  repeaters: RepeatersState,
-  dispatch: Dispatch,
-};
+interface OrderEditorProps {
+  shapes: ShapesState;
+  order: OrderState;
+  editor: EditorState;
+  repeaters: RepeatersState;
+  dispatch: Dispatch;
+}
 
 export default class OrderEditor extends React.Component<OrderEditorProps> {
   public render() {

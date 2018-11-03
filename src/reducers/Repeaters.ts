@@ -1,5 +1,5 @@
-import { RepeatersState, RepeatersAction } from '../types/repeaters';
 import { Action } from '../actions';
+import { RepeatersAction, RepeatersState } from '../types/repeaters';
 
 const CHARCODE_LOWERCASE_A = 97;
 const CHARCODE_LOWERCASE_I = 105;

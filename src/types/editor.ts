@@ -1,4 +1,4 @@
-import { RectProperties, EllipseProperties } from './shapes';
+import { EllipseProperties, RectProperties } from './shapes';
 
 export enum EditorAction {
   RedrawCanvases = 'EDITOR_REDRAW_CANVASES',

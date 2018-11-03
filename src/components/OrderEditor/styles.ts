@@ -1,9 +1,9 @@
 import styled from 'react-emotion';
 import {
-  RULE_ANTIALIAS,
   COLOR_GREY,
-  COLOR_NEAR_WHITE,
   COLOR_NEAR_BLACK,
+  COLOR_NEAR_WHITE,
+  RULE_ANTIALIAS,
 } from '../../styles';
 
 export const ShapesList = styled('ol')`
@@ -11,9 +11,9 @@ export const ShapesList = styled('ol')`
   flex-direction: column;
 `;
 
-type ShapesListItemPropsType = {
-  active: boolean,
-};
+interface ShapesListItemPropsType {
+  active: boolean;
+}
 export const ShapesListItem = styled('li')`
   padding: 0.8rem;
   display: block;

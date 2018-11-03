@@ -1,8 +1,8 @@
-import { ShapesState } from './shapes';
-import { OrderState } from './order';
-import { EditorState } from './editor';
-import { RepeatersState } from './repeaters';
 import { Action } from '../actions';
+import { EditorState } from './editor';
+import { OrderState } from './order';
+import { RepeatersState } from './repeaters';
+import { ShapesState } from './shapes';
 
 export interface Store {
   shapes: ShapesState;

@@ -1,7 +1,7 @@
-import { shapesInitialState } from './Shapes';
-import { OrderState, OrderAction } from '../types/order';
 import { Action } from '../actions';
+import { OrderAction, OrderState } from '../types/order';
 import { ShapesAction } from '../types/shapes';
+import { shapesInitialState } from './Shapes';
 
 export const orderInitialState: OrderState = Object.keys(shapesInitialState);
 
