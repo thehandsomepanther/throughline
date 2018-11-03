@@ -7,15 +7,15 @@ import { EditorState } from '../types/editor';
 import { Store } from '../types/store';
 
 const mapStateToProps = (
-  state: Store,
+  state: Store
 ): {
   shapes: ShapesState,
   order: OrderState,
-  editor: EditorState,
+  editor: EditorState
 } => ({
   order: state.order,
   shapes: state.shapes,
-  editor: state.editor,
+  editor: state.editor
 });
 
 export default connect(mapStateToProps)(Home);

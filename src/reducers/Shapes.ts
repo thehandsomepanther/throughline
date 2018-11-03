@@ -37,6 +37,6 @@ export default (
       newState[action.shapeID][action.prop] = action.values;
       return newState;
     default:
-      return { ...state };
+      return newState;
   }
 };

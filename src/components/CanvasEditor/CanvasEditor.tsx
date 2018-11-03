@@ -8,6 +8,7 @@ import {
   TickMarkerNumber,
   ControlsContainer,
   NotificationContainer,
+  DummyCanvasContainer,
 } from './styles';
 import { ShapesState } from '../../types/shapes';
 import { OrderState } from '../../types/order';
@@ -37,13 +38,13 @@ export default class CanvasEditor extends React.Component<
   CanvasEditorProps,
   CanvasEditorState
 > {
-  private frames: ImageData[];
+  private imageDataFrames: ImageData[];
   private canvasEl: HTMLCanvasElement | null = null;
   private dummyCanvasEl: HTMLCanvasElement | null = null;
 
   constructor(props: CanvasEditorProps) {
     super(props);
-    this.frames = [];
+    this.imageDataFrames = [];
     this.state = {
       interval: null,
       lastActiveCanvas: 0,
@@ -58,7 +59,7 @@ export default class CanvasEditor extends React.Component<
       Object.getOwnPropertyNames(nextProps.editor.erroneousProps).length === 0 &&
       this.dummyCanvasEl
     ) {
-      this.frames = [];
+      this.imageDataFrames = [];
       for (let i = 0; i < editor.numFrames; i++) {
         const ctx = this.dummyCanvasEl.getContext('2d');
         if (!ctx) {
@@ -67,7 +68,14 @@ export default class CanvasEditor extends React.Component<
 
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         paintShapesAtFrame(shapes, order, repeaters, i, ctx);
-        this.frames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
+        this.imageDataFrames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
+      }
+
+      if (this.canvasEl) {
+        const ctx = this.canvasEl.getContext('2d');
+        if (ctx) {
+          ctx.putImageData(this.imageDataFrames[editor.activeFrame], 0, 0);
+        }
       }
 
       this.props.dispatch(resetRedrawCanvases());
@@ -76,7 +84,7 @@ export default class CanvasEditor extends React.Component<
     if (editor.activeFrame !== this.props.editor.activeFrame && this.canvasEl) {
       const ctx = this.canvasEl.getContext('2d');
       if (ctx) {
-        ctx.putImageData(this.frames[editor.activeFrame], 0, 0);
+        ctx.putImageData(this.imageDataFrames[editor.activeFrame], 0, 0);
       }
     }
   }
@@ -148,13 +156,23 @@ export default class CanvasEditor extends React.Component<
             </NotificationContainer>
           )}
           <CanvasContainer>
-            <canvas ref={(el: HTMLCanvasElement | null) => {
-              this.canvasEl = el;
-            }} />
-            <canvas ref={(el: HTMLCanvasElement | null) => {
-              this.dummyCanvasEl = el;
-            }} />
+            <canvas
+              ref={(el: HTMLCanvasElement | null) => {
+                this.canvasEl = el;
+              }}
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+            />
           </CanvasContainer>
+          <DummyCanvasContainer>
+            <canvas
+              ref={(el: HTMLCanvasElement | null) => {
+                this.dummyCanvasEl = el;
+              }}
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+            />
+          </DummyCanvasContainer>
         </CanvasesContainer>
         <TickMarkersContainer
           onMouseEnter={() => {

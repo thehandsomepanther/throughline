@@ -49,4 +49,6 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
       );
       break;
   }
+
+  next(action);
 };

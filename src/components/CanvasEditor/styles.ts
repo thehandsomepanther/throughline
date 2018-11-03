@@ -6,9 +6,6 @@ export const CanvasEditorContainer = styled('div')`
 `;
 
 export const CanvasesContainer = styled('div')`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
 `;
 
@@ -17,6 +14,10 @@ export const CanvasContainer = styled('div')`
   width: 600px;
   height: 600px;
   border-radius: 4px;
+`;
+
+export const DummyCanvasContainer = styled('div')`
+  display: none;
 `;
 
 export const TickMarkersContainer = styled('div')`
@@ -28,7 +29,7 @@ export const TickMarkersContainer = styled('div')`
 
 type TickMarkerProps = {
   index: number,
-  activeCanvas: number,
+  activeCanvas: number
 };
 export const TickMarker = styled('div')`
   position: relative;

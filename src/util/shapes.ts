@@ -1,6 +1,5 @@
 import { toNumber, range } from 'lodash';
 import { Using } from '../types/formulas';
-import { shapeTypeToProperties } from '../types/shapes';
 import { Shape } from '../types/shapes';
 import { Formula } from '../types/formulas';
 
@@ -94,30 +93,34 @@ export const evalConstProp = (
 };
 
 export const calcFormulaValues = (
-  prop: Formula,
+  formula: Formula,
   frames: number
 ): Promise<number[]> => {
-  switch (prop.using) {
+  switch (formula.using) {
     case Using.Constant:
-      if (prop.const === null || prop.const === undefined) {
-        throw new Error('Tried to use const value of prop when none exists.');
+      if (formula.const == null) {
+        throw new Error(
+          'Tried to use const value of formula when none exists.'
+        );
       }
 
-      return evalConstProp(`${prop.const}`, frames);
+      return evalConstProp(`${formula.const}`, frames);
     case Using.Custom:
-      if (!prop.custom) {
-        throw new Error('Tried to use custom value of prop when none exists.');
+      if (!formula.custom) {
+        throw new Error(
+          'Tried to use custom value of formula when none exists.'
+        );
       }
 
-      return Promise.resolve(prop.custom);
+      return Promise.resolve(formula.custom);
     case Using.Function:
-      return evalFunctionProp(prop.fn || '', frames);
+      return evalFunctionProp(formula.fn || '', frames);
     default:
-      throw new Error(`Tried to use unexpected prop: ${prop.using}`);
+      throw new Error(`Tried to use unexpected formula: ${formula.using}`);
   }
 };
 
-// Given a shape, calculates the values for its provided formulas at a given frame.
+// Given a shape, calculates the values for its provided formulas at every frame.
 export const calcShapeValues = (
   shape: Shape,
   frames: number,
@@ -128,51 +131,50 @@ export const calcShapeValues = (
       resolve: (val: { [key: string]: number[] }) => void,
       reject: (reason: Error) => void
     ) => {
-      const propsKeys = shapeTypeToProperties[shape.type];
-
       // TODO: because calcShapeValues only gets called on init (and all subsequent
       // updates are handled using calcFormulaValues), this error handling doesn't
       // actually render any props in the props editor (and also no error messages)
       // if there's an error in one of them. need to figure out a better way to handle that
-      Promise.all(
-        propsKeys.map(
-          (prop: string): Promise<number[] | null> =>
-            calcFormulaValues(shape.formulas[prop], frames).catch(
+
+      const promises = [];
+      for (const propKey in shape.formulas) {
+        if (!shape.formulas.hasOwnProperty(propKey)) {
+          continue;
+        }
+
+        promises.push(
+          calcFormulaValues(shape.formulas[propKey], frames)
+            .then((values: number[]) => {
+              return Promise.resolve({ [propKey]: values });
+            })
+            .catch(
               (): Promise<null> => {
-                handleCalcPropError(prop);
+                handleCalcPropError(propKey);
                 return Promise.resolve(null);
               }
             )
-        )
-      ).then((values: Array<number[] | null>) => {
-        let shouldResolve = true;
-        for (const value of values) {
-          if (value == null) {
-            shouldResolve = false;
-            break;
+        );
+      }
+
+      Promise.all(promises).then(
+        (values: Array<{ [prop: string]: number[] } | null>) => {
+          const shapeValues = values.reduce(
+            (acc, curr) =>
+              acc == null
+                ? null
+                : {
+                    ...acc,
+                    ...curr
+                  },
+            {}
+          );
+
+          if (shapeValues != null) {
+            resolve(shapeValues);
+          } else {
+            reject(new Error('Some shapes have invalid props'));
           }
         }
-
-        if (shouldResolve) {
-          resolve(
-            // we know that all the values in the resolved object will be of type
-            // number[] because of the for loop above, but Flow isn't smart
-            // enough to know that
-            values.reduce(
-              (
-                acc: { [key: string]: number[] },
-                curr: number[],
-                i: number
-              ): { [key: string]: number[] } => ({
-                ...acc,
-                [propsKeys[i]]: curr
-              }),
-              {}
-            )
-          );
-        } else {
-          reject(new Error('Some shapes have invalid props'));
-        }
-      });
+      );
     }
   );
