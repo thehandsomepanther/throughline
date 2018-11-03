@@ -6,12 +6,12 @@ import makeDefaultShape from '../util/makeDefaultShape';
 export interface UpdateUsingAction {
   type: ShapesAction.UpdateUsing;
   shapeID: string;
-  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   using: Using;
 }
 export const updateUsing = (
   shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
   using: Using
 ): UpdateUsingAction => ({
   type: ShapesAction.UpdateUsing,
@@ -23,12 +23,12 @@ export const updateUsing = (
 export interface UpdateConstAction {
   type: ShapesAction.UpdateConst;
   shapeID: string;
-  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   value: number;
 }
 export const updateConst = (
   shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
   value: number
 ): UpdateConstAction => ({
   type: ShapesAction.UpdateConst,
@@ -40,12 +40,12 @@ export const updateConst = (
 export interface UpdateFunctionAction {
   type: ShapesAction.UpdateFunction;
   shapeID: string;
-  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   value: string;
 }
 export const updateFunction = (
   shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
   value: string
 ): UpdateFunctionAction => ({
   type: ShapesAction.UpdateFunction,
@@ -96,12 +96,12 @@ export const setShapeValues = (
 export interface UpdateShapeValuesAction {
   type: ShapesAction.UpdateValues;
   shapeID: string;
-  prop: keyof RectProperties<any> & EllipseProperties<any>;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   values: FormulaValues;
 }
 export const updateShapeValues = (
   shapeID: string,
-  prop: keyof RectProperties<any> & EllipseProperties<any>,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
   values: FormulaValues
 ): UpdateShapeValuesAction => ({
   type: ShapesAction.UpdateValues,

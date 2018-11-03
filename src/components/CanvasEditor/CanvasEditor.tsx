@@ -34,10 +34,7 @@ interface CanvasEditorState {
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
 
-export default class CanvasEditor extends React.Component<
-  CanvasEditorProps,
-  CanvasEditorState
-> {
+export default class CanvasEditor extends React.Component<CanvasEditorProps, CanvasEditorState> {
   private imageDataFrames: ImageData[];
   private canvasEl: HTMLCanvasElement | null = null;
   private dummyCanvasEl: HTMLCanvasElement | null = null;
@@ -114,8 +111,8 @@ export default class CanvasEditor extends React.Component<
           {(i === 0 ||
             i === editor.activeFrame ||
             i === editor.numFrames - 1) && (
-            <TickMarkerNumber>{i}</TickMarkerNumber>
-          )}
+              <TickMarkerNumber>{i}</TickMarkerNumber>
+            )}
         </TickMarker>,
       );
     }

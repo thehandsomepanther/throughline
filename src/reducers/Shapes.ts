@@ -21,7 +21,7 @@ export default (
       newState[action.shapeID].formulas[action.prop].const = action.value || 0;
       return newState;
     case ShapesAction.UpdateFunction:
-      newState[action.shapeID].formulas[action.prop].using = action.value || '';
+      newState[action.shapeID].formulas[action.prop].fn = action.value || '';
       return newState;
     case ShapesAction.NewShape:
       return {
@@ -34,7 +34,7 @@ export default (
       newState[action.shapeID].values = action.values as any;
       return newState;
     case ShapesAction.UpdateValues:
-      newState[action.shapeID][action.prop] = action.values;
+      newState[action.shapeID].values[action.prop] = action.values;
       return newState;
     default:
       return newState;

@@ -163,9 +163,9 @@ export const calcShapeValues = (
               acc == null
                 ? null
                 : {
-                    ...acc,
-                    ...curr
-                  },
+                  ...acc,
+                  ...curr
+                },
             {}
           );
 

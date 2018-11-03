@@ -21,10 +21,7 @@ interface PropertiesGraphState {
   lastActiveCanvas: number;
 }
 
-export default class PropertiesGraph extends React.Component<
-  PropertiesGraphProps,
-  PropertiesGraphState
-  > {
+export default class PropertiesGraph extends React.Component<PropertiesGraphProps, PropertiesGraphState> {
 
   get interval(): number {
     return this.space.size.x / (this.props.values.length + 1);

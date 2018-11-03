@@ -27,11 +27,12 @@ const updatePropValues = (
 export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
   action: Action
 ) => {
-  const { editor, shapes } = store.getState();
+  next(action);
 
+  const { editor, shapes } = store.getState();
   switch (action.type) {
     case ShapesAction.NewShape:
-      calcShapeValues(action.shape, editor.numFrames, () => {}).then(
+      calcShapeValues(action.shape, editor.numFrames, () => { }).then(
         (values: { [key: string]: number[] }) => {
           store.dispatch(setShapeValues(action.shapeID, values));
         }
@@ -49,6 +50,4 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
       );
       break;
   }
-
-  next(action);
 };
