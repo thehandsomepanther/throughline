@@ -86,10 +86,16 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
     }
   }
 
+  private handleTickContainerMouseEnter = () => {
+    this.setState({ lastActiveCanvas: this.props.editor.activeFrame });
+  }
+
+  private handleTickContainerMouseLeave = () => {
+    this.setActiveCanvas(this.state.lastActiveCanvas);
+  }
 
   public render() {
     const { editor } = this.props;
-    const { lastActiveCanvas } = this.state;
 
     const tickMarkers = [];
     for (let i = 0; i < editor.numFrames; i += 1) {
@@ -145,14 +151,8 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
           </DummyCanvasContainer>
         </CanvasesContainer>
         <TickMarkersContainer
-          onMouseEnter={() => {
-            this.setState({
-              lastActiveCanvas: editor.activeFrame,
-            });
-          }}
-          onMouseLeave={() => {
-            this.setActiveCanvas(lastActiveCanvas);
-          }}
+          onMouseEnter={this.handleTickContainerMouseEnter}
+          onMouseLeave={this.handleTickContainerMouseLeave}
         >
           {tickMarkers}
         </TickMarkersContainer>

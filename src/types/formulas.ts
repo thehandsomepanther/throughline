@@ -4,7 +4,7 @@ export enum Using {
   Constant = 'USING_CONST',
 }
 
-export type ConstValue = number
+export type ConstValue = string
 export type FunctionValue = string
 export type CustomValue = number[]
 
@@ -13,4 +13,4 @@ export interface Formula {
   const?: ConstValue;
   custom?: CustomValue;
   fn?: FunctionValue;
-}
+};

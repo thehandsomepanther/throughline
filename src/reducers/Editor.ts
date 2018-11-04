@@ -19,9 +19,6 @@ export default (
   let newState;
 
   switch (action.type) {
-    case ShapesAction.UpdateUsing:
-    case ShapesAction.UpdateConst:
-    case ShapesAction.UpdateFunction:
     case ShapesAction.DeleteShape:
     case ShapesAction.SetValues:
     case ShapesAction.UpdateValues:

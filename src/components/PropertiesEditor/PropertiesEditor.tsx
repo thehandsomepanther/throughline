@@ -36,7 +36,7 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
 
   private handleConstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateConst(shapeID, prop, parseInt(e.target.value, 10)));
+    dispatch(updateConst(shapeID, prop, e.target.value));
   }
 
   private handleFunctionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
