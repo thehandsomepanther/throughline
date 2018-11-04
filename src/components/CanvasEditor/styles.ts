@@ -1,5 +1,5 @@
 import styled from 'react-emotion';
-import { COLOR_NEAR_BLACK, COLOR_NEAR_WHITE } from '../../styles';
+import { COLOR_NEAR_BLACK, COLOR_NEAR_WHITE, COLOR_RED, FONT_SIZE_SMALL, FONT_STACK_MONOSPACE } from '../../styles';
 
 export const CanvasEditorContainer = styled('div')`
   padding-top: 70px ;
@@ -30,17 +30,17 @@ export const TickMarkersContainer = styled('div')`
 `;
 
 interface TickMarkerProps {
-  index: number;
-  activeCanvas: number;
+  active: boolean;
 };
 export const TickMarker = styled('div')`
   position: relative;
   width: 2px;
   height: ${(props: TickMarkerProps): string =>
-    props.index === props.activeCanvas ? '40px' : '20px'};
+    props.active ? '40px' : '20px'};
   margin-left: 2px;
   margin-right: 2px;
-  background-color: ${COLOR_NEAR_WHITE};
+  background-color: ${(props: TickMarkerProps): string =>
+    props.active ? COLOR_RED : COLOR_NEAR_WHITE};
   cursor: pointer;
 
   &:hover {
@@ -54,7 +54,11 @@ export const TickMarkerNumber = styled('span')`
   bottom: -20px;
   transform: translateX(-50%);
   left: 1px;
-  color: ${COLOR_NEAR_WHITE};
+  font-family: ${FONT_STACK_MONOSPACE};
+  font-size: ${FONT_SIZE_SMALL};
+  color: ${(props: TickMarkerProps): string =>
+    props.active ? COLOR_RED : COLOR_NEAR_WHITE};
+  white-space: nowrap;
 `;
 
 export const ControlsContainer = styled('div')`

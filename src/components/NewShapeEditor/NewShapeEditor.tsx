@@ -6,12 +6,12 @@ import { NewShapeButton, NewShapeButtonContainer, NewShapeDropdownInput, NewShap
 
 interface NewShapeEditorProps {
   dispatch: Dispatch;
-}
+};
 interface NewShapeEditorState {
   shouldShowNewShapeInfoForm: boolean;
   newShapeType: ShapeType;
   newShapeName: string;
-}
+};
 
 const initialState: NewShapeEditorState = {
   shouldShowNewShapeInfoForm: false,
@@ -40,7 +40,9 @@ export default class NewShapeEditor extends React.Component<NewShapeEditorProps,
   private handleNewShapeInfoFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const { newShapeName, newShapeType } = this.state;
     e.preventDefault();
-    this.props.dispatch(addNewShape(newShapeType, newShapeName));
+    if (newShapeName) {
+      this.props.dispatch(addNewShape(newShapeType, newShapeName));
+    }
     this.setState({ ...initialState });
   };
 

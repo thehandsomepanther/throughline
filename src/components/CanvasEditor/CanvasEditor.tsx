@@ -128,8 +128,7 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
       tickMarkers.push(
         <TickMarker
           key={`tickMarker-${i}`}
-          index={i}
-          activeCanvas={editor.activeFrame}
+          active={i === editor.activeFrame}
           onClick={() => {
             this.setActiveCanvas(i);
             this.setState({
@@ -143,7 +142,7 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
           {(i === 0 ||
             i === editor.activeFrame ||
             i === editor.numFrames - 1) && (
-              <TickMarkerNumber>{i}</TickMarkerNumber>
+              <TickMarkerNumber active={i === editor.activeFrame}>{(i === 0 ? 'Frame ' : '') + i}</TickMarkerNumber>
             )}
         </TickMarker>,
       );

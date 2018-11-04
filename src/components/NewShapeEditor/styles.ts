@@ -3,7 +3,6 @@ import { COLOR_BLACK, COLOR_BLUE, COLOR_NEAR_BLACK, COLOR_NEAR_WHITE, COLOR_ORAN
 
 export const NewShapeButtonContainer = styled('div')`
   width: 100%;
-
 `;
 
 export const NewShapeButton = styled('input')`
