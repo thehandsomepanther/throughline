@@ -10,6 +10,7 @@ import {
   FONT_SIZE_REGULAR,
   FONT_SIZE_SMALL,
   FONT_STACK_MONOSPACE,
+  mixins,
 } from '../../styles';
 import { Using } from '../../types/formulas';
 
@@ -78,30 +79,22 @@ export const UsingDropdown = styled('select')`
   }};
 `;
 
-export const ConstantPropertyInput = styled('input')`
-  color: ${COLOR_GREY};
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  outline: none;
-  box-shadow: none;
+const INPUT_STYLES = `
+  color: ${COLOR_NEAR_WHITE};
+  background-color: ${COLOR_BLACK};
+  font-size: ${FONT_SIZE_SMALL};
   font-family: ${FONT_STACK_MONOSPACE};
   padding: 0.5rem;
-  border-radius: 4px;
+  border-radius: 3px;
+  width: 100%;
+`;
+
+export const ConstantPropertyInput = styled('input')`
+  ${mixins.resetInput}
+  ${INPUT_STYLES}
 `;
 
 export const FunctionPropertyInput = styled('input')`
-  width: 100%;
-  color: ${COLOR_NEAR_WHITE};
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  outline: none;
-  border: none;
-  box-shadow: none;
-  font-family: ${FONT_STACK_MONOSPACE};
-  padding: 0.5rem;
-  border-radius: 4px;
+  ${mixins.resetInput}
+  ${INPUT_STYLES}
 `;

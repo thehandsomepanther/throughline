@@ -17,7 +17,23 @@ export const FONT_STACK_LUNCH =
 export const FONT_STACK_MONOSPACE =
   'IBM Plex Mono, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace';
 
-export const RULE_ANTIALIAS = `
+const RULE_ANTIALIAS = `
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
+
+const RULE_RESET_INPUT = `
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+`;
+
+export const mixins = {
+  antialias: RULE_ANTIALIAS,
+  resetInput: RULE_RESET_INPUT,
+};

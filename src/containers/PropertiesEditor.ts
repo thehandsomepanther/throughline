@@ -8,11 +8,11 @@ import { Store } from '../types/store';
 const mapStateToProps = (
   state: Store
 ): {
-  shapes: ShapesState,
-  editor: EditorState
-} => ({
-  shapes: state.shapes,
-  editor: state.editor
-});
+    shapes: ShapesState,
+    editor: EditorState
+  } => ({
+    shapes: state.shapes,
+    editor: state.editor
+  });
 
 export default connect(mapStateToProps)(PropertiesEditor);

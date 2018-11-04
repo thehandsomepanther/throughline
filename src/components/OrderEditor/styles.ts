@@ -5,7 +5,7 @@ import {
   COLOR_NEAR_WHITE,
   FONT_SIZE_REGULAR,
   FONT_STACK_MONOSPACE,
-  RULE_ANTIALIAS,
+  mixins,
 } from '../../styles';
 
 export const ShapesList = styled('ol')`
@@ -29,5 +29,5 @@ export const ShapesListItem = styled('li')`
   font-family: ${FONT_STACK_MONOSPACE};
   cursor: pointer;
   ${(props: ShapesListItemPropsType): string =>
-    props.active ? '' : RULE_ANTIALIAS}
+    props.active ? '' : mixins.antialias}
 `;
