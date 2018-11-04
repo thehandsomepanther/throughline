@@ -1,8 +1,10 @@
 import styled from 'react-emotion';
 import {
-  COLOR_GREY,
+  COLOR_BLUE,
   COLOR_NEAR_BLACK,
   COLOR_NEAR_WHITE,
+  FONT_SIZE_REGULAR,
+  FONT_STACK_MONOSPACE,
   RULE_ANTIALIAS,
 } from '../../styles';
 
@@ -15,16 +17,17 @@ interface ShapesListItemPropsType {
   active: boolean;
 }
 export const ShapesListItem = styled('li')`
-  padding: 0.8rem;
-  display: block;
+  height: 40px;
   background-color: ${(props: ShapesListItemPropsType): string =>
-    props.active ? COLOR_NEAR_WHITE : COLOR_GREY};
-  color: ${(props: ShapesListItemPropsType): string =>
-    props.active ? COLOR_NEAR_BLACK : COLOR_NEAR_WHITE};
-  ${(props: ShapesListItemPropsType): string =>
-    props.active ? '' : RULE_ANTIALIAS};
-  border-radius: 4px;
-  margin-bottom: 4px;
-  font-size: 0.8rem;
+    props.active ? COLOR_BLUE : COLOR_NEAR_BLACK};
+  color: ${COLOR_NEAR_WHITE};
+  font-size: ${FONT_SIZE_REGULAR};
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 10px;
+  font-family: ${FONT_STACK_MONOSPACE};
   cursor: pointer;
+  ${(props: ShapesListItemPropsType): string =>
+    props.active ? '' : RULE_ANTIALIAS}
 `;

@@ -1,18 +1,20 @@
 import styled from 'react-emotion';
 import {
+  COLOR_BLACK,
+  COLOR_BLUE,
   COLOR_GREY,
   COLOR_NEAR_BLACK,
   COLOR_NEAR_WHITE,
+  COLOR_ORANGE,
   COLOR_YELLOW,
+  FONT_SIZE_REGULAR,
+  FONT_SIZE_SMALL,
   FONT_STACK_MONOSPACE,
 } from '../../styles';
+import { Using } from '../../types/formulas';
 
 export const PropertiesEditorContainer = styled('div')`
-  margin-top: 1rem;
-  margin-right: 1rem;
-  padding: 0.8rem;
   background-color: ${COLOR_NEAR_WHITE};
-  border-radius: 4px;
   height: 100vh;
   overflow-y: scroll;
 `;
@@ -22,8 +24,18 @@ export const ShapeInfo = styled('div')`
 `;
 
 export const PropertyInfoContainer = styled('div')`
-  border-top: 1px solid ${COLOR_GREY};
-  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-bottom: 1px solid ${COLOR_BLACK};
+  background-color: ${COLOR_NEAR_BLACK};
+  color: ${COLOR_NEAR_WHITE};
+`;
+
+export const PropertyInfoHeader = styled('div')`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 `;
 
 export const InvalidPropNotification = styled('div')`
@@ -35,9 +47,35 @@ export const InvalidPropNotification = styled('div')`
 `;
 
 export const PropertyName = styled('div')`
-  color: ${COLOR_NEAR_BLACK};
-  display: inline-block;
-  margin-right: 1rem;
+  font-size: ${FONT_SIZE_REGULAR};
+  font-family: ${FONT_STACK_MONOSPACE};
+  margin-right: 4px;
+`;
+
+interface UsingDropdownProps {
+  value: Using;
+};
+export const UsingDropdown = styled('select')`
+  font-size: ${FONT_SIZE_SMALL};
+  font-family: ${FONT_STACK_MONOSPACE};
+  background-color: ${(props: UsingDropdownProps): string => {
+    switch (props.value) {
+      case Using.Function:
+        return COLOR_BLUE;
+      case Using.Custom:
+        return COLOR_ORANGE;
+      default:
+        return COLOR_GREY;
+    }
+  }};
+  color: ${(props: UsingDropdownProps): string => {
+    switch (props.value) {
+      case Using.Function:
+        return COLOR_NEAR_WHITE;
+      default:
+        return COLOR_NEAR_BLACK;
+    }
+  }};
 `;
 
 export const ConstantPropertyInput = styled('input')`
@@ -47,17 +85,14 @@ export const ConstantPropertyInput = styled('input')`
   -ms-appearance: none;
   -o-appearance: none;
   outline: none;
-  border: 1px solid ${COLOR_GREY};
   box-shadow: none;
   font-family: ${FONT_STACK_MONOSPACE};
   padding: 0.5rem;
   border-radius: 4px;
-  margin-left: 0.5rem;
 `;
 
 export const FunctionPropertyInput = styled('input')`
   width: 100%;
-  background-color: ${COLOR_NEAR_BLACK};
   color: ${COLOR_NEAR_WHITE};
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -69,5 +104,4 @@ export const FunctionPropertyInput = styled('input')`
   font-family: ${FONT_STACK_MONOSPACE};
   padding: 0.5rem;
   border-radius: 4px;
-  margin-top: 0.5rem;
 `;

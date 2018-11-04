@@ -18,10 +18,7 @@ const initialState: NewShapeEditorState = {
   newShapeName: '',
 };
 
-export default class NewShapeEditor extends React.Component<
-  NewShapeEditorProps,
-  NewShapeEditorState
-  > {
+export default class NewShapeEditor extends React.Component<NewShapeEditorProps, NewShapeEditorState> {
   constructor(props: NewShapeEditorProps) {
     super(props);
     this.state = initialState;

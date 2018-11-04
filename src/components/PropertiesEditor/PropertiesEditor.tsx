@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Dispatch } from 'src/actions';
 import { updateConst, updateFunction, updateUsing } from '../../actions/shapes';
+import { SidebarHeader } from '../../styles/components/SidebarHeader'
 import { EditorState } from '../../types/editor';
 import { ConstValue, Formula, FunctionValue, Using } from '../../types/formulas';
 import { EllipseProperties, RectProperties, ShapeType } from '../../types/shapes';
@@ -12,8 +13,9 @@ import {
   InvalidPropNotification,
   PropertiesEditorContainer,
   PropertyInfoContainer,
+  PropertyInfoHeader,
   PropertyName,
-  ShapeInfo,
+  UsingDropdown,
 } from './styles';
 
 const getConstValue = (formula: Formula): ConstValue | undefined => formula.const;
@@ -55,12 +57,14 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
             This prop is invalid
           </InvalidPropNotification>
         )}
-        <PropertyName>{prop}</PropertyName>
-        <select value={formula.using} onChange={this.handleUsingChange}>
-          <option value={Using.Constant}>Constant</option>
-          <option value={Using.Custom}>Custom</option>
-          <option value={Using.Function}>Function</option>
-        </select>
+        <PropertyInfoHeader>
+          <PropertyName>{prop}</PropertyName>
+          <UsingDropdown value={formula.using} onChange={this.handleUsingChange}>
+            <option value={Using.Constant}>Constant</option>
+            <option value={Using.Custom}>Custom</option>
+            <option value={Using.Function}>Function</option>
+          </UsingDropdown>
+        </PropertyInfoHeader>
         {formula.using === Using.Constant && (
           <ConstantPropertyInput
             value={getConstValue(formula)}
@@ -141,9 +145,7 @@ const ShapePropertiesView = ({
 
   return (
     <div>
-      <ShapeInfo>
-        {shape.name}, a {shape.type}
-      </ShapeInfo>
+      <SidebarHeader>Properties</SidebarHeader>
       {...propertyInfos}
     </div>
   )
