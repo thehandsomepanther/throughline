@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Dispatch } from '../../actions';
 import { addNewShape } from '../../actions/shapes';
 import { ShapeType, shapeTypeToProperties } from '../../types/shapes';
+import { NewShapeButton, NewShapeButtonContainer, NewShapeDropdownInput, NewShapeForm, NewShapeInputContainer, NewShapeNameInput, NewShapeSubmitInput } from './styles';
 
 interface NewShapeEditorProps {
   dispatch: Dispatch;
@@ -24,66 +25,16 @@ export default class NewShapeEditor extends React.Component<NewShapeEditorProps,
     this.state = initialState;
   }
 
-  public render() {
-    const {
-      shouldShowNewShapeInfoForm,
-      newShapeName,
-      newShapeType,
-    } = this.state;
-
-    return (
-      <div>
-        {shouldShowNewShapeInfoForm ? (
-          <form onSubmit={this.handleNewShapeInfoFormSubmit}>
-            <select
-              value={newShapeType}
-              onChange={(e) => {
-                this.handleNewShapeTypeChange(e.target.value as ShapeType);
-              }}
-            >
-              {Object.keys(shapeTypeToProperties).map(
-                (shapeType: ShapeType) => (
-                  <option value={shapeType} key={shapeType}>
-                    {shapeType}
-                  </option>
-                ),
-              )}
-            </select>
-            <input
-              type="text"
-              value={newShapeName}
-              placeholder="shape name"
-              onChange={(e) => {
-                this.handleNewShapeNameChange(e.target.value);
-              }}
-            />
-            <input
-              type="submit"
-              value="create shape"
-              disabled={!newShapeName.length}
-            />
-          </form>
-        ) : (
-            <input
-              type="button"
-              value="new shape"
-              onClick={this.handleNewShapeClick}
-            />
-          )}
-      </div>
-    );
-  }
-
   private handleNewShapeClick = () => {
     this.setState({ shouldShowNewShapeInfoForm: true });
   };
 
-  private handleNewShapeTypeChange = (value: ShapeType) => {
-    this.setState({ newShapeType: value });
+  private handleNewShapeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({ newShapeType: e.target.value as ShapeType });
   };
 
-  private handleNewShapeNameChange = (value: string) => {
-    this.setState({ newShapeName: value });
+  private handleNewShapeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newShapeName: e.target.value });
   };
 
   private handleNewShapeInfoFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -92,4 +43,49 @@ export default class NewShapeEditor extends React.Component<NewShapeEditorProps,
     this.props.dispatch(addNewShape(newShapeType, newShapeName));
     this.setState({ ...initialState });
   };
+
+  public render() {
+    const {
+      shouldShowNewShapeInfoForm,
+      newShapeName,
+      newShapeType,
+    } = this.state;
+
+    return (
+      <NewShapeButtonContainer>
+        {shouldShowNewShapeInfoForm ? (
+          <NewShapeForm onSubmit={this.handleNewShapeInfoFormSubmit}>
+            <NewShapeInputContainer>
+              <NewShapeDropdownInput value={newShapeType} onChange={this.handleNewShapeTypeChange}>
+                {Object.keys(shapeTypeToProperties).map(
+                  (shapeType: ShapeType) => (
+                    <option value={shapeType} key={shapeType}>
+                      {shapeType}
+                    </option>
+                  ),
+                )}
+              </NewShapeDropdownInput>
+              <NewShapeNameInput
+                type="text"
+                value={newShapeName}
+                placeholder="Shape name"
+                onChange={this.handleNewShapeNameChange}
+              />
+            </NewShapeInputContainer>
+            <NewShapeSubmitInput
+              type="submit"
+              name={newShapeName}
+              value={newShapeName ? "Create shape" : "Cancel"}
+            />
+          </NewShapeForm>
+        ) : (
+            <NewShapeButton
+              type="button"
+              value="+ New Shape"
+              onClick={this.handleNewShapeClick}
+            />
+          )}
+      </NewShapeButtonContainer>
+    );
+  }
 }
