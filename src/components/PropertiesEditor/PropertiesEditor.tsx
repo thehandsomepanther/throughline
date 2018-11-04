@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Dispatch } from 'src/actions';
 import { updateConst, updateFunction, updateUsing } from '../../actions/shapes';
 import { EditorState } from '../../types/editor';
-import { ConstValue, FunctionValue, Using } from '../../types/formulas';
-import { EllipseProperties, RectProperties } from '../../types/shapes';
+import { ConstValue, Formula, FunctionValue, Using } from '../../types/formulas';
+import { EllipseProperties, RectProperties, ShapeType } from '../../types/shapes';
 import { Shape, ShapesState } from '../../types/shapes';
 import {
   ConstantPropertyInput,
@@ -16,75 +16,69 @@ import {
   ShapeInfo,
 } from './styles';
 
-const getConstValue = (shape: Shape, prop: string): ConstValue => shape.formulas[prop].const
-const getFunctionValue = (shape: Shape, prop: string): FunctionValue => shape.formulas[prop].fn
+const getConstValue = (formula: Formula): ConstValue | undefined => formula.const;
+const getFunctionValue = (formula: Formula): FunctionValue | undefined => formula.fn;
 
 interface PropertyInfoProps {
-  shape: Shape;
+  formula: Formula;
   shapeID: string;
-  prop: string;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   activeFrame: number;
-  erroneousProps?: Partial<RectProperties<true>> | Partial<EllipseProperties<true>>;
+  isErroneous: boolean;
   dispatch: Dispatch;
 }
 
 class PropertyInfo extends React.Component<PropertyInfoProps> {
   private handleUsingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateUsing(shapeID, prop as keyof RectProperties<any> | keyof EllipseProperties<any>, e.target.value as Using));
+    dispatch(updateUsing(shapeID, prop, e.target.value as Using));
   }
 
   private handleConstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateConst(shapeID, prop as any, parseInt(e.target.value, 10)));
+    dispatch(updateConst(shapeID, prop, parseInt(e.target.value, 10)));
   }
 
   private handleFunctionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateFunction(shapeID, prop as any, e.target.value));
+    dispatch(updateFunction(shapeID, prop, e.target.value));
   }
 
   public render() {
-    const { shape, erroneousProps, prop } = this.props;
+    const { formula, isErroneous, prop } = this.props;
 
     return (
       <PropertyInfoContainer>
-        {erroneousProps &&
-          erroneousProps[prop] && (
-            <InvalidPropNotification>
-              <span role="img" aria-label="warning">
-                ⛔️
-                </span>{' '}
-              This prop is invalid
-              </InvalidPropNotification>
-          )}
+        {isErroneous && (
+          <InvalidPropNotification>
+            <span role="img" aria-label="warning">⛔️</span>{' '}
+            This prop is invalid
+          </InvalidPropNotification>
+        )}
         <PropertyName>{prop}</PropertyName>
-        <select
-          value={shape.formulas[prop].using}
-          onChange={this.handleUsingChange}
-        >
+        <select value={formula.using} onChange={this.handleUsingChange}>
           <option value={Using.Constant}>Constant</option>
           <option value={Using.Custom}>Custom</option>
           <option value={Using.Function}>Function</option>
         </select>
-        {shape.formulas[prop].using === Using.Constant && (
+        {formula.using === Using.Constant && (
           <ConstantPropertyInput
-            value={getConstValue(shape, prop)}
+            value={getConstValue(formula)}
             placeholder='0'
             onChange={this.handleConstChange}
           />
         )}
-        {shape.formulas[prop].using === Using.Custom && (
+        {formula.using === Using.Custom && (
           null // TODO: Fill this out
         )}
-        {shape.formulas[prop].using === Using.Function && (
+        {formula.using === Using.Function && (
           <FunctionPropertyInput
-            value={getFunctionValue(shape, prop) || ''}
+            value={getFunctionValue(formula)}
             placeholder="return 0"
             onChange={this.handleFunctionChange}
           />
         )}
-        {shape.formulas[prop].using !== Using.Constant && (
+        {formula.using !== Using.Constant && (
           null // TODO: Fix PropertiesGraph
           // <PropertiesGraph
           //   values={shape[shapeID].values[prop]}
@@ -111,26 +105,49 @@ const ShapePropertiesView = ({
     activeFrame: number,
     erroneousProps?: Partial<RectProperties<true>> | Partial<EllipseProperties<true>>,
     dispatch: Dispatch,
-  }) => (
+  }) => {
+  const propertyInfos = [];
+  for (const property in shape.formulas) {
+    if (!shape.formulas.hasOwnProperty(property)) {
+      continue;
+    }
+
+    if (shape.type === ShapeType.Rect) {
+      const rectProperty = property as keyof RectProperties<any>;
+      propertyInfos.push(
+        <PropertyInfo
+          prop={rectProperty}
+          formula={shape.formulas[rectProperty]}
+          shapeID={shapeID}
+          activeFrame={activeFrame}
+          isErroneous={erroneousProps && erroneousProps[shapeID]}
+          dispatch={dispatch}
+          key={property} />
+      );
+    } else if (shape.type === ShapeType.Ellipse) {
+      const ellipseProperty = property as keyof RectProperties<any>;
+      propertyInfos.push(
+        <PropertyInfo
+          prop={ellipseProperty}
+          formula={shape.formulas[ellipseProperty]}
+          shapeID={shapeID}
+          activeFrame={activeFrame}
+          isErroneous={erroneousProps && erroneousProps[shapeID]}
+          dispatch={dispatch}
+          key={property} />
+      );
+    }
+  }
+
+  return (
     <div>
       <ShapeInfo>
         {shape.name}, a {shape.type}
       </ShapeInfo>
-      {Object.keys(shape.formulas).map(
-        (prop: string) => (
-          <PropertyInfo
-            prop={prop}
-            shape={shape}
-            shapeID={shapeID}
-            activeFrame={activeFrame}
-            erroneousProps={erroneousProps}
-            dispatch={dispatch}
-            key={prop}
-          />
-        ),
-      )}
+      {...propertyInfos}
     </div>
-  );
+  )
+};
 
 export default ({
   shapes,
@@ -147,7 +164,7 @@ export default ({
         shapeID={editor.activeShape}
         shape={shapes[editor.activeShape]}
         activeFrame={editor.activeFrame}
-        erroneousProps={{ ...editor.erroneousProps[editor.activeShape] }}
+        erroneousProps={editor.erroneousProps[editor.activeShape]}
         dispatch={dispatch}
       />
     </PropertiesEditorContainer>
