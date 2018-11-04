@@ -1,5 +1,5 @@
 {
-  "flow.useNPMPackagedFlow": true,
   "javascript.validate.enable": false,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "tslint.autoFixOnSave": true
 }

@@ -97,4 +97,5 @@ export const ConstantPropertyInput = styled('input')`
 export const FunctionPropertyInput = styled('input')`
   ${mixins.resetInput}
   ${INPUT_STYLES}
+  margin-bottom: 10px;
 `;

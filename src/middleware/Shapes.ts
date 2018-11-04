@@ -40,6 +40,7 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
       break;
     case ShapesAction.UpdateUsing:
     case ShapesAction.UpdateConst:
+    case ShapesAction.UpdateCustom:
     case ShapesAction.UpdateFunction:
       updatePropValues(
         store.dispatch,

@@ -45,7 +45,7 @@ const shapePropsObject = (shape: ShapeType): ShapeProperties<Formula> =>
         const: defaultPropertyValues[shape]
           ? defaultPropertyValues[shape][property] || 0
           : 0,
-        custom: [], // TODO: figure out a good way to initialize this
+        custom: [defaultPropertyValues[shape][property]],
         fn: 'return 0;',
       },
     }),
@@ -69,5 +69,5 @@ export default (type: ShapeType, name: string): Shape => {
     }
   }
 
-  throw(new Error(''))
+  throw (new Error(''));
 }

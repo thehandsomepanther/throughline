@@ -20,6 +20,9 @@ export default (
     case ShapesAction.UpdateConst:
       newState[action.shapeID].formulas[action.prop].const = action.value || 0;
       return newState;
+    case ShapesAction.UpdateCustom:
+      newState[action.shapeID].formulas[action.prop].custom = action.value;
+      return newState;
     case ShapesAction.UpdateFunction:
       newState[action.shapeID].formulas[action.prop].fn = action.value || '';
       return newState;

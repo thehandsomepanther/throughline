@@ -15,7 +15,7 @@ export enum ShapesAction {
 // Shape objects.
 export interface ShapesState {
   [shapeID: string]: Shape;
-}
+};
 
 export enum ShapeType {
   Rect = 'SHAPE_RECT',

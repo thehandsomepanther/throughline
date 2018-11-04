@@ -1,5 +1,5 @@
 import { uniqueId } from 'lodash';
-import { ConstValue, FunctionValue, Using } from '../types/formulas';
+import { ConstValue, CustomValue, FunctionValue, Using } from '../types/formulas';
 import { EllipseProperties, FormulaValues, RectProperties, Shape, ShapesAction, ShapeType } from '../types/shapes';
 import makeDefaultShape from '../util/makeDefaultShape';
 
@@ -46,9 +46,26 @@ export interface UpdateFunctionAction {
 export const updateFunction = (
   shapeID: string,
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  value: FunctionValue
+  value: FunctionValue,
 ): UpdateFunctionAction => ({
   type: ShapesAction.UpdateFunction,
+  shapeID,
+  prop,
+  value
+});
+
+export interface UpdateCustomAction {
+  type: ShapesAction.UpdateCustom;
+  shapeID: string;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
+  value: CustomValue;
+}
+export const updateCustom = (
+  shapeID: string,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
+  value: CustomValue,
+): UpdateCustomAction => ({
+  type: ShapesAction.UpdateCustom,
   shapeID,
   prop,
   value
@@ -61,7 +78,7 @@ export interface AddNewShapeAction {
 }
 export const addNewShape = (
   shapeType: ShapeType,
-  name: string
+  name: string,
 ): AddNewShapeAction => ({
   type: ShapesAction.NewShape,
   shape: makeDefaultShape(shapeType, name),

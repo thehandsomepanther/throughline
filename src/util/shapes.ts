@@ -112,7 +112,13 @@ export const calcFormulaValues = (
         );
       }
 
-      return Promise.resolve(formula.custom);
+      // Ensure that our custom formula has at least as many values as the number
+      // of frames by padding out the formula as necessary
+      while (formula.custom.length < frames) {
+        formula.custom.push(formula.custom[formula.custom.length - 1]);
+      }
+
+      return Promise.resolve(formula.custom.slice(0, frames));
     case Using.Function:
       return evalFunctionProp(formula.fn || '', frames);
     default:

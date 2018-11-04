@@ -5,8 +5,9 @@ import { updateConst, updateFunction, updateUsing } from '../../actions/shapes';
 import { SidebarHeader } from '../../styles/components/SidebarHeader'
 import { EditorState } from '../../types/editor';
 import { ConstValue, Formula, FunctionValue, Using } from '../../types/formulas';
-import { EllipseProperties, RectProperties, ShapeType } from '../../types/shapes';
+import { EllipseProperties, FormulaValues, RectProperties, ShapeType } from '../../types/shapes';
 import { Shape, ShapesState } from '../../types/shapes';
+import { PropertiesGraph } from './PropertiesGraph';
 import {
   ConstantPropertyInput,
   FunctionPropertyInput,
@@ -23,6 +24,7 @@ const getFunctionValue = (formula: Formula): FunctionValue | undefined => formul
 
 interface PropertyInfoProps {
   formula: Formula;
+  values: FormulaValues;
   shapeID: string;
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   activeFrame: number;
@@ -47,7 +49,7 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
   }
 
   public render() {
-    const { formula, isErroneous, prop } = this.props;
+    const { formula, isErroneous, prop, values, activeFrame, shapeID, dispatch } = this.props;
 
     return (
       <PropertyInfoContainer>
@@ -83,14 +85,14 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
           />
         )}
         {formula.using !== Using.Constant && (
-          null // TODO: Fix PropertiesGraph
-          // <PropertiesGraph
-          //   values={shape[shapeID].values[prop]}
-          //   activeFrame={activeFrame}
-          //   shapeID={shapeID}
-          //   shapeProperty={prop}
-          //   dispatch={dispatch}
-          // />
+          <PropertiesGraph
+            values={values}
+            activeFrame={activeFrame}
+            shapeID={shapeID}
+            shapeProperty={prop}
+            using={formula.using}
+            dispatch={dispatch}
+          />
         )}
       </PropertyInfoContainer>
     )
@@ -122,6 +124,7 @@ const ShapePropertiesView = ({
         <PropertyInfo
           prop={rectProperty}
           formula={shape.formulas[rectProperty]}
+          values={shape.values[rectProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
           isErroneous={erroneousProps && erroneousProps[shapeID]}
@@ -134,6 +137,7 @@ const ShapePropertiesView = ({
         <PropertyInfo
           prop={ellipseProperty}
           formula={shape.formulas[ellipseProperty]}
+          values={shape.values[ellipseProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
           isErroneous={erroneousProps && erroneousProps[shapeID]}
