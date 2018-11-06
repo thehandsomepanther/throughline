@@ -8,17 +8,17 @@ import { ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
 
 const mapStateToProps = (
-  state: Store,
+  state: Store
 ): {
   shapes: ShapesState,
   order: OrderState,
   editor: EditorState,
-  repeaters: RepeatersState,
+  repeaters: RepeatersState
 } => ({
   shapes: state.shapes,
   order: state.order,
   editor: state.editor,
-  repeaters: state.repeaters,
+  repeaters: state.repeaters
 });
 
 export default connect(mapStateToProps)(OrderEditor);

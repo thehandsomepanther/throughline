@@ -6,12 +6,12 @@ import { Repeater, Repetition } from '../../types/repeaters';
 interface RepeaterEditorProps {
   repeater: Repeater;
   dispatch: Dispatch;
-  key: string;
+  shapeID: string;
 }
 
 export default class RepeaterEditor extends React.Component<RepeaterEditorProps> {
   public render() {
-    const { repeater, key } = this.props;
+    const { repeater, shapeID } = this.props;
 
     return (
       <div>
@@ -24,7 +24,7 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps>
                   value={repetition.variable}
                   onChange={(e) => {
                     this.props.dispatch(
-                      updateRepeater(key, i, repetition.times, e.target.value),
+                      updateRepeater(shapeID, i, repetition.times, e.target.value),
                     );
                   }}
                 />
@@ -36,7 +36,7 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps>
                   onChange={(e) => {
                     this.props.dispatch(
                       updateRepeater(
-                        key,
+                        shapeID,
                         i,
                         Number.parseFloat(e.target.value),
                         repetition.variable,
@@ -49,7 +49,7 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps>
                 type="button"
                 value="delete repeater"
                 onClick={() => {
-                  this.props.dispatch(deleteRepetition(key, i));
+                  this.props.dispatch(deleteRepetition(shapeID, i));
                 }}
               />
             </div>
