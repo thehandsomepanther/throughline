@@ -8,8 +8,13 @@ import { EditorState } from '../../types/editor';
 import { OrderState } from '../../types/order';
 import { Repeater, RepeatersState } from '../../types/repeaters';
 import { Shape, ShapesState } from '../../types/shapes';
+import { IconButton } from '../IconButton';
 import RepeaterEditor from '../RepeaterEditor';
-import { ShapesList, ShapesListItem } from './styles';
+import { Layer, LayerIcons, LayerName, ShapesList } from './styles';
+
+const HandleIcon = require('../../assets/icon/Handle.svg');
+const RepeatIcon = require('../../assets/icon/Repeat.svg');
+const VisibleIcon = require('../../assets/icon/Visible.svg');
 
 // const flipIndex = (index: number, length: number): number => length - 1 - index;
 
@@ -38,10 +43,15 @@ class ShapeLayer extends React.PureComponent<ShapeLayerProps> {
     const { shape, repetition, shapeID, active } = this.props
 
     return (
-      <ShapesListItem active={active} onClick={this.handleClick}>
-        {shape.name}, a {shape.type}
-        <input type="button" value="add repeater" onClick={this.handleRepeatButtonClick} />
-        <input type="button" value="delete" onClick={this.handleDeleteButtonClick} />
+      <Layer active={active} onClick={this.handleClick}>
+        <LayerName>
+          <IconButton svg={HandleIcon} />
+          <span>{shape.name}</span>
+        </LayerName>
+        <LayerIcons>
+          <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
+          <IconButton svg={VisibleIcon} onClick={this.handleDeleteButtonClick} />
+        </LayerIcons>
         {repetition && (
           <div>
             <RepeaterEditor
@@ -51,7 +61,7 @@ class ShapeLayer extends React.PureComponent<ShapeLayerProps> {
             />
           </div>
         )}
-      </ShapesListItem>
+      </Layer>
     );
   }
 }

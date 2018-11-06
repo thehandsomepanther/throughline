@@ -5,7 +5,7 @@ import {
   COLOR_NEAR_WHITE,
   FONT_SIZE_REGULAR,
   FONT_STACK_MONOSPACE,
-  mixins,
+  mixins
 } from '../../styles';
 
 export const ShapesList = styled('ol')`
@@ -13,21 +13,36 @@ export const ShapesList = styled('ol')`
   flex-direction: column;
 `;
 
-interface ShapesListItemPropsType {
+interface LayerProps {
   active: boolean;
 }
-export const ShapesListItem = styled('li')`
+export const Layer = styled('li')`
   height: 40px;
-  background-color: ${(props: ShapesListItemPropsType): string =>
+  background-color: ${(props: LayerProps): string =>
     props.active ? COLOR_BLUE : COLOR_NEAR_BLACK};
   color: ${COLOR_NEAR_WHITE};
   font-size: ${FONT_SIZE_REGULAR};
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 10px;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
   font-family: ${FONT_STACK_MONOSPACE};
-  cursor: pointer;
-  ${(props: ShapesListItemPropsType): string =>
-    props.active ? '' : mixins.antialias}
+  ${(props: LayerProps): string => (props.active ? '' : mixins.antialias)};
+`;
+
+export const LayerName = styled('div')`
+  display: flex;
+  align-items: center;
+  line-height: 24px;
+
+  & input {
+    margin-right: 4px;
+  }
+`;
+
+export const LayerIcons = styled('div')`
+  & input {
+    margin-left: 4px;
+  }
 `;

@@ -4,7 +4,7 @@ import { ShapesAction, ShapesState, ShapeType } from '../types/shapes';
 import makeDefaultShape from '../util/makeDefaultShape';
 
 export const shapesInitialState: ShapesState = {
-  rect: makeDefaultShape(ShapeType.Rect, 'rect')
+  rect: makeDefaultShape(ShapeType.Rect, 'Rectangle')
 };
 
 export default (
