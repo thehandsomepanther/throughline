@@ -15,9 +15,11 @@ export const ShapesList = styled('ol')`
 
 interface LayerProps {
   active: boolean;
+  visible: boolean;
 }
 export const Layer = styled('li')`
   height: 40px;
+  opacity: ${(props: LayerProps): string => (props.visible ? '1' : '0.3')};
   background-color: ${(props: LayerProps): string =>
     props.active ? COLOR_BLUE : COLOR_NEAR_BLACK};
   color: ${COLOR_NEAR_WHITE};

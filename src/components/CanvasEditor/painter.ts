@@ -14,6 +14,11 @@ export const paintShapesAtFrame = (
   for (const shapeID of order) {
     ctx.save();
     const shape = shapes[shapeID];
+
+    if (!shape.visible) {
+      continue;
+    }
+
     if (shape.type === ShapeType.Rect) {
       const sv = shape.values;
       ctx.translate(

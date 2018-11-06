@@ -9,6 +9,7 @@ export enum ShapesAction {
   DeleteShape = 'SHAPE_DELETE_SHAPE',
   SetValues = 'SHAPE_SET_VALUES',
   UpdateValues = 'SHAPE_UPDATE_VALUES',
+  ToggleVisible = 'SHAPE_TOGGLE_VISIBLE',
 };
 
 // The shapes branch of the state tree maps shape IDs to their corresponding
@@ -96,6 +97,7 @@ interface VirtualShape {
   children?: string[];
   formulas: ShapeProperties<Formula>;
   values: ShapeProperties<FormulaValues>;
+  visible: boolean;
 };
 
 export interface RectShape extends VirtualShape {

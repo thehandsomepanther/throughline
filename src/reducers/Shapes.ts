@@ -39,6 +39,8 @@ export default (
     case ShapesAction.UpdateValues:
       newState[action.shapeID].values[action.prop] = action.values;
       return newState;
+    case ShapesAction.ToggleVisible:
+      newState[action.shapeID].visible = !state[action.shapeID].visible;
     default:
       return newState;
   }

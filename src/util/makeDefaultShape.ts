@@ -58,14 +58,16 @@ export default (type: ShapeType, name: string): Shape => {
       type: ShapeType.Ellipse,
       name,
       formulas: shapePropsObject(type) as EllipseProperties<Formula>,
-      values: {} as EllipseProperties<FormulaValues>
+      values: {} as EllipseProperties<FormulaValues>,
+      visible: true,
     }
   } else if (type === ShapeType.Rect) {
     return {
       type: ShapeType.Rect,
       name,
       formulas: shapePropsObject(type) as RectProperties<Formula>,
-      values: {} as RectProperties<FormulaValues>
+      values: {} as RectProperties<FormulaValues>,
+      visible: true,
     }
   }
 

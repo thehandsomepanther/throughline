@@ -126,3 +126,12 @@ export const updateShapeValues = (
   prop,
   values
 });
+
+export interface ToggleShapeVisibleAction {
+  type: ShapesAction.ToggleVisible;
+  shapeID: string;
+}
+export const toggleShapeVisible = (shapeID: string): ToggleShapeVisibleAction => ({
+  type: ShapesAction.ToggleVisible,
+  shapeID,
+});

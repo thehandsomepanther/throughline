@@ -22,6 +22,7 @@ export default (
     case ShapesAction.DeleteShape:
     case ShapesAction.SetValues:
     case ShapesAction.UpdateValues:
+    case ShapesAction.ToggleVisible:
     case RepeatersAction.UpdateRepeater:
       return {
         ...state,

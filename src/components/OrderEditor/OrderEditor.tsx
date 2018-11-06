@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Dispatch } from '../../actions';
 import { changeActiveShape } from '../../actions/editor';
 import { addRepeater } from '../../actions/repeaters';
-import { deleteShape } from '../../actions/shapes';
+import { toggleShapeVisible } from '../../actions/shapes';
 import { SidebarHeader } from '../../styles/components/SidebarHeader';
 import { EditorState } from '../../types/editor';
 import { OrderState } from '../../types/order';
@@ -15,6 +15,7 @@ import { Layer, LayerIcons, LayerName, ShapesList } from './styles';
 const HandleIcon = require('../../assets/icon/Handle.svg');
 const RepeatIcon = require('../../assets/icon/Repeat.svg');
 const VisibleIcon = require('../../assets/icon/Visible.svg');
+const InvisibleIcon = require('../../assets/icon/Invisible.svg');
 
 // const flipIndex = (index: number, length: number): number => length - 1 - index;
 
@@ -26,7 +27,7 @@ interface ShapeLayerProps {
   dispatch: Dispatch;
 };
 
-class ShapeLayer extends React.PureComponent<ShapeLayerProps> {
+class ShapeLayer extends React.Component<ShapeLayerProps> {
   private handleClick = () => {
     this.props.dispatch(changeActiveShape(this.props.shapeID));
   }
@@ -35,22 +36,21 @@ class ShapeLayer extends React.PureComponent<ShapeLayerProps> {
     this.props.dispatch(addRepeater(this.props.shapeID));
   }
 
-  private handleDeleteButtonClick = () => {
-    this.props.dispatch(deleteShape(this.props.shapeID));
+  private handleToggleVisibleClick = () => {
+    this.props.dispatch(toggleShapeVisible(this.props.shapeID));
   }
 
   public render() {
-    const { shape, repetition, shapeID, active } = this.props
-
+    const { shape, repetition, shapeID, active } = this.props;
     return (
-      <Layer active={active} onClick={this.handleClick}>
+      <Layer active={active} visible={shape.visible} onClick={this.handleClick}>
         <LayerName>
           <IconButton svg={HandleIcon} />
           <span>{shape.name}</span>
         </LayerName>
         <LayerIcons>
           <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
-          <IconButton svg={VisibleIcon} onClick={this.handleDeleteButtonClick} />
+          <IconButton svg={shape.visible ? VisibleIcon : InvisibleIcon} onClick={this.handleToggleVisibleClick} />
         </LayerIcons>
         {repetition && (
           <div>

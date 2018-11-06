@@ -17,6 +17,7 @@ import {
   AddNewShapeAction,
   DeleteShapeAction,
   SetShapeValuesAction,
+  ToggleShapeVisibleAction,
   UpdateConstAction,
   UpdateCustomAction,
   UpdateFunctionAction,
@@ -33,6 +34,7 @@ export type Action =
   | DeleteShapeAction
   | SetShapeValuesAction
   | UpdateShapeValuesAction
+  | ToggleShapeVisibleAction
   | RedrawCanvasesAction
   | ResetRedrawCanvasesAction
   | ChangeActiveShapeAction
