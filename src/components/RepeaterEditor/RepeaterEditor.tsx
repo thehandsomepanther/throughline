@@ -89,7 +89,9 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps,
           </RepeatersInputContainer>
           { this.state.isHovered && (
             <div>
-              <IconButton svg={RepeatIcon} onClick={this.handleAddChildRepeaterClick} />
+              { !repeater.next &&
+                <IconButton svg={RepeatIcon} onClick={this.handleAddChildRepeaterClick} />
+              }
               <IconButton svg={DeleteIcon} onClick={this.handleDeleteClick} />
             </div>
           )}

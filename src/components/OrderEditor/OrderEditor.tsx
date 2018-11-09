@@ -75,7 +75,7 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
             <span>{shape.name}</span>
           </LayerName>
           <LayerIcons>
-            {this.state.isHovered &&
+            {(this.state.isHovered && !repeaters[shapeID]) &&
               <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
             }
             {(this.state.isHovered || !shape.visible) &&

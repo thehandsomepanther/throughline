@@ -57,7 +57,12 @@ export default (
         );
       }
 
-      delete newState[action.id];
+      let orphanID: string | null = action.id;
+      while (orphanID) {
+        const next: string | null = newState[orphanID].next;
+        delete newState[orphanID];
+        orphanID = next;
+      }
 
       // TODO(josh): For now, iterating over the entire repeaters state
       // doesn't seem bad because we probably won't have a ton of repeaters.
@@ -73,6 +78,8 @@ export default (
           newState[repeaterID].next = null;
         }
       }
+
+      console.log(newState);
 
       return newState;
     case RepeatersAction.UpdateRepeater:
