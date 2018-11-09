@@ -10,7 +10,7 @@ import { RepeatersState } from '../../types/repeaters';
 import { Shape, ShapesState } from '../../types/shapes';
 import { IconButton } from '../IconButton';
 import RepeaterEditor from '../RepeaterEditor';
-import { Layer, LayerIcons, LayerName, ShapesList } from './styles';
+import { Layer, LayerContainer, LayerIcons, LayerName, ShapesList } from './styles';
 
 const HandleIcon = require('../../assets/icon/Handle.svg');
 const RepeatIcon = require('../../assets/icon/Repeat.svg');
@@ -62,38 +62,38 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
   public render() {
     const { shape, repeaters, shapeID, active } = this.props;
     return (
-      <Layer
+      <LayerContainer
         active={active}
         visible={shape.visible}
         onClick={this.handleClick}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
-        <LayerName>
-          <IconButton svg={HandleIcon} />
-          <span>{shape.name}</span>
-        </LayerName>
-        <LayerIcons>
-          {this.state.isHovered &&
-            <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
-          }
-          {(this.state.isHovered || !shape.visible) &&
-            <IconButton
-              svg={shape.visible ? VisibleIcon : InvisibleIcon}
-              onClick={this.handleToggleVisibleClick}
-            />
-          }
-        </LayerIcons>
+        <Layer>
+          <LayerName>
+            <IconButton svg={HandleIcon} />
+            <span>{shape.name}</span>
+          </LayerName>
+          <LayerIcons>
+            {this.state.isHovered &&
+              <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
+            }
+            {(this.state.isHovered || !shape.visible) &&
+              <IconButton
+                svg={shape.visible ? VisibleIcon : InvisibleIcon}
+                onClick={this.handleToggleVisibleClick}
+              />
+            }
+          </LayerIcons>
+        </Layer>
         {repeaters[shapeID] && (
-          <div>
-            <RepeaterEditor
-              repeaters={repeaters}
-              dispatch={this.props.dispatch}
-              id={shapeID}
-            />
-          </div>
+          <RepeaterEditor
+            repeaters={repeaters}
+            dispatch={this.props.dispatch}
+            id={shapeID}
+          />
         )}
-      </Layer>
+      </LayerContainer>
     );
   }
 }

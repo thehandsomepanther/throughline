@@ -13,7 +13,7 @@ export interface AddChildRepeaterAction {
   type: RepeatersAction.AddChildRepeater;
   repeaterID: string;
 }
-export const AddChildRepeater = (
+export const addChildRepeater = (
   repeaterID: string
 ): AddChildRepeaterAction => ({
   type: RepeatersAction.AddChildRepeater,

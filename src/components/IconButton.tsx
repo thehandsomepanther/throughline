@@ -7,14 +7,23 @@ interface IconButtonProps {
   onClick?: () => void;
 };
 
-const Icon = styled('input')`
-  ${mixins.resetInput}
+const iconMixin = (svg: string) => `
   width: 24px;
   height: 24px;
-  cursor: pointer;
-  background: url(${(props: IconButtonProps): string => props.svg});
+  background: url(${svg});
   background-repeat: no-repeat;
   background-position: center center;
+`;
+
+export const Icon = styled('div')`
+  ${(props: { svg: string }): string => iconMixin(props.svg)}
+  display: inline-block;
+`;
+
+const IconInput = styled('input')`
+  ${mixins.resetInput}
+  ${(props: IconButtonProps): string => iconMixin(props.svg)}
+  cursor: pointer;
   border-radius: 3px;
 
   &:hover {
@@ -25,7 +34,7 @@ const Icon = styled('input')`
 export class IconButton extends React.PureComponent<IconButtonProps> {
   public render() {
     return (
-      <Icon type="button" onClick={this.props.onClick} svg={this.props.svg} />
+      <IconInput type="button" onClick={this.props.onClick} svg={this.props.svg} />
     );
   }
 }

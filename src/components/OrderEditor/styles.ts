@@ -13,24 +13,33 @@ export const ShapesList = styled('ol')`
   flex-direction: column;
 `;
 
-interface LayerProps {
+interface LayerContainerProps {
   active: boolean;
   visible: boolean;
 }
-export const Layer = styled('li')`
-  height: 40px;
-  opacity: ${(props: LayerProps): string => (props.visible ? '1' : '0.3')};
-  background-color: ${(props: LayerProps): string =>
+export const LayerContainer = styled('li')`
+  opacity: ${(props: LayerContainerProps): string =>
+    props.visible ? '1' : '0.3'};
+  background-color: ${(props: LayerContainerProps): string =>
     props.active ? COLOR_BLUE : COLOR_NEAR_BLACK};
   color: ${COLOR_NEAR_WHITE};
   font-size: ${FONT_SIZE_REGULAR};
   display: flex;
   align-items: center;
+  flex-direction: column;
+  font-family: ${FONT_STACK_MONOSPACE};
+  ${(props: LayerContainerProps): string =>
+    props.active ? '' : mixins.antialias};
+`;
+
+export const Layer = styled('div')`
+  height: 40px;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding-left: 4px;
   padding-right: 4px;
-  font-family: ${FONT_STACK_MONOSPACE};
-  ${(props: LayerProps): string => (props.active ? '' : mixins.antialias)};
 `;
 
 export const LayerName = styled('div')`

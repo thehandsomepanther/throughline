@@ -1,15 +1,41 @@
 import * as React from 'react';
 import { Dispatch } from '../../actions';
-import { deleteRepeater, updateRepeater } from '../../actions/repeaters';
+import { addChildRepeater, deleteRepeater, updateRepeater } from '../../actions/repeaters';
 import { RepeatersState } from '../../types/repeaters';
+import { Icon, IconButton } from '../IconButton';
+import { RepeatersContainer, RepeatersInputContainer, RepeatersLayer } from './styles';
+
+const DeleteIcon = require('../../assets/icon/Delete.svg');
+const RepeatIcon = require('../../assets/icon/Repeat.svg');
+const RepetitionIcon = require('../../assets/icon/Repetition.svg');
 
 interface RepeaterEditorProps {
   repeaters: RepeatersState;
   dispatch: Dispatch;
   id: string;
+  nesting?: number;
 };
 
-export default class RepeaterEditor extends React.Component<RepeaterEditorProps> {
+interface RepeaterEditorState {
+  isHovered: boolean;
+};
+
+export default class RepeaterEditor extends React.Component<RepeaterEditorProps, RepeaterEditorState> {
+  constructor(props: RepeaterEditorProps) {
+    super(props);
+    this.state = {
+      isHovered: false,
+    };
+  }
+
+  private handleMouseEnter = () => {
+    this.setState({ isHovered: true });
+  }
+
+  private handleMouseLeave = () => {
+    this.setState({ isHovered: false });
+  }
+
   private handleVariableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const repeater = this.props.repeaters[this.props.id];
     this.props.dispatch(
@@ -29,45 +55,54 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps>
     );
   }
 
+  private handleAddChildRepeaterClick = () => {
+    this.props.dispatch(addChildRepeater(this.props.id));
+  }
+
   private handleDeleteClick = () => {
     this.props.dispatch(deleteRepeater(this.props.id));
   }
 
   public render() {
-    const { dispatch, repeaters } = this.props;
+    const { dispatch, repeaters, nesting } = this.props;
     const repeater = this.props.repeaters[this.props.id];
 
     return (
-      <div>
-        <div>
-          <div>
-            <label>Variable</label>
+      <RepeatersContainer>
+        <RepeatersLayer
+          nesting={nesting || 0}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
+          <RepeatersInputContainer>
+            <Icon svg={RepetitionIcon} />
+            <span>Repeat</span>
+              <input
+                value={repeater.times}
+                onChange={this.handleTimesChange}
+              />
+            <span>times as</span>
             <input
               value={repeater.variable}
               onChange={this.handleVariableChange}
             />
-          </div>
-          <div>
-            <label>Times</label>
-            <input
-              value={repeater.times}
-              onChange={this.handleTimesChange}
-            />
-          </div>
-          <input
-            type="button"
-            value="delete repeater"
-            onClick={this.handleDeleteClick}
-          />
-        </div>
+          </RepeatersInputContainer>
+          { this.state.isHovered && (
+            <div>
+              <IconButton svg={RepeatIcon} onClick={this.handleAddChildRepeaterClick} />
+              <IconButton svg={DeleteIcon} onClick={this.handleDeleteClick} />
+            </div>
+          )}
+        </RepeatersLayer>
         { repeater.next && (
           <RepeaterEditor
             id={repeater.next}
             dispatch={dispatch}
             repeaters={repeaters}
+            nesting={(nesting || 0) + 1}
           />
         )}
-      </div>
+      </RepeatersContainer>
     );
   }
 }
