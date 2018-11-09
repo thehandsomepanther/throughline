@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Dispatch } from '../../actions';
 import { changeActiveShape } from '../../actions/editor';
-import { addRepeater } from '../../actions/repeaters';
+import { addRootRepeater } from '../../actions/repeaters';
 import { toggleShapeVisible } from '../../actions/shapes';
 import { SidebarHeader } from '../../styles/components/SidebarHeader';
 import { EditorState } from '../../types/editor';
 import { OrderState } from '../../types/order';
-import { Repeater, RepeatersState } from '../../types/repeaters';
+import { RepeatersState } from '../../types/repeaters';
 import { Shape, ShapesState } from '../../types/shapes';
 import { IconButton } from '../IconButton';
 import RepeaterEditor from '../RepeaterEditor';
@@ -21,7 +21,7 @@ const InvisibleIcon = require('../../assets/icon/Invisible.svg');
 
 interface ShapeLayerProps {
   shape: Shape;
-  repetition?: Repeater;
+  repeaters: RepeatersState;
   shapeID: string;
   active: boolean;
   dispatch: Dispatch;
@@ -44,7 +44,7 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
   }
 
   private handleRepeatButtonClick = () => {
-    this.props.dispatch(addRepeater(this.props.shapeID));
+    this.props.dispatch(addRootRepeater(this.props.shapeID));
   }
 
   private handleToggleVisibleClick = () => {
@@ -60,7 +60,7 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
   }
 
   public render() {
-    const { shape, repetition, shapeID, active } = this.props;
+    const { shape, repeaters, shapeID, active } = this.props;
     return (
       <Layer
         active={active}
@@ -84,12 +84,12 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
             />
           }
         </LayerIcons>
-        {repetition && (
+        {repeaters[shapeID] && (
           <div>
             <RepeaterEditor
-              repeater={repetition}
+              repeaters={repeaters}
               dispatch={this.props.dispatch}
-              shapeID={shapeID}
+              id={shapeID}
             />
           </div>
         )}
@@ -123,7 +123,7 @@ export default class OrderEditor extends React.Component<OrderEditorProps> {
           {[...order].reverse().map((shapeID: string) => (
             <ShapeLayer
               shape={shapes[shapeID]}
-              repetition={repeaters[shapeID]}
+              repeaters={repeaters}
               shapeID={shapeID}
               active={editor.activeShape === shapeID}
               dispatch={dispatch}

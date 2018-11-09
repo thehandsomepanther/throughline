@@ -1,16 +1,21 @@
 export enum RepeatersAction {
-  AddRepeater = 'REPEATER_ADD_REPEATER',
-  DeleteRepetition = 'REPEATER_DELETE_REPETITION',
+  AddRootRepeater = 'REPEATER_ADD_ROOT_REPEATER',
+  AddChildRepeater = 'REPEATER_ADD_CHILD_REPEATER',
+  DeleteRepeater = 'REPEATER_DELETE_REPEATER',
   UpdateRepeater = 'REPEATER_UPDATE_REPEATER',
-}
+};
 
-export interface Repetition {
+export interface Repeater {
   times: number;
   variable: string;
-}
+  next: string | null;       // ID of next repeater
+};
 
-export type Repeater = Repetition[];
-
+// The Repeaters branch of the state tree maps keys to repeaters. A key can
+// be either a shape ID or a repeater ID.
+// If the key is a shape ID, that means it's the root repeater for that shape.
+// If it's a repeater ID, that means it's a child repeater (i.e. the repeater
+// of a repeater).
 export interface RepeatersState {
-  [shapeID: string]: Repeater;
-}
+  [id: string]: Repeater;
+};

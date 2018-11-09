@@ -1,5 +1,6 @@
 import { Action } from '../actions';
 import { RepeatersAction, RepeatersState } from '../types/repeaters';
+import { uniqueRepeaterID } from '../util';
 
 const CHARCODE_LOWERCASE_A = 97;
 const CHARCODE_LOWERCASE_I = 105;
@@ -24,51 +25,70 @@ const initialState: RepeatersState = {};
 
 export default (
   state: RepeatersState = initialState,
-  action: Action,
+  action: Action
 ): RepeatersState => {
-  let newRepeater;
+  const newState = { ...state };
 
   switch (action.type) {
-    case RepeatersAction.AddRepeater:
-      return {
-        ...state,
-        [action.key]: state[action.key]
-          ? [
-              ...state[action.key],
-              { times: 1, variable: getNextVariableName() },
-            ]
-          : [{ times: 1, variable: getNextVariableName() }],
+    case RepeatersAction.AddRootRepeater:
+      newState[action.shapeID] = {
+        times: 1,
+        variable: getNextVariableName(),
+        next: null
       };
-    case RepeatersAction.DeleteRepetition:
-      if (!state[action.key]) {
+
+      return newState;
+    case RepeatersAction.AddChildRepeater:
+      const newRepeaterID = uniqueRepeaterID();
+      newState[action.repeaterID] = {
+        ...newState[action.repeaterID],
+        next: newRepeaterID
+      };
+      newState[newRepeaterID] = {
+        times: 1,
+        variable: getNextVariableName(),
+        next: null
+      };
+      return newState;
+    case RepeatersAction.DeleteRepeater:
+      if (!state[action.id]) {
         throw new Error(
-          `Called delete repeater on an empty repeater: ${action.key}`,
+          `Called delete repeater on a non-existant repeater: ${action.id}`
         );
       }
 
-      newRepeater = [...state[action.key]];
-      newRepeater.splice(action.index, 1);
-      return {
-        ...state,
-        [action.key]: newRepeater,
-      };
+      delete newState[action.id];
+
+      // TODO(josh): For now, iterating over the entire repeaters state
+      // doesn't seem bad because we probably won't have a ton of repeaters.
+      // If this gets bad though we may want to consider giving each repeater
+      // a pointer to its parent.
+      for (const repeaterID in newState) {
+        if (!newState.hasOwnProperty(repeaterID)) {
+          continue;
+        }
+
+        const repeater = newState[repeaterID];
+        if (repeater.next === action.id) {
+          newState[repeaterID].next = null;
+        }
+      }
+
+      return newState;
     case RepeatersAction.UpdateRepeater:
-      if (!state[action.key]) {
+      if (!state[action.id]) {
         throw new Error(
-          `Called update repeater on an empty repeater: ${action.key}`,
+          `Called update repeater on a non-existant repeater: ${action.id}`
         );
       }
 
-      newRepeater = [...state[action.key]];
-      newRepeater[action.index] = {
+      newState[action.id] = {
+        ...newState[action.id],
         times: action.times,
-        variable: action.variable,
+        variable: action.variable
       };
 
-      return {
-        ...state,
-        [action.key]: newRepeater,
-      };
+      return newState;
     default:
       return state;
   }

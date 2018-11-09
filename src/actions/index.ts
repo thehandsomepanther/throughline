@@ -9,8 +9,9 @@ import {
 } from './editor';
 import { UpdateOrderAction } from './order';
 import {
-  AddRepeaterAction,
-  DeleteRepetitionAction,
+  AddChildRepeaterAction,
+  AddRootRepeaterAction,
+  DeleteRepeaterAction,
   UpdateRepeaterAction
 } from './repeaters';
 import {
@@ -43,8 +44,9 @@ export type Action =
   | ResetErroneousPropsAction
   | ChangeActiveFrameAction
   | UpdateOrderAction
-  | AddRepeaterAction
-  | DeleteRepetitionAction
+  | AddRootRepeaterAction
+  | AddChildRepeaterAction
+  | DeleteRepeaterAction
   | UpdateRepeaterAction;
 
 export type Dispatch = (action: Action) => void;

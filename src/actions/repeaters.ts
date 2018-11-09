@@ -1,44 +1,47 @@
 import { RepeatersAction } from '../types/repeaters';
 
-export interface AddRepeaterAction {
-  type: RepeatersAction.AddRepeater;
-  key: string;
+export interface AddRootRepeaterAction {
+  type: RepeatersAction.AddRootRepeater;
+  shapeID: string;
 }
-export const addRepeater = (key: string): AddRepeaterAction => ({
-  type: RepeatersAction.AddRepeater,
-  key
+export const addRootRepeater = (shapeID: string): AddRootRepeaterAction => ({
+  type: RepeatersAction.AddRootRepeater,
+  shapeID
 });
 
-export interface DeleteRepetitionAction {
-  type: RepeatersAction.DeleteRepetition;
-  key: string;
-  index: number;
+export interface AddChildRepeaterAction {
+  type: RepeatersAction.AddChildRepeater;
+  repeaterID: string;
 }
-export const deleteRepetition = (
-  key: string,
-  index: number
-): DeleteRepetitionAction => ({
-  type: RepeatersAction.DeleteRepetition,
-  key,
-  index
+export const AddChildRepeater = (
+  repeaterID: string
+): AddChildRepeaterAction => ({
+  type: RepeatersAction.AddChildRepeater,
+  repeaterID
+});
+
+export interface DeleteRepeaterAction {
+  type: RepeatersAction.DeleteRepeater;
+  id: string;
+}
+export const deleteRepeater = (id: string): DeleteRepeaterAction => ({
+  type: RepeatersAction.DeleteRepeater,
+  id
 });
 
 export interface UpdateRepeaterAction {
   type: RepeatersAction.UpdateRepeater;
-  key: string;
-  index: number;
+  id: string;
   times: number;
   variable: string;
 }
 export const updateRepeater = (
-  key: string,
-  index: number,
+  id: string,
   times: number,
   variable: string
 ): UpdateRepeaterAction => ({
   type: RepeatersAction.UpdateRepeater,
-  key,
-  index,
+  id,
   times,
   variable
 });
