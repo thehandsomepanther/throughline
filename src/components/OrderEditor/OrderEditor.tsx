@@ -27,7 +27,18 @@ interface ShapeLayerProps {
   dispatch: Dispatch;
 };
 
-class ShapeLayer extends React.Component<ShapeLayerProps> {
+interface ShapeLayerState {
+  isHovered: boolean;
+};
+
+class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
+  constructor(props: ShapeLayerProps) {
+    super(props);
+    this.state = {
+      isHovered: false,
+    };
+  }
+
   private handleClick = () => {
     this.props.dispatch(changeActiveShape(this.props.shapeID));
   }
@@ -40,17 +51,38 @@ class ShapeLayer extends React.Component<ShapeLayerProps> {
     this.props.dispatch(toggleShapeVisible(this.props.shapeID));
   }
 
+  private handleMouseEnter = () => {
+    this.setState({ isHovered: true });
+  }
+
+  private handleMouseLeave = () => {
+    this.setState({ isHovered: false });
+  }
+
   public render() {
     const { shape, repetition, shapeID, active } = this.props;
     return (
-      <Layer active={active} visible={shape.visible} onClick={this.handleClick}>
+      <Layer
+        active={active}
+        visible={shape.visible}
+        onClick={this.handleClick}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
         <LayerName>
           <IconButton svg={HandleIcon} />
           <span>{shape.name}</span>
         </LayerName>
         <LayerIcons>
-          <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
-          <IconButton svg={shape.visible ? VisibleIcon : InvisibleIcon} onClick={this.handleToggleVisibleClick} />
+          {this.state.isHovered &&
+            <IconButton svg={RepeatIcon} onClick={this.handleRepeatButtonClick} />
+          }
+          {(this.state.isHovered || !shape.visible) &&
+            <IconButton
+              svg={shape.visible ? VisibleIcon : InvisibleIcon}
+              onClick={this.handleToggleVisibleClick}
+            />
+          }
         </LayerIcons>
         {repetition && (
           <div>
