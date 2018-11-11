@@ -1,11 +1,14 @@
 import { range, toNumber } from 'lodash';
 import { Using } from '../types/formulas';
 import { Formula } from '../types/formulas';
+import { RepeatersState } from '../types/repeaters';
 import { Shape } from '../types/shapes';
 
 export const evalFunctionProp = (
   fn: string,
-  frames: number
+  frames: number,
+  shapeID: string,
+  repeaters: RepeatersState,
 ): Promise<number[]> => {
   let worker: Worker | null = new Worker('worker.js');
 
@@ -93,8 +96,10 @@ export const evalConstProp = (
 };
 
 export const calcFormulaValues = (
+  shapeID: string,
   formula: Formula,
-  frames: number
+  frames: number,
+  repeaters: RepeatersState,
 ): Promise<number[]> => {
   switch (formula.using) {
     case Using.Constant:
@@ -120,16 +125,16 @@ export const calcFormulaValues = (
 
       return Promise.resolve(formula.custom.slice(0, frames));
     case Using.Function:
-      return evalFunctionProp(formula.fn || '', frames);
-    default:
-      throw new Error(`Tried to use unexpected formula: ${formula.using}`);
+      return evalFunctionProp(formula.fn || '', frames, shapeID, repeaters);
   }
 };
 
 // Given a shape, calculates the values for its provided formulas at every frame.
 export const calcShapeValues = (
+  shapeID: string,
   shape: Shape,
   frames: number,
+  repeaters: RepeatersState,
   handleCalcPropError: (prop: string) => void
 ): Promise<{ [key: string]: number[] }> =>
   new Promise(
@@ -149,7 +154,7 @@ export const calcShapeValues = (
         }
 
         promises.push(
-          calcFormulaValues(shape.formulas[propKey], frames)
+          calcFormulaValues(shapeID, shape.formulas[propKey], frames, repeaters)
             .then((values: number[]) => {
               return Promise.resolve({ [propKey]: values });
             })

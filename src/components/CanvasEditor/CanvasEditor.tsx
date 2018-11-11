@@ -64,7 +64,7 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
         }
 
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        paintShapesAtFrame(shapes, order, repeaters, i, ctx);
+        paintShapesAtFrame(ctx, shapes, order, repeaters, i);
         this.imageDataFrames.push(ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT));
       }
 

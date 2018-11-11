@@ -5,7 +5,6 @@ import { changeActiveFrame } from '../../actions/editor';
 import { updateCustom, updateUsing } from '../../actions/shapes';
 import { COLOR_BLACK, COLOR_BLUE, COLOR_GREY, COLOR_RED } from '../../styles';
 import { Using } from '../../types/formulas';
-import { FormulaValues } from '../../types/shapes';
 
 const MARGIN_VERTICAL = 40;
 
@@ -13,7 +12,7 @@ const percentile = (min: number, max: number, val: number): number =>
   (val - min) / (max - min);
 
 interface PropertiesGraphProps {
-  values: FormulaValues;
+  values: number[];
   activeFrame: number;
   shapeID: string;
   shapeProperty: string;

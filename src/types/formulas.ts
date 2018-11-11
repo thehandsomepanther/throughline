@@ -1,16 +1,37 @@
 export enum Using {
-  Custom = 'USING_CUSTOM',
   Function = 'USING_FN',
+  Custom = 'USING_CUSTOM',
   Constant = 'USING_CONST',
-}
-
-export type ConstValue = string
-export type FunctionValue = string
-export type CustomValue = number[]
-
-export interface Formula {
-  using: Using;
-  const?: ConstValue;
-  custom?: CustomValue;
-  fn?: FunctionValue;
 };
+
+export interface VirtualFormula {
+  using: Using;
+  fn?: string;
+  custom?: number[];
+  const?: string;
+};
+
+// A FunctionValue is nested list of numbers. Each level of nesting corresponds to the
+// value of an argument supplied to the function. For example, in the simplest function
+// we supply one argument, t, which corresponds to the frame index. In that case, we the
+// type of `values` is number[].
+// If we add two repeaters to the shape, we get a function with three arguments (e.g. t,
+// i, and j). Now, the type of `values` is Array<Array<Array<number>>>.
+export interface FunctionValue extends Array<number | FunctionValue> { };
+export interface FunctionFormula extends VirtualFormula {
+  using: Using.Function;
+  values: FunctionValue;
+};
+
+export interface CustomFormula extends VirtualFormula {
+  using: Using.Constant;
+  values: number[];
+};
+
+export interface ConstFormula extends VirtualFormula {
+  using: Using.Custom;
+  values: number[];
+};
+
+export type FormulaValue = number[] | FunctionValue;
+export type Formula = FunctionFormula | CustomFormula | ConstFormula;

@@ -1,10 +1,9 @@
-import { Formula } from './formulas';
+import { ConstFormula, CustomFormula, Formula, FunctionFormula } from './formulas';
 
 export enum ShapesAction {
   UpdateUsing = 'SHAPE_UPDATE_USING',
-  UpdateConst = 'SHAPE_UPDATE_CONST',
   UpdateCustom = 'SHAPE_UPDATE_CUSTOM',
-  UpdateFunction = 'SHAPE_UPDATE_FN',
+  UpdateFormula = 'SHAPE_UPDATE_FORMULA',
   NewShape = 'SHAPE_NEW_SHAPE',
   DeleteShape = 'SHAPE_DELETE_SHAPE',
   SetValues = 'SHAPE_SET_VALUES',
@@ -85,10 +84,6 @@ export interface EllipseProperties<T> extends ShapeProperties<T> {
 // determines how those values are determined.
 export type Shape = RectShape | EllipseShape;
 
-// Calculated values for a formula are stored as an array of numbers (one for each
-// frame)
-export type FormulaValues = number[];
-
 // This interface only exists to be extended by actual shapes which can be
 // rendered.
 interface VirtualShape {
@@ -96,19 +91,15 @@ interface VirtualShape {
   name: string;
   children?: string[];
   formulas: ShapeProperties<Formula>;
-  values: ShapeProperties<FormulaValues>;
   visible: boolean;
 };
 
 export interface RectShape extends VirtualShape {
   type: ShapeType.Rect;
-  formulas: RectProperties<Formula>;
-  values: RectProperties<FormulaValues>;
+  formulas: RectProperties<ConstFormula | FunctionFormula | CustomFormula>;
 };
 
 export interface EllipseShape extends VirtualShape {
   type: ShapeType.Ellipse;
-  formulas: EllipseProperties<Formula>;
-  values: EllipseProperties<FormulaValues>;
+  formulas: EllipseProperties<ConstFormula | FunctionFormula | CustomFormula>;
 };
-

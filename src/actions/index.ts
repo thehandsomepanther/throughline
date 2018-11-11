@@ -19,18 +19,16 @@ import {
   DeleteShapeAction,
   SetShapeValuesAction,
   ToggleShapeVisibleAction,
-  UpdateConstAction,
   UpdateCustomAction,
-  UpdateFunctionAction,
+  UpdateFormulaAction,
   UpdateShapeValuesAction,
   UpdateUsingAction
 } from './shapes';
 
 export type Action =
-  | UpdateConstAction
   | UpdateUsingAction
   | UpdateCustomAction
-  | UpdateFunctionAction
+  | UpdateFormulaAction
   | AddNewShapeAction
   | DeleteShapeAction
   | SetShapeValuesAction

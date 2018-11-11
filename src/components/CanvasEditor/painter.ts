@@ -1,68 +1,107 @@
+import { ConstFormula, CustomFormula, FunctionFormula, Using } from '../../types/formulas';
 import { OrderState } from '../../types/order';
-import { RepeatersState } from '../../types/repeaters';
+import { Repeater, RepeatersState } from '../../types/repeaters';
 import { ShapesState, ShapeType } from '../../types/shapes';
 import { rgbToHex } from '../../util';
 
+export const getShapeFormulaValue = (
+  formula: ConstFormula | CustomFormula | FunctionFormula,
+  frame: number,
+  functionArguments: number[],
+): number => {
+  if (formula.using === Using.Constant || formula.using === Using.Custom) {
+    return formula.values[frame];
+  }
+
+  let values = formula.values[frame];
+  for (const functionArgument of functionArguments) {
+    values = values[functionArgument];
+
+    if (values == null) {
+      throw new Error('Wrong number of function arguments supplied.');
+    }
+  }
+
+  if (typeof values !== 'number') {
+    throw new Error('Wrong number of function arguments supplied.');
+  }
+
+  return values;
+}
+
+const paintShape = (
+  ctx: CanvasRenderingContext2D,
+  shapeID: string,
+  shapes: ShapesState,
+  repeaters: RepeatersState,
+  repeater: Repeater | undefined,
+  frame: number,
+  ...functionArguments: number[]
+) => {
+  // If there's still another level of repetition we need to paint, then we recur.
+  if (repeater && repeater.next) {
+    const nextRepeater = repeaters[repeater.next];
+    for (let i = 0; i < repeater.times; i++) {
+      paintShape(ctx, shapeID, shapes, repeaters, nextRepeater, frame, ...functionArguments, i);
+    }
+
+    return;
+  }
+
+  // Otherwise, we've done all the repetition necessary and we can proceed to drawing
+  // this shape to the canvas.
+  ctx.save();
+
+  const sv = (formula: ConstFormula | CustomFormula | FunctionFormula) =>
+    (getShapeFormulaValue(formula, frame, functionArguments));
+
+  const shape = shapes[shapeID];
+  const posX = sv(shape.formulas.posX);
+  const posY = sv(shape.formulas.posY);
+  const fillR = sv(shape.formulas.fillR);
+  const fillG = sv(shape.formulas.fillG);
+  const fillB = sv(shape.formulas.fillB);
+  const rotation = sv(shape.formulas.rotation);
+
+  if (shape.type === ShapeType.Rect) {
+    const width = sv(shape.formulas.width);
+    const height = sv(shape.formulas.height);
+    const scaleX = sv(shape.formulas.scaleX);
+    const scaleY = sv(shape.formulas.scaleY);
+
+    ctx.translate(posX + width / 2, posY + height / 2);
+    ctx.rotate(rotation);
+    ctx.translate(-(posX + width / 2), -(posY + height / 2));
+    ctx.fillStyle = rgbToHex(fillR, fillG, fillB);
+    ctx.fillRect(posX, posY, width * scaleX, height * scaleY);
+  } else if (shape.type === ShapeType.Ellipse) {
+    const radiusX = sv(shape.formulas.radiusX);
+    const radiusY = sv(shape.formulas.radiusY);
+    const startAngle = sv(shape.formulas.startAngle);
+    const endAngle = sv(shape.formulas.endAngle);
+
+    ctx.beginPath();
+    ctx.fillStyle = rgbToHex(fillR, fillG, fillB);
+    ctx.ellipse(posX, posY, radiusX, radiusY, rotation, startAngle, endAngle);
+    ctx.fill();
+    ctx.closePath();
+  }
+  ctx.restore();
+}
+
 // Paints a given canvas context with the values of shapes at a given frame.
 export const paintShapesAtFrame = (
+  ctx: CanvasRenderingContext2D,
   shapes: ShapesState,
   order: OrderState,
   repeaters: RepeatersState,
   frame: number,
-  ctx: CanvasRenderingContext2D
 ) => {
   for (const shapeID of order) {
-    ctx.save();
-    const shape = shapes[shapeID];
-
-    if (!shape.visible) {
+    if (!shapes[shapeID].visible) {
       continue;
     }
 
-    if (shape.type === ShapeType.Rect) {
-      const sv = shape.values;
-      ctx.translate(
-        sv.posX[frame] + sv.width[frame] / 2,
-        sv.posY[frame] + sv.height[frame] / 2
-      );
-      ctx.rotate(sv.rotation[frame]);
-      ctx.translate(
-        -(sv.posX[frame] + sv.width[frame] / 2),
-        -(sv.posY[frame] + sv.height[frame] / 2)
-      );
-      ctx.fillStyle = rgbToHex(
-        sv.fillR[frame],
-        sv.fillG[frame],
-        sv.fillB[frame]
-      );
-      ctx.fillRect(
-        sv.posX[frame],
-        sv.posY[frame],
-        sv.width[frame] * sv.scaleX[frame],
-        sv.height[frame] * sv.scaleY[frame]
-      );
-    } else if (shape.type === ShapeType.Ellipse) {
-      const sv = shape.values;
-      ctx.beginPath();
-      ctx.fillStyle = rgbToHex(
-        sv.fillR[frame],
-        sv.fillG[frame],
-        sv.fillB[frame]
-      );
-      ctx.ellipse(
-        sv.posX[frame],
-        sv.posY[frame],
-        sv.radiusX[frame],
-        sv.radiusY[frame],
-        sv.rotation[frame],
-        sv.startAngle[frame],
-        sv.endAngle[frame]
-      );
-      ctx.fill();
-      ctx.closePath();
-      break;
-    }
-
-    ctx.restore();
+    paintShape(ctx, shapeID, shapes, repeaters, repeaters[shapeID], frame);
   }
 };

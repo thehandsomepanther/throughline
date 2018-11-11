@@ -1,5 +1,5 @@
-import { ConstValue, CustomValue, FunctionValue, Using } from '../types/formulas';
-import { EllipseProperties, FormulaValues, RectProperties, Shape, ShapesAction, ShapeType } from '../types/shapes';
+import { FormulaValue, Using } from '../types/formulas';
+import { EllipseProperties, RectProperties, Shape, ShapesAction, ShapeType } from '../types/shapes';
 import { uniqueShapeID } from '../util';
 import makeDefaultShape from '../util/makeDefaultShape';
 
@@ -20,55 +20,38 @@ export const updateUsing = (
   using
 });
 
-export interface UpdateConstAction {
-  type: ShapesAction.UpdateConst;
-  shapeID: string;
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
-  value: ConstValue;
-}
-export const updateConst = (
-  shapeID: string,
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  value: ConstValue
-): UpdateConstAction => ({
-  type: ShapesAction.UpdateConst,
-  shapeID,
-  prop,
-  value
-});
-
-export interface UpdateFunctionAction {
-  type: ShapesAction.UpdateFunction;
-  shapeID: string;
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
-  value: FunctionValue;
-}
-export const updateFunction = (
-  shapeID: string,
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  value: FunctionValue,
-): UpdateFunctionAction => ({
-  type: ShapesAction.UpdateFunction,
-  shapeID,
-  prop,
-  value
-});
-
 export interface UpdateCustomAction {
   type: ShapesAction.UpdateCustom;
   shapeID: string;
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
-  value: CustomValue;
+  value: number[];
 }
 export const updateCustom = (
   shapeID: string,
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  value: CustomValue,
+  value: number[],
 ): UpdateCustomAction => ({
   type: ShapesAction.UpdateCustom,
   shapeID,
   prop,
-  value
+  value,
+})
+
+export interface UpdateFormulaAction {
+  type: ShapesAction.UpdateFormula;
+  shapeID: string;
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
+  formula: string;
+};
+export const updateFormula = (
+  shapeID: string,
+  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
+  formula: string,
+): UpdateFormulaAction => ({
+  type: ShapesAction.UpdateFormula,
+  shapeID,
+  prop,
+  formula,
 });
 
 export interface AddNewShapeAction {
@@ -99,11 +82,11 @@ export const deleteShape = (shapeID: string): DeleteShapeAction => ({
 export interface SetShapeValuesAction {
   type: ShapesAction.SetValues;
   shapeID: string;
-  values: Partial<RectProperties<FormulaValues> & EllipseProperties<FormulaValues>>;
+  values: Partial<RectProperties<FormulaValue> & EllipseProperties<FormulaValue>>;
 }
 export const setShapeValues = (
   shapeID: string,
-  values: Partial<RectProperties<FormulaValues> & EllipseProperties<FormulaValues>>
+  values: Partial<RectProperties<FormulaValue> & EllipseProperties<FormulaValue>>
 ): SetShapeValuesAction => ({
   type: ShapesAction.SetValues,
   shapeID,
@@ -114,12 +97,12 @@ export interface UpdateShapeValuesAction {
   type: ShapesAction.UpdateValues;
   shapeID: string;
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
-  values: FormulaValues;
+  values: FormulaValue;
 }
 export const updateShapeValues = (
   shapeID: string,
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  values: FormulaValues
+  values: FormulaValue
 ): UpdateShapeValuesAction => ({
   type: ShapesAction.UpdateValues,
   shapeID,

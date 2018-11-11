@@ -1,7 +1,6 @@
 import { Formula, Using } from '../types/formulas';
 import {
   EllipseProperties,
-  FormulaValues,
   RectProperties,
   Shape,
   ShapeProperties,
@@ -42,11 +41,11 @@ const shapePropsObject = (shape: ShapeType): ShapeProperties<Formula> =>
       ...acc,
       [property]: {
         using: Using.Constant,
-        const: defaultPropertyValues[shape]
-          ? defaultPropertyValues[shape][property] || 0
-          : 0,
+        const: (defaultPropertyValues[shape] && defaultPropertyValues[shape][property]) ?
+          defaultPropertyValues[shape][property] : 0,
         custom: [defaultPropertyValues[shape][property]],
         fn: 'return 0;',
+        values: [],
       },
     }),
     {},
@@ -58,7 +57,6 @@ export default (type: ShapeType, name: string): Shape => {
       type: ShapeType.Ellipse,
       name,
       formulas: shapePropsObject(type) as EllipseProperties<Formula>,
-      values: {} as EllipseProperties<FormulaValues>,
       visible: true,
     }
   } else if (type === ShapeType.Rect) {
@@ -66,7 +64,6 @@ export default (type: ShapeType, name: string): Shape => {
       type: ShapeType.Rect,
       name,
       formulas: shapePropsObject(type) as RectProperties<Formula>,
-      values: {} as RectProperties<FormulaValues>,
       visible: true,
     }
   }

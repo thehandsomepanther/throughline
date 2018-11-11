@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { Dispatch } from 'src/actions';
-import { updateConst, updateFunction, updateUsing } from '../../actions/shapes';
+import { updateFormula, updateUsing } from '../../actions/shapes';
 import { SidebarHeader } from '../../styles/components/SidebarHeader'
 import { EditorState } from '../../types/editor';
-import { ConstValue, Formula, FunctionValue, Using } from '../../types/formulas';
-import { EllipseProperties, FormulaValues, RectProperties, ShapeType } from '../../types/shapes';
+import { Formula, FunctionValue, Using } from '../../types/formulas';
+import { EllipseProperties, RectProperties, ShapeType } from '../../types/shapes';
 import { Shape, ShapesState } from '../../types/shapes';
 import { PropertiesGraph } from './PropertiesGraph';
 import {
@@ -19,12 +19,8 @@ import {
   UsingDropdown,
 } from './styles';
 
-const getConstValue = (formula: Formula): ConstValue | undefined => formula.const;
-const getFunctionValue = (formula: Formula): FunctionValue | undefined => formula.fn;
-
 interface PropertyInfoProps {
   formula: Formula;
-  values: FormulaValues;
   shapeID: string;
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   activeFrame: number;
@@ -38,18 +34,20 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
     dispatch(updateUsing(shapeID, prop, e.target.value as Using));
   }
 
-  private handleConstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleFormulaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateConst(shapeID, prop, e.target.value));
-  }
-
-  private handleFunctionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { dispatch, shapeID, prop } = this.props;
-    dispatch(updateFunction(shapeID, prop, e.target.value));
+    dispatch(updateFormula(shapeID, prop, e.target.value));
   }
 
   public render() {
-    const { formula, isErroneous, prop, values, activeFrame, shapeID, dispatch } = this.props;
+    const { formula, isErroneous, prop, activeFrame, shapeID, dispatch } = this.props;
+    let values = formula.values;
+
+    // TODO: Figure out a better way to handle this (preferrably some way of
+    // giving the user control over the function arguments?)
+    while (Array.isArray(values[0])) {
+      values = values[0] as FunctionValue | number[];
+    }
 
     return (
       <PropertyInfoContainer>
@@ -69,9 +67,9 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
         </PropertyInfoHeader>
         {formula.using === Using.Constant && (
           <ConstantPropertyInput
-            value={getConstValue(formula)}
+            value={formula.const}
             placeholder='0'
-            onChange={this.handleConstChange}
+            onChange={this.handleFormulaChange}
           />
         )}
         {formula.using === Using.Custom && (
@@ -79,14 +77,14 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
         )}
         {formula.using === Using.Function && (
           <FunctionPropertyInput
-            value={getFunctionValue(formula)}
+            value={formula.fn}
             placeholder="return 0"
-            onChange={this.handleFunctionChange}
+            onChange={this.handleFormulaChange}
           />
         )}
         {formula.using !== Using.Constant && (
           <PropertiesGraph
-            values={values}
+            values={values as number[]}
             activeFrame={activeFrame}
             shapeID={shapeID}
             shapeProperty={prop}
@@ -124,7 +122,6 @@ const ShapePropertiesView = ({
         <PropertyInfo
           prop={rectProperty}
           formula={shape.formulas[rectProperty]}
-          values={shape.values[rectProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
           isErroneous={erroneousProps && erroneousProps[shapeID]}
@@ -137,7 +134,6 @@ const ShapePropertiesView = ({
         <PropertyInfo
           prop={ellipseProperty}
           formula={shape.formulas[ellipseProperty]}
-          values={shape.values[ellipseProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
           isErroneous={erroneousProps && erroneousProps[shapeID]}

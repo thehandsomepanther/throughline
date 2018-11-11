@@ -2,7 +2,7 @@ import { Action } from '../actions';
 import { Dispatch } from '../actions';
 import { addErroneousProp, removeErroneousProp } from '../actions/editor';
 import { setShapeValues, updateShapeValues } from '../actions/shapes';
-import { EditorState } from '../types/editor';
+import { RepeatersState } from '../types/repeaters';
 import { ShapesAction, ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
 import { calcFormulaValues, calcShapeValues } from '../util/shapes';
@@ -10,17 +10,18 @@ import { calcFormulaValues, calcShapeValues } from '../util/shapes';
 const updatePropValues = (
   dispatch: Dispatch,
   shapes: ShapesState,
-  shape: string,
+  shapeID: string,
   prop: string,
-  editor: EditorState
+  frames: number,
+  repeaters: RepeatersState,
 ) => {
-  calcFormulaValues(shapes[shape].formulas[prop], editor.numFrames)
+  calcFormulaValues(shapeID, shapes[shapeID].formulas[prop], frames, repeaters)
     .then((values: number[]) => {
-      dispatch(removeErroneousProp(shape, prop));
-      dispatch(updateShapeValues(shape, prop as any, values));
+      dispatch(removeErroneousProp(shapeID, prop));
+      dispatch(updateShapeValues(shapeID, prop as any, values));
     })
     .catch(() => {
-      dispatch(addErroneousProp(shape, prop));
+      dispatch(addErroneousProp(shapeID, prop));
     });
 };
 
@@ -29,25 +30,24 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
 ) => {
   next(action);
 
-  const { editor, shapes } = store.getState();
+  const { editor, shapes, repeaters } = store.getState();
   switch (action.type) {
     case ShapesAction.NewShape:
-      calcShapeValues(action.shape, editor.numFrames, () => { }).then(
+      calcShapeValues(action.shapeID, action.shape, editor.numFrames, repeaters, () => { }).then(
         (values: { [key: string]: number[] }) => {
           store.dispatch(setShapeValues(action.shapeID, values));
         }
       );
       break;
     case ShapesAction.UpdateUsing:
-    case ShapesAction.UpdateConst:
-    case ShapesAction.UpdateCustom:
-    case ShapesAction.UpdateFunction:
+    case ShapesAction.UpdateFormula:
       updatePropValues(
         store.dispatch,
         shapes,
         action.shapeID,
         action.prop,
-        editor
+        editor.numFrames,
+        repeaters,
       );
       break;
   }
