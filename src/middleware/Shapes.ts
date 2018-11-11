@@ -2,7 +2,7 @@ import { Action } from '../actions';
 import { Dispatch } from '../actions';
 import { addErroneousProp, removeErroneousProp } from '../actions/editor';
 import { setShapeValues, updateShapeValues } from '../actions/shapes';
-import { RepeatersState } from '../types/repeaters';
+import { RepeatersAction, RepeatersState } from '../types/repeaters';
 import { ShapesAction, ShapesState } from '../types/shapes';
 import { Store } from '../types/store';
 import { calcFormulaValues, calcShapeValues } from '../util/shapes';
@@ -34,6 +34,13 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
   switch (action.type) {
     case ShapesAction.NewShape:
       calcShapeValues(action.shapeID, action.shape, editor.numFrames, repeaters, () => { }).then(
+        (values: { [key: string]: number[] }) => {
+          store.dispatch(setShapeValues(action.shapeID, values));
+        }
+      );
+      break;
+    case RepeatersAction.AddRootRepeater:
+      calcShapeValues(action.shapeID, shapes[action.shapeID], editor.numFrames, repeaters, () => { }).then(
         (values: { [key: string]: number[] }) => {
           store.dispatch(setShapeValues(action.shapeID, values));
         }

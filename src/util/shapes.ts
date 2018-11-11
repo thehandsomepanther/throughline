@@ -1,8 +1,20 @@
 import { range, toNumber } from 'lodash';
 import { Using } from '../types/formulas';
 import { Formula } from '../types/formulas';
-import { RepeatersState } from '../types/repeaters';
+import { Repeater, RepeatersState } from '../types/repeaters';
 import { Shape } from '../types/shapes';
+
+const isNumberOrArrayOfNumbers = (value: any): boolean => {
+  if (typeof value === 'number') {
+    return true;
+  }
+
+  if (Array.isArray(value)) {
+    return value.reduce((acc, curr) => acc && isNumberOrArrayOfNumbers(curr), true);
+  }
+
+  return false;
+}
 
 export const evalFunctionProp = (
   fn: string,
@@ -11,6 +23,18 @@ export const evalFunctionProp = (
   repeaters: RepeatersState,
 ): Promise<number[]> => {
   let worker: Worker | null = new Worker('worker.js');
+
+  let script = `(function(){return ${
+    JSON.stringify(range(frames))}.map(function(t){${fn}})})()`;
+
+  let repeater: Repeater | null = repeaters[shapeID];
+  while (repeater) {
+    script = `(function(){return ${
+      JSON.stringify(range(repeater.times))
+      }.map(function(${repeater.variable}){return ${script}})})()`;
+
+    repeater = repeater.next ? repeaters[repeater.next] : null;
+  }
 
   return new Promise(
     (resolve: (val: number[]) => void, reject: (reason: Error) => void) => {
@@ -23,22 +47,14 @@ export const evalFunctionProp = (
           reject(new Error('Timeout'));
         }, 2000);
 
-        worker.postMessage([
-          `(function(){return ${JSON.stringify(
-            range(frames)
-          )}.map(function(t){${fn}})})()`
-        ]);
+        worker.postMessage([script]);
 
         worker.onmessage = (e) => {
           clearTimeout(timeout);
           const values = JSON.parse(e.data);
           values.forEach((value?: number) => {
-            if (Number.isNaN(toNumber(value))) {
-              reject(
-                new Error(
-                  'Expression evaluated to something other than an number'
-                )
-              );
+            if (!isNumberOrArrayOfNumbers(value)) {
+              reject(new Error('Expression evaluated to something other than an number'));
             }
           });
           resolve(values);

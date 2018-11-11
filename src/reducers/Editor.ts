@@ -1,6 +1,5 @@
 import { Action } from '../actions';
 import { EditorAction, EditorState } from '../types/editor';
-import { RepeatersAction } from '../types/repeaters';
 import { ShapesAction } from '../types/shapes';
 import { orderInitialState } from './Order';
 
@@ -23,7 +22,6 @@ export default (
     case ShapesAction.SetValues:
     case ShapesAction.UpdateValues:
     case ShapesAction.ToggleVisible:
-    case RepeatersAction.UpdateRepeater:
       return {
         ...state,
         shouldRedrawFrames: true

@@ -1,4 +1,4 @@
-import { ConstFormula, CustomFormula, FunctionFormula, Using } from '../../types/formulas';
+import { ConstFormula, CustomFormula, FunctionFormula, FunctionValue, Using } from '../../types/formulas';
 import { OrderState } from '../../types/order';
 import { Repeater, RepeatersState } from '../../types/repeaters';
 import { ShapesState, ShapeType } from '../../types/shapes';
@@ -13,20 +13,29 @@ export const getShapeFormulaValue = (
     return formula.values[frame];
   }
 
-  let values = formula.values[frame];
-  for (const functionArgument of functionArguments) {
-    values = values[functionArgument];
+  if (!functionArguments.length) {
+    return formula.values[frame] as number;
+  }
 
-    if (values == null) {
-      throw new Error('Wrong number of function arguments supplied.');
+  let values: FunctionValue | number[] | null = null;
+  for (const functionArgument of functionArguments.reverse()) {
+    if (!values) {
+      values = formula.values[functionArgument] as any;
+    } else {
+      values = values[functionArgument] as any;
     }
   }
 
-  if (typeof values !== 'number') {
+  if (values == null) {
     throw new Error('Wrong number of function arguments supplied.');
   }
 
-  return values;
+  const value = values[frame];
+  if (typeof value !== 'number') {
+    throw new Error('Wrong number of function arguments supplied.');
+  }
+
+  return value;
 }
 
 const paintShape = (
@@ -34,13 +43,13 @@ const paintShape = (
   shapeID: string,
   shapes: ShapesState,
   repeaters: RepeatersState,
-  repeater: Repeater | undefined,
+  repeater: Repeater | null,
   frame: number,
   ...functionArguments: number[]
 ) => {
   // If there's still another level of repetition we need to paint, then we recur.
-  if (repeater && repeater.next) {
-    const nextRepeater = repeaters[repeater.next];
+  if (repeater) {
+    const nextRepeater = repeater.next ? repeaters[repeater.next] : null;
     for (let i = 0; i < repeater.times; i++) {
       paintShape(ctx, shapeID, shapes, repeaters, nextRepeater, frame, ...functionArguments, i);
     }
