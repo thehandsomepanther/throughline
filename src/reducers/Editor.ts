@@ -15,7 +15,7 @@ export default (
   state: EditorState = initialState,
   action: Action
 ): EditorState => {
-  let newState;
+  let newState = { ...state };
 
   switch (action.type) {
     case ShapesAction.DeleteShape:
@@ -37,29 +37,31 @@ export default (
         shouldRedrawFrames: false
       };
     case EditorAction.AddErroneousProp:
-      return {
-        ...state,
-        erroneousProps: {
-          ...state.erroneousProps,
-          [action.shape]: {
-            ...(state.erroneousProps[action.shape] || {}),
+      newState.erroneousProps[action.shapeID] = newState.erroneousProps[
+        action.shapeID
+      ]
+        ? {
+            ...newState.erroneousProps[action.shapeID],
             [action.prop]: true
           }
-        }
-      };
+        : {
+            [action.prop]: true
+          };
+
+      return newState;
     case EditorAction.RemoveErroneousProp:
       newState = { ...state };
       if (
-        newState.erroneousProps[action.shape] &&
-        newState.erroneousProps[action.shape][action.prop]
+        newState.erroneousProps[action.shapeID] &&
+        newState.erroneousProps[action.shapeID][action.prop]
       ) {
-        delete newState.erroneousProps[action.shape][action.prop];
+        delete newState.erroneousProps[action.shapeID][action.prop];
 
         if (
-          Object.getOwnPropertyNames(newState.erroneousProps[action.shape])
+          Object.getOwnPropertyNames(newState.erroneousProps[action.shapeID])
             .length === 0
         ) {
-          delete newState.erroneousProps[action.shape];
+          delete newState.erroneousProps[action.shapeID];
         }
       }
 

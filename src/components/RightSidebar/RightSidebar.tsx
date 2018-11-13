@@ -4,7 +4,7 @@ import PropertiesEditor from '../../containers/PropertiesEditor';
 import { COLOR_NEAR_BLACK } from '../../styles';
 
 const RightSidebar = styled('div')`
-  width: 350px;
+  width: 400px;
   border-left: 4px solid ${COLOR_NEAR_BLACK};
 `;
 

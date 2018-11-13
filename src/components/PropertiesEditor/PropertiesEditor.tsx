@@ -51,24 +51,22 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
 
     return (
       <PropertyInfoContainer>
-        {isErroneous && (
-          <InvalidPropNotification>
-            <span role="img" aria-label="warning">⛔️</span>{' '}
-            This prop is invalid
-          </InvalidPropNotification>
-        )}
         <PropertyInfoHeader>
-          <PropertyName>{prop}</PropertyName>
-          <UsingDropdown value={formula.using} onChange={this.handleUsingChange}>
-            <option value={Using.Constant}>Constant</option>
-            <option value={Using.Custom}>Custom</option>
-            <option value={Using.Function}>Function</option>
-          </UsingDropdown>
+          <div>
+            <PropertyName>{prop}</PropertyName>
+            <UsingDropdown value={formula.using} onChange={this.handleUsingChange}>
+              <option value={Using.Constant}>Constant</option>
+              <option value={Using.Custom}>Custom</option>
+              <option value={Using.Function}>Function</option>
+            </UsingDropdown>
+          </div>
+          {isErroneous && (
+            <InvalidPropNotification>!!</InvalidPropNotification>
+          )}
         </PropertyInfoHeader>
         {formula.using === Using.Constant && (
           <ConstantPropertyInput
             value={formula.const}
-            placeholder='0'
             onChange={this.handleFormulaChange}
           />
         )}
@@ -78,7 +76,6 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
         {formula.using === Using.Function && (
           <FunctionPropertyInput
             value={formula.fn}
-            placeholder="return 0"
             onChange={this.handleFormulaChange}
           />
         )}
@@ -111,6 +108,7 @@ const ShapePropertiesView = ({
     dispatch: Dispatch,
   }) => {
   const propertyInfos = [];
+
   for (const property in shape.formulas) {
     if (!shape.formulas.hasOwnProperty(property)) {
       continue;
@@ -124,7 +122,7 @@ const ShapePropertiesView = ({
           formula={shape.formulas[rectProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
-          isErroneous={erroneousProps && erroneousProps[shapeID]}
+          isErroneous={erroneousProps ? !!erroneousProps[property] : false}
           dispatch={dispatch}
           key={property} />
       );
@@ -136,7 +134,7 @@ const ShapePropertiesView = ({
           formula={shape.formulas[ellipseProperty]}
           shapeID={shapeID}
           activeFrame={activeFrame}
-          isErroneous={erroneousProps && erroneousProps[shapeID]}
+          isErroneous={erroneousProps ? !!erroneousProps[property] : false}
           dispatch={dispatch}
           key={property} />
       );

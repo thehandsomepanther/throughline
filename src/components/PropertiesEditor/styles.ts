@@ -10,7 +10,7 @@ import {
   FONT_SIZE_REGULAR,
   FONT_SIZE_SMALL,
   FONT_STACK_MONOSPACE,
-  mixins,
+  mixins
 } from '../../styles';
 import { Using } from '../../types/formulas';
 
@@ -37,14 +37,24 @@ export const PropertyInfoHeader = styled('div')`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 export const InvalidPropNotification = styled('div')`
-  margin-bottom: 1rem;
   background-color: ${COLOR_YELLOW};
-  padding: 1rem;
+  padding-left: 4px;
+  padding-right: 4px;
+  height: 16px;
+  line-height: 16px;
   color: ${COLOR_NEAR_BLACK};
-  border-radius: 4px;
+  border-radius: 3px;
+  font-family: ${FONT_STACK_MONOSPACE};
+  font-size: ${FONT_SIZE_SMALL};
 `;
 
 export const PropertyName = styled('div')`
@@ -55,7 +65,7 @@ export const PropertyName = styled('div')`
 
 interface UsingDropdownProps {
   value: Using;
-};
+}
 export const UsingDropdown = styled('select')`
   font-size: ${FONT_SIZE_SMALL};
   font-family: ${FONT_STACK_MONOSPACE};
@@ -90,12 +100,10 @@ const INPUT_STYLES = `
 `;
 
 export const ConstantPropertyInput = styled('input')`
-  ${mixins.resetInput}
-  ${INPUT_STYLES}
+  ${mixins.resetInput} ${INPUT_STYLES};
 `;
 
 export const FunctionPropertyInput = styled('input')`
-  ${mixins.resetInput}
-  ${INPUT_STYLES}
+  ${mixins.resetInput} ${INPUT_STYLES}
   margin-bottom: 10px;
 `;

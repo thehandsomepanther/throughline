@@ -25,29 +25,29 @@ export const changeActiveShape = (shape: string): ChangeActiveShapeAction => ({
 
 export interface AddErroneousPropAction {
   type: EditorAction.AddErroneousProp;
-  shape: string;
+  shapeID: string;
   prop: string;
 }
 export const addErroneousProp = (
-  shape: string,
+  shapeID: string,
   prop: string
 ): AddErroneousPropAction => ({
   type: EditorAction.AddErroneousProp,
-  shape,
+  shapeID,
   prop
 });
 
 export interface RemoveErroneousPropAction {
   type: EditorAction.RemoveErroneousProp;
-  shape: string;
+  shapeID: string;
   prop: string;
 }
 export const removeErroneousProp = (
-  shape: string,
+  shapeID: string,
   prop: string
 ): RemoveErroneousPropAction => ({
   type: EditorAction.RemoveErroneousProp,
-  shape,
+  shapeID,
   prop
 });
 
