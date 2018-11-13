@@ -46,6 +46,19 @@ export const shapesMiddleware = (store: Store) => (next: Dispatch) => (
         }
       );
       break;
+    case RepeatersAction.UpdateRepeater: {
+      let parentRepeaterID = action.repeaterID;
+      while (repeaters[parentRepeaterID].prev) {
+        parentRepeaterID = repeaters[parentRepeaterID].prev as string;
+      }
+
+      calcShapeValues(parentRepeaterID, shapes[parentRepeaterID], editor.numFrames, repeaters, () => { }).then(
+        (values: { [key: string]: number[] }) => {
+          store.dispatch(setShapeValues(parentRepeaterID, values));
+        }
+      );
+    }
+      break;
     case ShapesAction.UpdateUsing:
     case ShapesAction.UpdateFormula:
       updatePropValues(

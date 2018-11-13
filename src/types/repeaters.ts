@@ -9,6 +9,7 @@ export interface Repeater {
   times: number;
   variable: string;
   next: string | null;       // ID of next repeater
+  prev: string | null;       // ID of parent repeater
 };
 
 // The Repeaters branch of the state tree maps keys to repeaters. A key can

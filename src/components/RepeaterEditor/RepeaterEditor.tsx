@@ -44,12 +44,19 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps,
   }
 
   private handleTimesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const repeater = this.props.repeaters[this.props.id];
+    if (e.target.value === '') {
+      this.props.dispatch(
+        updateRepeater(this.props.id, 0, repeater.variable),
+      );
+      return;
+    }
+
     const times = Number.parseInt(e.target.value, 10);
     if (Number.isNaN(times)) {
       return;
     }
 
-    const repeater = this.props.repeaters[this.props.id];
     this.props.dispatch(
       updateRepeater(this.props.id, Number.parseFloat(e.target.value), repeater.variable),
     );
@@ -78,7 +85,8 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps,
             <Icon svg={RepetitionIcon} />
             <span>Repeat</span>
               <input
-                value={repeater.times}
+                value={repeater.times === 0 ? '' : repeater.times}
+                placeholder="0"
                 onChange={this.handleTimesChange}
               />
             <span>times as</span>

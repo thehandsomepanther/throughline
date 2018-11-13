@@ -22,26 +22,26 @@ export const addChildRepeater = (
 
 export interface DeleteRepeaterAction {
   type: RepeatersAction.DeleteRepeater;
-  id: string;
+  repeaterID: string;
 }
-export const deleteRepeater = (id: string): DeleteRepeaterAction => ({
+export const deleteRepeater = (repeaterID: string): DeleteRepeaterAction => ({
   type: RepeatersAction.DeleteRepeater,
-  id
+  repeaterID
 });
 
 export interface UpdateRepeaterAction {
   type: RepeatersAction.UpdateRepeater;
-  id: string;
+  repeaterID: string;
   times: number;
   variable: string;
 }
 export const updateRepeater = (
-  id: string,
+  repeaterID: string,
   times: number,
   variable: string
 ): UpdateRepeaterAction => ({
   type: RepeatersAction.UpdateRepeater,
-  id,
+  repeaterID,
   times,
   variable
 });

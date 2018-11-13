@@ -34,7 +34,8 @@ export default (
       newState[action.shapeID] = {
         times: 1,
         variable: getNextVariableName(),
-        next: null
+        next: null,
+        prev: null
       };
 
       return newState;
@@ -47,17 +48,20 @@ export default (
       newState[newRepeaterID] = {
         times: 1,
         variable: getNextVariableName(),
-        next: null
+        next: null,
+        prev: action.repeaterID
       };
       return newState;
     case RepeatersAction.DeleteRepeater:
-      if (!state[action.id]) {
+      if (!state[action.repeaterID]) {
         throw new Error(
-          `Called delete repeater on a non-existant repeater: ${action.id}`
+          `Called delete repeater on a non-existant repeater: ${
+            action.repeaterID
+          }`
         );
       }
 
-      let orphanID: string | null = action.id;
+      let orphanID: string | null = action.repeaterID;
       while (orphanID) {
         const next: string | null = newState[orphanID].next;
         delete newState[orphanID];
@@ -74,23 +78,23 @@ export default (
         }
 
         const repeater = newState[repeaterID];
-        if (repeater.next === action.id) {
+        if (repeater.next === action.repeaterID) {
           newState[repeaterID].next = null;
         }
       }
 
-      console.log(newState);
-
       return newState;
     case RepeatersAction.UpdateRepeater:
-      if (!state[action.id]) {
+      if (!state[action.repeaterID]) {
         throw new Error(
-          `Called update repeater on a non-existant repeater: ${action.id}`
+          `Called update repeater on a non-existant repeater: ${
+            action.repeaterID
+          }`
         );
       }
 
-      newState[action.id] = {
-        ...newState[action.id],
+      newState[action.repeaterID] = {
+        ...newState[action.repeaterID],
         times: action.times,
         variable: action.variable
       };
