@@ -34,7 +34,7 @@ export const evalFunctionProp = (
   let repeater: Repeater | null = repeaters[shapeID];
   while (repeater) {
     script = `(function(){return ${JSON.stringify(
-      range(repeater.times)
+      range(repeater.times || 0)
     )}.map(function(${repeater.variable ||
       repeater.defaultVariable}){return ${script}})})()`;
 

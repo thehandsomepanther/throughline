@@ -50,7 +50,7 @@ const paintShape = (
   // If there's still another level of repetition we need to paint, then we recur.
   if (repeater) {
     const nextRepeater = repeater.next ? repeaters[repeater.next] : null;
-    for (let i = 0; i < repeater.times; i++) {
+    for (let i = 0; i < repeater.times || 0; i++) {
       paintShape(ctx, shapeID, shapes, repeaters, nextRepeater, frame, ...functionArguments, i);
     }
 

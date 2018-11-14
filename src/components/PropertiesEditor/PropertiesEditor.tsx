@@ -25,12 +25,16 @@ interface FunctionPropertyProps {
   fn?: string;
   repeaters: RepeatersState;
   shapeID: string;
-  handleFormulaChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFunctionChange: (fn: string) => void;
 }
 
 class FunctionProperty extends React.Component<FunctionPropertyProps> {
+  private handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.props.handleFunctionChange(e.target.value);
+  }
+
   public render() {
-    const { fn, handleFormulaChange, shapeID, repeaters } = this.props;
+    const { fn, shapeID, repeaters } = this.props;
 
     const params = ['t'];
     let repeaterID: string | null = shapeID;
@@ -44,7 +48,7 @@ class FunctionProperty extends React.Component<FunctionPropertyProps> {
         <span>{`function (${params.join(', ')}) {`}</span>
         <FunctionPropertyInput
           value={fn}
-          onChange={handleFormulaChange}
+          onInput={this.handleChange}
         />
         <span>}</span>
       </FunctionPropertyInputContainer>
@@ -68,9 +72,15 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
     dispatch(updateUsing(shapeID, prop, e.target.value as Using));
   }
 
-  private handleFormulaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleConstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { dispatch, shapeID, prop } = this.props;
     dispatch(updateFormula(shapeID, prop, e.target.value));
+  }
+
+  private handleFunctionChange = (fn: string) => {
+    const { dispatch, shapeID, prop } = this.props;
+    console.log(fn);
+    dispatch(updateFormula(shapeID, prop, fn));
   }
 
   public render() {
@@ -101,7 +111,7 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
         {formula.using === Using.Constant && (
           <ConstantPropertyInput
             value={formula.const}
-            onChange={this.handleFormulaChange}
+            onChange={this.handleConstChange}
           />
         )}
         {formula.using === Using.Custom && (
@@ -110,7 +120,7 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
         {formula.using === Using.Function && (
           <FunctionProperty
             fn={formula.fn}
-            handleFormulaChange={this.handleFormulaChange}
+            handleFunctionChange={this.handleFunctionChange}
             shapeID={shapeID}
             repeaters={repeaters}
           />

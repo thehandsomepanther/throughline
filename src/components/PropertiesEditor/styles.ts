@@ -113,6 +113,6 @@ export const FunctionPropertyInputContainer = styled('div')`
   margin-bottom: 10px;
 `;
 
-export const FunctionPropertyInput = styled('input')`
+export const FunctionPropertyInput = styled('textarea')`
   ${mixins.resetInput} ${INPUT_STYLES};
 `;
