@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Dispatch } from 'src/actions';
+import { RepeatersState } from 'src/types/repeaters';
 import { updateFormula, updateUsing } from '../../actions/shapes';
 import { SidebarHeader } from '../../styles/components/SidebarHeader'
 import { EditorState } from '../../types/editor';
@@ -11,6 +12,7 @@ import { PropertiesGraph } from './PropertiesGraph';
 import {
   ConstantPropertyInput,
   FunctionPropertyInput,
+  FunctionPropertyInputContainer,
   InvalidPropNotification,
   PropertiesEditorContainer,
   PropertyInfoContainer,
@@ -19,12 +21,44 @@ import {
   UsingDropdown,
 } from './styles';
 
+interface FunctionPropertyProps {
+  fn?: string;
+  repeaters: RepeatersState;
+  shapeID: string;
+  handleFormulaChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+class FunctionProperty extends React.Component<FunctionPropertyProps> {
+  public render() {
+    const { fn, handleFormulaChange, shapeID, repeaters } = this.props;
+
+    const params = ['t'];
+    let repeaterID: string | null = shapeID;
+    while (repeaterID && repeaters[repeaterID]) {
+      params.push(repeaters[repeaterID].variable || repeaters[repeaterID].defaultVariable);
+      repeaterID = repeaters[repeaterID].next;
+    }
+
+    return (
+      <FunctionPropertyInputContainer>
+        <span>{`function (${params.join(', ')}) {`}</span>
+        <FunctionPropertyInput
+          value={fn}
+          onChange={handleFormulaChange}
+        />
+        <span>}</span>
+      </FunctionPropertyInputContainer>
+    )
+  }
+}
+
 interface PropertyInfoProps {
   formula: Formula;
   shapeID: string;
   prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
   activeFrame: number;
   isErroneous: boolean;
+  repeaters: RepeatersState;
   dispatch: Dispatch;
 }
 
@@ -40,7 +74,7 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
   }
 
   public render() {
-    const { formula, isErroneous, prop, activeFrame, shapeID, dispatch } = this.props;
+    const { formula, isErroneous, prop, activeFrame, shapeID, dispatch, repeaters } = this.props;
     let values = formula.values;
 
     // TODO: Figure out a better way to handle this (preferrably some way of
@@ -74,9 +108,11 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
           null // TODO: Fill this out
         )}
         {formula.using === Using.Function && (
-          <FunctionPropertyInput
-            value={formula.fn}
-            onChange={this.handleFormulaChange}
+          <FunctionProperty
+            fn={formula.fn}
+            handleFormulaChange={this.handleFormulaChange}
+            shapeID={shapeID}
+            repeaters={repeaters}
           />
         )}
         {formula.using !== Using.Constant && (
@@ -99,12 +135,14 @@ const ShapePropertiesView = ({
   shapeID,
   activeFrame,
   erroneousProps,
+  repeaters,
   dispatch,
 }: {
     shape: Shape,
     shapeID: string,
     activeFrame: number,
     erroneousProps?: Partial<RectProperties<true>> | Partial<EllipseProperties<true>>,
+    repeaters: RepeatersState,
     dispatch: Dispatch,
   }) => {
   const propertyInfos = [];
@@ -124,6 +162,7 @@ const ShapePropertiesView = ({
           activeFrame={activeFrame}
           isErroneous={erroneousProps ? !!erroneousProps[property] : false}
           dispatch={dispatch}
+          repeaters={repeaters}
           key={property} />
       );
     } else if (shape.type === ShapeType.Ellipse) {
@@ -136,6 +175,7 @@ const ShapePropertiesView = ({
           activeFrame={activeFrame}
           isErroneous={erroneousProps ? !!erroneousProps[property] : false}
           dispatch={dispatch}
+          repeaters={repeaters}
           key={property} />
       );
     }
@@ -152,10 +192,12 @@ const ShapePropertiesView = ({
 export default ({
   shapes,
   editor,
+  repeaters,
   dispatch,
 }: {
     shapes: ShapesState,
     editor: EditorState,
+    repeaters: RepeatersState,
     dispatch: Dispatch,
   }) =>
   editor.activeShape && shapes[editor.activeShape] ? (
@@ -164,6 +206,7 @@ export default ({
         shapeID={editor.activeShape}
         shape={shapes[editor.activeShape]}
         activeFrame={editor.activeFrame}
+        repeaters={repeaters}
         erroneousProps={editor.erroneousProps[editor.activeShape]}
         dispatch={dispatch}
       />

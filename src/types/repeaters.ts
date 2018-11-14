@@ -7,6 +7,7 @@ export enum RepeatersAction {
 
 export interface Repeater {
   times: number;
+  defaultVariable: string;
   variable: string;
   next: string | null;       // ID of next repeater
   prev: string | null;       // ID of parent repeater

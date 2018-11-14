@@ -92,6 +92,7 @@ export default class RepeaterEditor extends React.Component<RepeaterEditorProps,
             <span>times as</span>
             <input
               value={repeater.variable}
+              placeholder={repeater.defaultVariable}
               onChange={this.handleVariableChange}
             />
           </RepeatersInputContainer>

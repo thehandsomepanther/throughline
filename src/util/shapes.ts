@@ -10,28 +10,33 @@ const isNumberOrArrayOfNumbers = (value: any): boolean => {
   }
 
   if (Array.isArray(value)) {
-    return value.reduce((acc, curr) => acc && isNumberOrArrayOfNumbers(curr), true);
+    return value.reduce(
+      (acc, curr) => acc && isNumberOrArrayOfNumbers(curr),
+      true
+    );
   }
 
   return false;
-}
+};
 
 export const evalFunctionProp = (
   fn: string,
   frames: number,
   shapeID: string,
-  repeaters: RepeatersState,
+  repeaters: RepeatersState
 ): Promise<number[]> => {
   let worker: Worker | null = new Worker('worker.js');
 
-  let script = `(function(){return ${
-    JSON.stringify(range(frames))}.map(function(t){${fn}})})()`;
+  let script = `(function(){return ${JSON.stringify(
+    range(frames)
+  )}.map(function(t){${fn}})})()`;
 
   let repeater: Repeater | null = repeaters[shapeID];
   while (repeater) {
-    script = `(function(){return ${
-      JSON.stringify(range(repeater.times))
-      }.map(function(${repeater.variable}){return ${script}})})()`;
+    script = `(function(){return ${JSON.stringify(
+      range(repeater.times)
+    )}.map(function(${repeater.variable ||
+      repeater.defaultVariable}){return ${script}})})()`;
 
     repeater = repeater.next ? repeaters[repeater.next] : null;
   }
@@ -54,7 +59,11 @@ export const evalFunctionProp = (
           const values = JSON.parse(e.data);
           values.forEach((value?: number) => {
             if (!isNumberOrArrayOfNumbers(value)) {
-              reject(new Error('Expression evaluated to something other than an number'));
+              reject(
+                new Error(
+                  'Expression evaluated to something other than an number'
+                )
+              );
             }
           });
           resolve(values);
@@ -115,7 +124,7 @@ export const calcFormulaValues = (
   shapeID: string,
   formula: Formula,
   frames: number,
-  repeaters: RepeatersState,
+  repeaters: RepeatersState
 ): Promise<number[]> => {
   switch (formula.using) {
     case Using.Constant:
@@ -190,9 +199,9 @@ export const calcShapeValues = (
               acc == null
                 ? null
                 : {
-                  ...acc,
-                  ...curr
-                },
+                    ...acc,
+                    ...curr
+                  },
             {}
           );
 

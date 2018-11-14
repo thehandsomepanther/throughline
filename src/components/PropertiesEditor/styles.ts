@@ -103,7 +103,16 @@ export const ConstantPropertyInput = styled('input')`
   ${mixins.resetInput} ${INPUT_STYLES};
 `;
 
-export const FunctionPropertyInput = styled('input')`
-  ${mixins.resetInput} ${INPUT_STYLES}
+export const FunctionPropertyInputContainer = styled('div')`
+  color: ${COLOR_GREY};
+  background-color: ${COLOR_BLACK};
+  font-size: ${FONT_SIZE_SMALL};
+  font-family: ${FONT_STACK_MONOSPACE};
+  padding: 0.5rem;
+  border-radius: 3px;
   margin-bottom: 10px;
+`;
+
+export const FunctionPropertyInput = styled('input')`
+  ${mixins.resetInput} ${INPUT_STYLES};
 `;

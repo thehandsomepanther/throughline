@@ -30,28 +30,37 @@ export default (
   const newState = { ...state };
 
   switch (action.type) {
-    case RepeatersAction.AddRootRepeater:
+    case RepeatersAction.AddRootRepeater: {
+      const nextVariableName = getNextVariableName();
       newState[action.shapeID] = {
         times: 1,
-        variable: getNextVariableName(),
+        variable: nextVariableName,
+        defaultVariable: nextVariableName,
         next: null,
         prev: null
       };
 
       return newState;
-    case RepeatersAction.AddChildRepeater:
+    }
+    case RepeatersAction.AddChildRepeater: {
       const newRepeaterID = uniqueRepeaterID();
+      const nextVariableName = getNextVariableName();
+
       newState[action.repeaterID] = {
         ...newState[action.repeaterID],
         next: newRepeaterID
       };
+
       newState[newRepeaterID] = {
         times: 1,
-        variable: getNextVariableName(),
+        variable: nextVariableName,
+        defaultVariable: nextVariableName,
         next: null,
         prev: action.repeaterID
       };
+
       return newState;
+    }
     case RepeatersAction.DeleteRepeater:
       if (!state[action.repeaterID]) {
         throw new Error(
