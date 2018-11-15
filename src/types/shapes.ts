@@ -28,6 +28,9 @@ export const SHAPE_RECT_PROPS = [
   'fillR',
   'fillG',
   'fillB',
+  'strokeR',
+  'strokeG',
+  'strokeB',
   'width',
   'height',
   'rotation',
@@ -43,6 +46,9 @@ export const SHAPE_ELLIPSE_PROPS = [
   'fillR',
   'fillG',
   'fillB',
+  'strokeR',
+  'strokeG',
+  'strokeB',
   'rotation',
   'startAngle',
   'endAngle',
@@ -61,6 +67,9 @@ export interface ShapeProperties<T> {
   fillR: T;
   fillG: T;
   fillB: T;
+  strokeR: T;
+  strokeG: T;
+  strokeB: T;
   rotation: T;
   scaleX: T;
   scaleY: T;

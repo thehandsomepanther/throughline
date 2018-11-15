@@ -70,6 +70,9 @@ const paintShape = (
   const fillR = sv(shape.formulas.fillR);
   const fillG = sv(shape.formulas.fillG);
   const fillB = sv(shape.formulas.fillB);
+  const strokeR = sv(shape.formulas.strokeR);
+  const strokeG = sv(shape.formulas.strokeG);
+  const strokeB = sv(shape.formulas.strokeB);
   const rotation = sv(shape.formulas.rotation);
 
   if (shape.type === ShapeType.Rect) {
@@ -82,7 +85,9 @@ const paintShape = (
     ctx.rotate(rotation);
     ctx.translate(-(posX + width / 2), -(posY + height / 2));
     ctx.fillStyle = rgbToHex(fillR, fillG, fillB);
+    ctx.strokeStyle = rgbToHex(strokeR, strokeG, strokeB);
     ctx.fillRect(posX, posY, width * scaleX, height * scaleY);
+    ctx.strokeRect(posX, posY, width * scaleX, height * scaleY);
   } else if (shape.type === ShapeType.Ellipse) {
     const radiusX = sv(shape.formulas.radiusX);
     const radiusY = sv(shape.formulas.radiusY);
@@ -91,8 +96,10 @@ const paintShape = (
 
     ctx.beginPath();
     ctx.fillStyle = rgbToHex(fillR, fillG, fillB);
+    ctx.strokeStyle = rgbToHex(strokeR, strokeG, strokeB);
     ctx.ellipse(posX, posY, radiusX, radiusY, rotation, startAngle, endAngle);
     ctx.fill();
+    ctx.stroke();
     ctx.closePath();
   }
   ctx.restore();
