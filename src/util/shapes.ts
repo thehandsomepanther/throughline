@@ -36,7 +36,7 @@ export const evalFunctionProp = (
     script = `(function(){return ${JSON.stringify(
       range(repeater.times || 0)
     )}.map(function(${repeater.variable ||
-      repeater.defaultVariable}){return ${script}})})()`;
+    repeater.defaultVariable}){return ${script}})})()`;
 
     repeater = repeater.next ? repeaters[repeater.next] : null;
   }
@@ -57,15 +57,9 @@ export const evalFunctionProp = (
         worker.onmessage = (e) => {
           clearTimeout(timeout);
           const values = JSON.parse(e.data);
-          values.forEach((value?: number) => {
-            if (!isNumberOrArrayOfNumbers(value)) {
-              reject(
-                new Error(
-                  'Expression evaluated to something other than an number'
-                )
-              );
-            }
-          });
+          if (!isNumberOrArrayOfNumbers(values)) {
+            reject(new Error('Expression evaluated to something other than an number'));
+          }
           resolve(values);
         };
 
@@ -199,9 +193,9 @@ export const calcShapeValues = (
               acc == null
                 ? null
                 : {
-                    ...acc,
-                    ...curr
-                  },
+                  ...acc,
+                  ...curr
+                },
             {}
           );
 
