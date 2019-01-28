@@ -36,7 +36,7 @@ export const evalFunctionProp = (
     script = `(function(){return ${JSON.stringify(
       range(repeater.times || 0)
     )}.map(function(${repeater.variable ||
-    repeater.defaultVariable}){return ${script}})})()`;
+      repeater.defaultVariable}){return ${script}})})()`;
 
     repeater = repeater.next ? repeaters[repeater.next] : null;
   }
@@ -58,7 +58,11 @@ export const evalFunctionProp = (
           clearTimeout(timeout);
           const values = JSON.parse(e.data);
           if (!isNumberOrArrayOfNumbers(values)) {
-            reject(new Error('Expression evaluated to something other than an number'));
+            reject(
+              new Error(
+                'Expression evaluated to something other than an number'
+              )
+            );
           }
           resolve(values);
         };
@@ -129,20 +133,6 @@ export const calcFormulaValues = (
       }
 
       return evalConstProp(`${formula.const}`, frames);
-    case Using.Custom:
-      if (!formula.custom) {
-        throw new Error(
-          'Tried to use custom value of formula when none exists.'
-        );
-      }
-
-      // Ensure that our custom formula has at least as many values as the number
-      // of frames by padding out the formula as necessary
-      while (formula.custom.length < frames) {
-        formula.custom.push(formula.custom[formula.custom.length - 1]);
-      }
-
-      return Promise.resolve(formula.custom.slice(0, frames));
     case Using.Function:
       return evalFunctionProp(formula.fn || '', frames, shapeID, repeaters);
   }
@@ -193,9 +183,9 @@ export const calcShapeValues = (
               acc == null
                 ? null
                 : {
-                  ...acc,
-                  ...curr
-                },
+                    ...acc,
+                    ...curr
+                  },
             {}
           );
 

@@ -20,23 +20,6 @@ export const updateUsing = (
   using
 });
 
-export interface UpdateCustomAction {
-  type: ShapesAction.UpdateCustom;
-  shapeID: string;
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>;
-  value: number[];
-}
-export const updateCustom = (
-  shapeID: string,
-  prop: keyof RectProperties<any> | keyof EllipseProperties<any>,
-  value: number[],
-): UpdateCustomAction => ({
-  type: ShapesAction.UpdateCustom,
-  shapeID,
-  prop,
-  value,
-})
-
 export interface UpdateFormulaAction {
   type: ShapesAction.UpdateFormula;
   shapeID: string;

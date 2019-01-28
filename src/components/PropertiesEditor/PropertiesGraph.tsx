@@ -2,7 +2,6 @@ import { CanvasForm, CanvasSpace, Pt, Rectangle } from 'pts';
 import * as React from 'react';
 import { Dispatch } from '../../actions';
 import { changeActiveFrame } from '../../actions/editor';
-import { updateCustom, updateUsing } from '../../actions/shapes';
 import { COLOR_BLACK, COLOR_BLUE, COLOR_GREY, COLOR_RED } from '../../styles';
 import { Using } from '../../types/formulas';
 
@@ -72,16 +71,6 @@ export class PropertiesGraph extends React.Component<PropertiesGraphProps, Prope
       (x + 1) * this.interval,
       space.size.y * (1 - percentile(minValue, maxValue, y))
     ];
-  };
-
-  private getValueAtCanvasSpacePoint = (space: CanvasSpace, x: number, y: number): number[] => {
-    const { values } = this.props;
-
-    const p = 1 - y / space.size.y;
-    const maxValue = Math.max(...values) + MARGIN_VERTICAL;
-    const minValue = Math.min(...values) - MARGIN_VERTICAL;
-
-    return [(x + 1) * this.interval, (maxValue - minValue) * p + minValue];
   };
 
   private createChart = () => {
@@ -166,12 +155,9 @@ export class PropertiesGraph extends React.Component<PropertiesGraphProps, Prope
           activeFrame,
           values,
           dispatch,
-          shapeProperty,
-          shapeID
         } = this.props;
         const { lastActiveFrame } = this.state;
         const frame = Math.floor(this.space.pointer.x / this.interval);
-        let graphY;
 
         switch (type) {
           case 'over':
@@ -183,21 +169,6 @@ export class PropertiesGraph extends React.Component<PropertiesGraphProps, Prope
           case 'move':
             if (frame >= 0 && frame < values.length) {
               dispatch(changeActiveFrame(frame));
-            }
-            break;
-          case 'down':
-          case 'drag':
-            if (frame >= 0 && frame < values.length) {
-              [, graphY] = this.getValueAtCanvasSpacePoint(
-                this.space,
-                this.space.pointer.x,
-                this.space.pointer.y
-              );
-              values[frame] = graphY;
-              dispatch(updateUsing(shapeID, shapeProperty as any, Using.Custom));
-              // TODO: shapeTypeToProperties needs better typing, or else we'll have
-              // to keep patching type mischecks like this one
-              dispatch(updateCustom(shapeID, shapeProperty as any, values));
             }
             break;
           default:

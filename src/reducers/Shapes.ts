@@ -29,9 +29,6 @@ export default (
       }
 
       return newState;
-    case ShapesAction.UpdateCustom:
-      newState[action.shapeID].formulas[action.prop].custom = action.value;
-      return newState;
     case ShapesAction.NewShape:
       return {
         ...state,

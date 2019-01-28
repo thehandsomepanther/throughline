@@ -5,7 +5,6 @@ import {
   COLOR_GREY,
   COLOR_NEAR_BLACK,
   COLOR_NEAR_WHITE,
-  COLOR_ORANGE,
   COLOR_YELLOW,
   FONT_SIZE_REGULAR,
   FONT_SIZE_SMALL,
@@ -73,8 +72,6 @@ export const UsingDropdown = styled('select')`
     switch (props.value) {
       case Using.Function:
         return COLOR_BLUE;
-      case Using.Custom:
-        return COLOR_ORANGE;
       default:
         return COLOR_GREY;
     }

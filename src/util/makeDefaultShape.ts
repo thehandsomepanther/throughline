@@ -43,7 +43,6 @@ const shapePropsObject = (shape: ShapeType): ShapeProperties<Formula> =>
         using: Using.Constant,
         const: (defaultPropertyValues[shape] && defaultPropertyValues[shape][property]) ?
           defaultPropertyValues[shape][property] : 0,
-        custom: [defaultPropertyValues[shape][property]],
         fn: 'return 0;',
         values: [],
       },

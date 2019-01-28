@@ -79,7 +79,6 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
 
   private handleFunctionChange = (fn: string) => {
     const { dispatch, shapeID, prop } = this.props;
-    console.log(fn);
     dispatch(updateFormula(shapeID, prop, fn));
   }
 
@@ -100,7 +99,6 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
             <PropertyName>{prop}</PropertyName>
             <UsingDropdown value={formula.using} onChange={this.handleUsingChange}>
               <option value={Using.Constant}>Constant</option>
-              <option value={Using.Custom}>Custom</option>
               <option value={Using.Function}>Function</option>
             </UsingDropdown>
           </div>
@@ -113,9 +111,6 @@ class PropertyInfo extends React.Component<PropertyInfoProps> {
             value={formula.const}
             onChange={this.handleConstChange}
           />
-        )}
-        {formula.using === Using.Custom && (
-          null // TODO: Fill this out
         )}
         {formula.using === Using.Function && (
           <FunctionProperty

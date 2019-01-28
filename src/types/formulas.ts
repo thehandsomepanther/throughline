@@ -1,13 +1,11 @@
 export enum Using {
   Function = 'USING_FN',
-  Custom = 'USING_CUSTOM',
   Constant = 'USING_CONST',
 };
 
 export interface VirtualFormula {
   using: Using;
   fn?: string;
-  custom?: number[];
   const?: string;
 };
 
@@ -23,15 +21,10 @@ export interface FunctionFormula extends VirtualFormula {
   values: FunctionValue;
 };
 
-export interface CustomFormula extends VirtualFormula {
+export interface ConstFormula extends VirtualFormula {
   using: Using.Constant;
   values: number[];
 };
 
-export interface ConstFormula extends VirtualFormula {
-  using: Using.Custom;
-  values: number[];
-};
-
 export type FormulaValue = number[] | FunctionValue;
-export type Formula = FunctionFormula | CustomFormula | ConstFormula;
+export type Formula = FunctionFormula | ConstFormula;

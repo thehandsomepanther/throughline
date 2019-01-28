@@ -1,15 +1,15 @@
-import { ConstFormula, CustomFormula, FunctionFormula, FunctionValue, Using } from '../../types/formulas';
+import { ConstFormula, FunctionFormula, FunctionValue, Using } from '../../types/formulas';
 import { OrderState } from '../../types/order';
 import { Repeater, RepeatersState } from '../../types/repeaters';
 import { ShapesState, ShapeType } from '../../types/shapes';
 import { rgbToHex } from '../../util';
 
 export const getShapeFormulaValue = (
-  formula: ConstFormula | CustomFormula | FunctionFormula,
+  formula: ConstFormula | FunctionFormula,
   frame: number,
   functionArguments: number[],
 ): number => {
-  if (formula.using === Using.Constant || formula.using === Using.Custom) {
+  if (formula.using === Using.Constant) {
     return formula.values[frame];
   }
 
@@ -61,7 +61,7 @@ const paintShape = (
   // this shape to the canvas.
   ctx.save();
 
-  const sv = (formula: ConstFormula | CustomFormula | FunctionFormula) =>
+  const sv = (formula: ConstFormula | FunctionFormula) =>
     (getShapeFormulaValue(formula, frame, functionArguments));
 
   const shape = shapes[shapeID];

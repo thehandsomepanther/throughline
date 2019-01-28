@@ -1,8 +1,7 @@
-import { ConstFormula, CustomFormula, Formula, FunctionFormula } from './formulas';
+import { ConstFormula, Formula, FunctionFormula } from './formulas';
 
 export enum ShapesAction {
   UpdateUsing = 'SHAPE_UPDATE_USING',
-  UpdateCustom = 'SHAPE_UPDATE_CUSTOM',
   UpdateFormula = 'SHAPE_UPDATE_FORMULA',
   NewShape = 'SHAPE_NEW_SHAPE',
   DeleteShape = 'SHAPE_DELETE_SHAPE',
@@ -105,10 +104,10 @@ interface VirtualShape {
 
 export interface RectShape extends VirtualShape {
   type: ShapeType.Rect;
-  formulas: RectProperties<ConstFormula | FunctionFormula | CustomFormula>;
+  formulas: RectProperties<ConstFormula | FunctionFormula>;
 };
 
 export interface EllipseShape extends VirtualShape {
   type: ShapeType.Ellipse;
-  formulas: EllipseProperties<ConstFormula | FunctionFormula | CustomFormula>;
+  formulas: EllipseProperties<ConstFormula | FunctionFormula>;
 };

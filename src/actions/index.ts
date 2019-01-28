@@ -19,7 +19,6 @@ import {
   DeleteShapeAction,
   SetShapeValuesAction,
   ToggleShapeVisibleAction,
-  UpdateCustomAction,
   UpdateFormulaAction,
   UpdateShapeValuesAction,
   UpdateUsingAction
@@ -27,7 +26,6 @@ import {
 
 export type Action =
   | UpdateUsingAction
-  | UpdateCustomAction
   | UpdateFormulaAction
   | AddNewShapeAction
   | DeleteShapeAction
