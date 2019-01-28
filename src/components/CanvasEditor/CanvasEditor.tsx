@@ -5,6 +5,7 @@ import { EditorState } from '../../types/editor';
 import { OrderState } from '../../types/order';
 import { RepeatersState } from '../../types/repeaters';
 import { ShapesState } from '../../types/shapes';
+import { IconButton } from '../IconButton';
 import { paintShapesAtFrame } from './painter';
 import {
   CanvasContainer,
@@ -17,6 +18,10 @@ import {
   TickMarkerNumber,
   TickMarkersContainer,
 } from './styles';
+
+const PlayIcon = require('../../assets/icon/Play.svg');
+const PauseIcon = require('../../assets/icon/Pause.svg');
+const SkipIcon = require('../../assets/icon/Skip.svg');
 
 interface CanvasEditorProps {
   shapes: ShapesState;
@@ -182,19 +187,17 @@ export default class CanvasEditor extends React.Component<CanvasEditorProps, Can
           {tickMarkers}
         </TickMarkersContainer>
         <ControlsContainer>
-          <input
-            type="button"
-            value="previous frame"
+          <IconButton
+            svg={SkipIcon}
             onClick={this.decrementActiveCanvas}
+            styles={`transform: rotate(180deg);`}
           />
-          <input
-            type="button"
-            value="play/pause"
+          <IconButton
+            svg={this.state.interval ? PauseIcon : PlayIcon}
             onClick={this.handleTogglePlayClick}
           />
-          <input
-            type="button"
-            value="next frame"
+          <IconButton
+            svg={SkipIcon}
             onClick={this.incrementActiveCanvas}
           />
         </ControlsContainer>
