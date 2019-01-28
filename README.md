@@ -34,7 +34,7 @@ function posY(t) {
 
 ![](assets/2.gif)
 
-This will draw 10 squares, each of which is moving in a circle, where the first square's circle has radius 250, the second 300, the third 350, and so on. You can change the name and specify the range of the repeater variable (and you can even have repeaters on repeaters).
+This will draw 10 squares, each of which is moving in a circle, where the first square's circle has radius 50, the second 100, the third 150, and so on. You can change the name and specify the range of the repeater variable (and you can even have repeaters on repeaters).
 
 ## Project status
 
