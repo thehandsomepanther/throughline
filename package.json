@@ -6,7 +6,7 @@
     "babel-plugin-emotion": "^9.1.2",
     "emotion": "^9.2.12",
     "lodash": "^4.17.10",
-    "pts": "^0.6.6",
+    "pts": "^0.6.7",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-emotion": "^9.1.2",
