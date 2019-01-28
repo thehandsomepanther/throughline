@@ -19,9 +19,9 @@ import {
   TickMarkersContainer,
 } from './styles';
 
-const PlayIcon = require('../../assets/icon/Play.svg');
-const PauseIcon = require('../../assets/icon/Pause.svg');
-const SkipIcon = require('../../assets/icon/Skip.svg');
+const PlayIcon = require('../../icons/Play.svg');
+const PauseIcon = require('../../icons/Pause.svg');
+const SkipIcon = require('../../icons/Skip.svg');
 
 interface CanvasEditorProps {
   shapes: ShapesState;

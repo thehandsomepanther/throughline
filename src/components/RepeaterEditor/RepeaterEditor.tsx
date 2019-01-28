@@ -5,9 +5,9 @@ import { RepeatersState } from '../../types/repeaters';
 import { Icon, IconButton } from '../IconButton';
 import { RepeatersContainer, RepeatersInputContainer, RepeatersLayer } from './styles';
 
-const DeleteIcon = require('../../assets/icon/Delete.svg');
-const RepeatIcon = require('../../assets/icon/Repeat.svg');
-const RepetitionIcon = require('../../assets/icon/Repetition.svg');
+const DeleteIcon = require('../../icons/Delete.svg');
+const RepeatIcon = require('../../icons/Repeat.svg');
+const RepetitionIcon = require('../../icons/Repetition.svg');
 
 interface RepeaterEditorProps {
   repeaters: RepeatersState;

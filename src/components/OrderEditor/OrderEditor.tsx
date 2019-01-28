@@ -12,10 +12,10 @@ import { IconButton } from '../IconButton';
 import RepeaterEditor from '../RepeaterEditor';
 import { Layer, LayerContainer, LayerIcons, LayerName, ShapesList } from './styles';
 
-const HandleIcon = require('../../assets/icon/Handle.svg');
-const RepeatIcon = require('../../assets/icon/Repeat.svg');
-const VisibleIcon = require('../../assets/icon/Visible.svg');
-const InvisibleIcon = require('../../assets/icon/Invisible.svg');
+const HandleIcon = require('../../icons/Handle.svg');
+const RepeatIcon = require('../../icons/Repeat.svg');
+const VisibleIcon = require('../../icons/Visible.svg');
+const InvisibleIcon = require('../../icons/Invisible.svg');
 
 // const flipIndex = (index: number, length: number): number => length - 1 - index;
 
