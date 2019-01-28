@@ -54,3 +54,11 @@ The following is a non-exhaustive list of things I think would make the app a lo
 - [ ] syntax highlighting in the function editor
 - [ ] controls for more stuff (e.g. canvas size, number of frames)
 - [ ] come up with a better name than "Throughline" (which sucks)
+
+## Setup/Run
+```
+git clone git@github.com:thehandsomepanther/throughline.git
+cd throughline
+npm install
+npm start
+```
