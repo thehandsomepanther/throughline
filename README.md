@@ -4,7 +4,7 @@ Throughline is a web app that explores an idea I had about a functional approach
 
 ## How does Throughline work?
 
-While other creative coding apps like [Drawbot](http://www.drawbot.com/) or [Processing](https://processing.org/) have users draw by writing imperative programs, in Throughline users draw by specifying how the attributes of a given shape change as a function of time (and potentially other parameters). This means that if I wanted to draw a square which moves along the circumference of a circle with a radius of 50 pixels and centered at the point (275, 275), I could do that by defining that square's x-coordinate and y-coordinate in two functions:
+While other creative coding apps like [Drawbot](http://www.drawbot.com/) or [Processing](https://processing.org/) have users draw by writing imperative programs, in Throughline users draw by specifying how the attributes of a given shape change as a function of time (and potentially other parameters). This means that if I wanted to draw a square which moves along the circumference of a circle with a radius of 50 pixels and offset by the vector (275, 275), I could do that by defining that square's x-coordinate and y-coordinate in two functions:
 
 ```js
 function posX(t /* Where t = [0, 59]*/) {
@@ -34,7 +34,7 @@ function posY(t) {
 
 ![](assets/2.gif)
 
-This will draw 10 squares, each of which is moving in a circle, where the first square's circle has radius 250, the second 300, the third 350, and so on. You can change the name and specify the range of the repeater variable (and you can even have repeaters on repeaters).
+This will draw 10 squares, each of which is moving in a circle, where the first square's circle has radius 50, the second 100, the third 150, and so on. You can change the name and specify the range of the repeater variable (and you can even have repeaters on repeaters).
 
 ## Project status
 
