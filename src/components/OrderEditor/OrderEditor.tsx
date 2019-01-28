@@ -71,7 +71,12 @@ class ShapeLayer extends React.Component<ShapeLayerProps, ShapeLayerState> {
       >
         <Layer>
           <LayerName>
-            <IconButton svg={HandleIcon} />
+            <IconButton
+              svg={HandleIcon}
+              styles={`
+                cursor: grab;
+              `}
+            />
             <span>{shape.name}</span>
           </LayerName>
           <LayerIcons>

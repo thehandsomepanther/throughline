@@ -2,9 +2,9 @@ import * as React from 'react';
 import styled from 'react-emotion';
 import { mixins } from '../styles';
 
-interface IconButtonProps {
+interface IconButtonProps extends React.HTMLProps<HTMLInputElement> {
   svg: string;
-  onClick?: () => void;
+  styles?: string;
 };
 
 const iconMixin = (svg: string) => `
@@ -29,12 +29,14 @@ const IconInput = styled('input')`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+
+  ${(props: IconButtonProps): string | undefined => props.styles}
 `;
 
 export class IconButton extends React.PureComponent<IconButtonProps> {
   public render() {
     return (
-      <IconInput type="button" onClick={this.props.onClick} svg={this.props.svg} />
+      <IconInput type="button" onClick={this.props.onClick} svg={this.props.svg} styles={this.props.styles} />
     );
   }
 }
