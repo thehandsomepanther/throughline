@@ -2,9 +2,11 @@
   "name": "throughline",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://thehandsomepanther.github.io/throughline",
   "dependencies": {
     "babel-plugin-emotion": "^9.1.2",
     "emotion": "^9.2.12",
+    "gh-pages": "^2.0.1",
     "lodash": "^4.17.10",
     "pts": "^0.6.7",
     "react": "^16.3.2",
@@ -18,6 +20,8 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "format": "tslint --fix \"src/**/*.ts*\"",
